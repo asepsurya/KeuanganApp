@@ -95,7 +95,7 @@
     {{-- Simple DataTable --}}
     <div x-data="main" x-init="init()" class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
         <div class="mb-5">
-            <p class="text-sm font-semibold">Database Mitra</p>
+            <p class="text-sm font-semibold">Database Mitra dan Toko</p>
         </div>
         <div class="overflow-auto">
             <table id="myTable" class="whitespace-nowrap table-hover table-bordered w-full"></table>

@@ -16,6 +16,7 @@
 
     <!-- Custom Style -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"

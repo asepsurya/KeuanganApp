@@ -27,8 +27,10 @@ Route::middleware(['auth'])->group(function () {
     // Route Mitra
     // ------------------------------------------------
     Route::get('/mitra', [MitraController::class, 'index'])->name('index.mitra');
+    Route::get('/mitra/create', [MitraController::class, 'create'])->name('mitra.add');
     // ------------------------------------------------
     // Route Produk
     // ------------------------------------------------
     Route::get('/produk', [ProdukController::class, 'index'])->name('index.produk');
+    Route::get('/produk/category', [ProdukController::class, 'category'])->name('produk.category');
 });

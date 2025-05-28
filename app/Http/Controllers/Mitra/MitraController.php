@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Mitra;
 
-use App\Http\Controllers\Controller;
+use App\Models\Regency;
+use App\Models\District;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MitraController extends Controller
 {
@@ -42,5 +44,15 @@ class MitraController extends Controller
             'activeMenu' => 'mitra',
             'active' => 'mitra',
         ], compact('mitra'));
+    }
+
+    public function create()
+    {
+        $kota = Regency::pluck('name');
+
+        return view('mitra.action.add', [
+            'activeMenu' => 'mitra',
+            'active' => 'add_mitra',
+        ],compact('kota'));
     }
 }

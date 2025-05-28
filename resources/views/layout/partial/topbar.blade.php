@@ -15,7 +15,7 @@
                     @endphp
             
                     <li>
-                        <a href="{{ url('/') }}"
+                        <a href="{{ url('/dashboard') }}"
                             class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white">Home</a>
                     </li>
             

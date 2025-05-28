@@ -47,7 +47,7 @@
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
         
             {{-- Data Mitra --}}
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['mitra', 'tambah']) ? 'true' : 'false' }} }">
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['mitra', 'add_mitra']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.66 9.35C0.45 9.16 0.45 8.84 0.66 8.65L4.25 5.35C4.46 5.16 4.46 4.84 4.25 4.65L0.66 1.35C0.45 1.16 0.45 0.84 0.66 0.65C0.87 0.45 1.22 0.45 1.43 0.65L5.02 3.94C5.66 4.53 5.66 5.47 5.02 6.06L1.43 9.35C1.22 9.55 0.87 9.55 0.66 9.35Z" fill="currentcolor"/></svg>
@@ -58,8 +58,8 @@
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="{{ route('index.mitra') }}" class="{{ $active === 'mitra' ? 'active' : '' }}">Tambah Data</a></li>
-                    <li><a href="" class="{{ $active === 'mitra2' ? 'active' : '' }}">Data Mitra</a></li>
+                    <li><a href="{{ route('mitra.add') }}" class="{{ $active === 'add_mitra' ? 'active' : '' }}">Tambah Data</a></li>
+                    <li><a href="{{ route('index.mitra') }}" class="{{ $active === 'mitra' ? 'active' : '' }}">Data Mitra</a></li>
                 </ul>
             </li>
         
@@ -82,7 +82,7 @@
                 </ul>
             </li>
 
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['produk']) ? 'true' : 'false' }} }">
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['produk','category']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,6 +97,7 @@
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
                     <li><a href="#" class="{{ $active === 'ikm' ? 'active' : '' }}">Tambah Data</a></li>
                     <li><a href="{{ route('index.produk') }}" class="{{ $active === 'produk' ? 'active' : '' }}">Data Produk</a></li>
+                    <li><a href="{{ route('produk.category') }}" class="{{ $active === 'category' ? 'active' : '' }}">kategori</a></li>
                 </ul>
             </li>
             <li class="menu nav-item">

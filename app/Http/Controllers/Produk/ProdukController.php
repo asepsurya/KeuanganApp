@@ -14,4 +14,11 @@ class ProdukController extends Controller
             'active' => 'produk', 
         ]);
     }
+    public function category()
+    {
+        return view('produk.category', [
+            'activeMenu' => 'produk',
+            'active' => 'category',
+        ]);
+    }
 }
