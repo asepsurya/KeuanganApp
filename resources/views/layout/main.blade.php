@@ -16,11 +16,12 @@
 
     <!-- Custom Style -->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-  />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    {{-- select 2 --}}
+     <!-- jQuery (Select2 depends on jQuery) -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+     <link rel="stylesheet" href="{{ asset('assets/css/customselect2.css') }}">
     {{-- CSS --}}
     @yield('css')
     <style>
@@ -81,7 +82,8 @@
     <script src="{{ asset('assets/js/alpine-persist.min.js') }}"></script>
     <script src="{{ asset('assets/js/alpine-ui.min.js') }}" ></script>
     <script src="{{ asset('assets/js/alpine.min.js') }}" defer></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <!-- Custom js -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('js')

@@ -64,7 +64,7 @@
             </li>
         
             {{-- Data IKM --}}
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm']) ? 'true' : 'false' }} }">
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm','ikm_create','ikm_update']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,12 +77,12 @@
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="#" class="{{ $active === 'ikm' ? 'active' : '' }}">Tambah Data</a></li>
-                    <li><a href="#">Data IKM</a></li>
+                    <li><a href="{{ route('ikm.create') }}" class="{{ $active === 'ikm_create' ? 'active' : '' }}" >Tambah Data</a></li>
+                    <li><a href="{{ route('index.ikm') }}" class="{{ $active === 'ikm' ? 'active' : '' }}">Data IKM</a></li>
                 </ul>
             </li>
-
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['produk','category']) ? 'true' : 'false' }} }">
+           
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['add_produk','produk','category']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,9 +95,9 @@
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="#" class="{{ $active === 'ikm' ? 'active' : '' }}">Tambah Data</a></li>
+                    <li><a href="{{ route('index.create.produk') }}" class="{{ $active === 'add_produk' ? 'active' : '' }}">Tambah Data</a></li>
                     <li><a href="{{ route('index.produk') }}" class="{{ $active === 'produk' ? 'active' : '' }}">Data Produk</a></li>
-                    <li><a href="{{ route('produk.category') }}" class="{{ $active === 'category' ? 'active' : '' }}">kategori</a></li>
+                    <li><a href="{{ route('produk.category') }}" class="{{ $active === 'category' ? 'active' : '' }}">Kategori</a></li>
                 </ul>
             </li>
             <li class="menu nav-item">

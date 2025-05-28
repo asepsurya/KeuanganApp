@@ -1,14 +1,14 @@
 @extends('layout.main')
-@section('title', 'Tambah Produk')
+@section('title', 'Kategori Produk')
 @section('container')
-   <div x-data="modals">
+<div x-data="modals">
     <div class="px-2 py-1 mb-4 flex items-center justify-between">
-        <h2 class="text-lg font-semibold">Data Mitra</h2>
+        <h2 class="text-lg font-semibold">Kategori Produk <span class="px-1 bg-lightgreen-100 text-xs text-black rounded ml-1">{{ $category->count() }}</span></h2>
         <button class="px-2 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition" @click="toggle">
-            + Tambah Mitra Baru
+            + Tambah Kategori
         </button>
     </div>
-       
+
     <div class="fixed inset-0 bg-black/60 dark:bg-white/10 z-[999] hidden overflow-y-auto" :class="open &amp;&amp; '!block'">
         <div class="flex items-center justify-center min-h-screen px-4" @click.self="open = false">
             <div x-show="open" x-transition="" x-transition.duration.300="" class="bg-white dark:bg-black relative shadow-3xl border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8" style="display: none;">
@@ -23,78 +23,116 @@
                 </div>
                 <div class="p-5">
                     <div class="text-sm text-black dark:text-white">
-                        <form action="/mitra/store" method="POST">
+                        <form action="{{ route('category.add') }}" method="POST">
                             <!-- CSRF Token (Laravel) -->
                             @csrf
                             <div class="mb-4">
                                 <div class="relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
                                     <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Kategori</label>
-                                    <input type="text"  placeholder="Nama Kategori " class="form-input">
+                                    <input type="text" name="name" placeholder="Nama Kategori " class="form-input">
                                 </div>
                             </div>
-                    
+
                             <!-- Tombol Submit -->
                             <div class="flex justify-end">
-                              <button type="submit"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-300 w-full">
-                                Tambah Kategori
-                              </button>
+                                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-300 w-full">
+                                    Tambah Kategori
+                                </button>
                             </div>
-                          </form>
+                        </form>
                     </div>
-                   
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-    <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
-        <div class="mb-1">
-            <p class="text-sm font-semibold">Simple Table</p>
-        </div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nama</th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="whitespace-nowrap w-10"><div class="border border-black/10 text-black dark:text-white dark:border-white/10 rounded-md h-10 w-10 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
-                                        <path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
-                                    </svg>
-                                </div></td>
-                        <td>Makanan Ringan</td>
-                        <td><button type="button"
-                                class="btn inline-flex items-center bg-lightgreen-100 dark:bg-lightblue-100 align-middle text-black dark:text-black hover:bg-lightgreen-200 dark:hover:bg-lightgreen-200 hover:text-black dark:hover:text-black">
-                                <svg class="w-4 h-4 mr-1" width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M11.4012 27.0849C11.4012 27.0849 10.9664 26.9028 9.6139 26.8843C9.6139 26.8843 8.4575 26.8685 7.88867 26.7645C7.88867 26.7645 6.77082 26.56 6.10539 25.8946C6.10539 25.8946 5.43594 25.2252 5.22844 24.0882C5.22844 24.0882 5.12294 23.5102 5.10465 22.3366C5.10465 22.3366 5.08389 21.0046 4.91418 20.5965C4.91418 20.5965 4.74093 20.18 3.79698 19.1924C3.79698 19.1924 2.98525 18.3431 2.6547 17.8655C2.6547 17.8655 2 16.9195 2 16C2 16 2 15.0846 2.64417 14.1522C2.64417 14.1522 2.96978 13.6809 3.77243 12.8434C3.77243 12.8434 4.7293 11.8449 4.91512 11.4012C4.91512 11.4012 5.09721 10.9664 5.1157 9.6139C5.1157 9.6139 5.13151 8.4575 5.23553 7.88867C5.23553 7.88867 5.43996 6.77082 6.10539 6.10539C6.10539 6.10539 6.77484 5.43594 7.91181 5.22844C7.91181 5.22844 8.48983 5.12294 9.66342 5.10465C9.66342 5.10465 10.9954 5.08389 11.4035 4.91418C11.4035 4.91418 11.82 4.74093 12.8076 3.79698C12.8076 3.79698 13.6569 2.98525 14.1345 2.6547C14.1345 2.6547 15.0805 2 16 2C16 2 16.9154 2 17.8478 2.64417C17.8478 2.64417 18.3191 2.96978 19.1566 3.77243C19.1566 3.77243 20.1551 4.7293 20.5988 4.91512C20.5988 4.91512 21.0336 5.09721 22.3861 5.1157C22.3861 5.1157 23.5425 5.13151 24.1113 5.23553C24.1113 5.23553 25.2292 5.43996 25.8946 6.10539C25.8946 6.10539 26.5641 6.77484 26.7716 7.91181C26.7716 7.91181 26.8771 8.48985 26.8953 9.66342C26.8953 9.66342 26.9161 10.9954 27.0858 11.4035C27.0858 11.4035 27.2591 11.82 28.203 12.8076C28.203 12.8076 29.0148 13.6569 29.3453 14.1345C29.3453 14.1345 30 15.0805 30 16C30 16 30 16.9154 29.3558 17.8478C29.3558 17.8478 29.0302 18.3191 28.2276 19.1566C28.2276 19.1566 27.2707 20.1551 27.0849 20.5988C27.0849 20.5988 26.9028 21.0336 26.8843 22.3861C26.8843 22.3861 26.8685 23.5425 26.7645 24.1113C26.7645 24.1113 26.56 25.2292 25.8946 25.8946C25.8946 25.8946 25.2252 26.5641 24.0882 26.7716C24.0882 26.7716 23.5102 26.8771 22.3366 26.8953C22.3366 26.8953 21.0046 26.9161 20.5965 27.0858C20.5965 27.0858 20.18 27.2591 19.1924 28.203C19.1924 28.203 18.3431 29.0148 17.8655 29.3453C17.8655 29.3453 16.9195 30 16 30C16 30 15.0846 30 14.1522 29.3558C14.1522 29.3558 13.6809 29.0302 12.8434 28.2276C12.8434 28.2276 11.8449 27.2707 11.4012 27.0849ZM12.1738 25.2401C12.1738 25.2401 12.9603 25.5695 14.2272 26.7836C14.2272 26.7836 15.4965 28 16 28C16 28 16.5103 28 17.8105 26.7572C17.8105 26.7572 19.0676 25.5556 19.8285 25.2392C19.8285 25.2392 20.5903 24.9223 22.3054 24.8956C22.3054 24.8956 24.0931 24.8677 24.4804 24.4804C24.4804 24.4804 24.8607 24.1001 24.8845 22.3588C24.8845 22.3588 24.9083 20.6186 25.2401 19.8262C25.2401 19.8262 25.5695 19.0397 26.7836 17.7728C26.7836 17.7728 28 16.5035 28 16C28 16 28 15.4897 26.7572 14.1895C26.7572 14.1895 25.5556 12.9324 25.2392 12.1715C25.2392 12.1715 24.9223 11.4097 24.8956 9.69459C24.8956 9.69459 24.8677 7.90694 24.4804 7.51961C24.4804 7.51961 24.1001 7.13932 22.3588 7.11551C22.3588 7.11551 20.6186 7.09172 19.8262 6.75988C19.8262 6.75988 19.0397 6.43046 17.7728 5.2164C17.7728 5.2164 16.5035 4 16 4C16 4 15.4897 4 14.1895 5.24278C14.1895 5.24278 12.9324 6.44437 12.1715 6.76082C12.1715 6.76082 11.4097 7.07767 9.69459 7.10441C9.69459 7.10441 7.90694 7.13227 7.51961 7.51961C7.51961 7.51961 7.13932 7.8999 7.11551 9.64124C7.11551 9.64124 7.09172 11.3814 6.75988 12.1738C6.75988 12.1738 6.43047 12.9603 5.2164 14.2272C5.2164 14.2272 4 15.4965 4 16C4 16 4 16.5103 5.24278 17.8105C5.24278 17.8105 6.44437 19.0676 6.76082 19.8285C6.76082 19.8285 7.07767 20.5903 7.10441 22.3054C7.10441 22.3054 7.13227 24.0931 7.51961 24.4804C7.51961 24.4804 7.8999 24.8607 9.64124 24.8845C9.64124 24.8845 11.3814 24.9083 12.1738 25.2401Z"
-                                        fill="currentColor"></path>
-                                    <path
-                                        d="M11.1909 15.777C11.0048 15.5992 10.7574 15.5 10.5 15.5C10.4998 15.5 10.4773 15.5003 10.4773 15.5003C10.2122 15.5063 9.96027 15.6174 9.77704 15.8091C9.59923 15.9952 9.5 16.2426 9.5 16.5L9.50026 16.5227C9.50627 16.7878 9.61737 17.0397 9.80911 17.223L13.4716 20.723C13.8579 21.0921 14.4662 21.0924 14.8528 20.7236L22.19 13.7238C22.3819 13.5407 22.4935 13.2887 22.4997 13.0235C22.5001 13.0075 22.5001 12.9915 22.4997 12.9755C22.4936 12.727 22.3952 12.4896 22.2236 12.3097C22.0348 12.1119 21.7734 12 21.5 12L21.4718 12.0004C21.2245 12.0074 20.9887 12.1057 20.8097 12.2764L14.1631 18.6174L11.1909 15.777Z"
-                                        fill="currentColor"></path>
-                                </svg>
-                                <span>Aktif</span>
-                            </button>
-                        </td>
-                        <td>
-                            
-                        </td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
+<div class="py-3">
+    <input type="text" id="searchInput" placeholder="Cari Produk..." class="form-input py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" required="" data-listener-added_87712baf="true" data-listener-added_280f2adf="true">
+</div>
+<div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
+    <div class="mb-1">
+        <p class="text-sm font-semibold">Kategori Produk</p>
     </div>
+    <div class="table-responsive">
+        <table id="categoryTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nama Kategori</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php $no = 1; @endphp
+                {{-- Assuming $category is passed from the controller --}}
+                @foreach ($category as $item )
+                <tr class="searchable-row">
+                    <td class="w-10">{{ $no++ }}.</td>
+                    <td>
+                        <div x-data="modals">
+                            <button @click="toggle">{{ $item->name }}</button>
+                            <div class="fixed inset-0 bg-black/60 dark:bg-white/10 z-[999] hidden overflow-y-auto" :class="open &amp;&amp; '!block'">
+                                <div class="flex items-center justify-center min-h-screen px-4" @click.self="open = false">
+                                    <div x-show="open" x-transition="" x-transition.duration.300="" class="bg-white dark:bg-black relative shadow-3xl border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8" style="display: none;">
+                                        <div class="flex bg-white dark:bg-black border-b border-black/10 dark:border-white/10 items-center justify-between px-5 py-3">
+                                            <h5 class="font-semibold text-lg">Data kategori</h5>
+                                            <button type="button" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white" @click="toggle">
+                                                <svg class="w-5 h-5" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M24.2929 6.29289L6.29289 24.2929C6.10536 24.4804 6 24.7348 6 25C6 25.2652 6.10536 25.5196 6.29289 25.7071C6.48043 25.8946 6.73478 26 7 26C7.26522 26 7.51957 25.8946 7.70711 25.7071L25.7071 7.70711C25.8946 7.51957 26 7.26522 26 7C26 6.73478 25.8946 6.48043 25.7071 6.29289C25.5196 6.10536 25.2652 6 25 6C24.7348 6 24.4804 6.10536 24.2929 6.29289Z" fill="currentcolor"></path>
+                                                    <path d="M7.70711 6.29289C7.51957 6.10536 7.26522 6 7 6C6.73478 6 6.48043 6.10536 6.29289 6.29289C6.10536 6.48043 6 6.73478 6 7C6 7.26522 6.10536 7.51957 6.29289 7.70711L24.2929 25.7071C24.4804 25.8946 24.7348 26 25 26C25.2652 26 25.5196 25.8946 25.7071 25.7071C25.8946 25.5196 26 25.2652 26 25C26 24.7348 25.8946 24.4804 25.7071 24.2929L7.70711 6.29289Z" fill="currentcolor"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="p-5">
+                                            <div class="text-sm text-black dark:text-white">
+                                                <form action="{{ route('category.update') }}" method="POST">
+                                                    <!-- CSRF Token (Laravel) -->
+                                                    @csrf
+                                                    <input type="text" name="id" value="{{ $item->id }}" hidden>
+                                                    <div class="mb-4">
+                                                        <div class="relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
+                                                            <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Kategori</label>
+                                                            <input type="text" name="name" placeholder="Nama Kategori " class="form-input" value="{{ $item->name }}">
+                                                        </div>
+                                                    </div>
+                                                    <!-- Tombol Submit -->
+                                                    <div class="flex justify-end">
+                                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
+                                                            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-300 ">
+                                                                Update
+                                                            </button>
+                                                            <a href="{{ route('category.delete',$item->id) }}" type="button" class="btn text-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-300">
+                                                                Hapus
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#categoryTable .searchable-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
 
 
 @endsection

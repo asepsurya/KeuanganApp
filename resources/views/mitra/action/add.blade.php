@@ -1,8 +1,6 @@
 @extends('layout.main')
 @section('css')
-    <!-- jQuery (Select2 depends on jQuery) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/customselect2.css') }}">
+   
 @section('title', 'Form Tambah Mitra')
 @section('container')
     <style>
@@ -88,7 +86,7 @@
                             oninput="showRecommendations()" />
                         <!-- Dropdown for Recommendations -->
                         <ul id="kota-recommendations"
-                            class="absolute w-full mt-1 bg-white dark:bg-dark p-5 rounded-md border-black/10 dark:border-white/10 p-5 rounded-md border border-gray-200 rounded-lg shadow-lg hidden max-h-40 overflow-y-auto z-10">
+                            class="absolute w-full mt-1 bg-white dark:bg-dark  dark:border-white/10 p-5  border border-gray-200  shadow-lg hidden max-h-40 overflow-y-auto z-10">
                             <!-- Data recommendations will be injected here -->
                         </ul>
 
@@ -170,7 +168,7 @@
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+   
      <script>
         function formatCurrency(input) {
             let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Ikm\IkmController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\auth\logoutController;
 use App\Http\Controllers\Mitra\MitraController;
@@ -32,5 +33,19 @@ Route::middleware(['auth'])->group(function () {
     // Route Produk
     // ------------------------------------------------
     Route::get('/produk', [ProdukController::class, 'index'])->name('index.produk');
+    Route::get('/produk/create', [ProdukController::class, 'create'])->name('index.create.produk');
+    Route::get('/produk/update/{id}', [ProdukController::class, 'update'])->name('index.update.produk');
+    Route::post('/produk/update/', [ProdukController::class, 'updateaction'])->name('action.update');
+    Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('/produk/category', [ProdukController::class, 'category'])->name('produk.category');
+    Route::post('/produk/category', [ProdukController::class, 'createCategory'])->name('category.add');
+    Route::post('/produk/category/update', [ProdukController::class, 'updateCategory'])->name('category.update');
+    Route::get('/produk/category/delete/{id}', [ProdukController::class, 'deleteCategory'])->name('category.delete');
+    // ------------------------------------------------
+    // Route IKM
+    // ------------------------------------------------
+    Route::get('/people', [IkmController::class, 'index'])->name('index.ikm');
+    Route::get('/people/create', [IkmController::class, 'create'])->name('ikm.create');
+    Route::post('/people/create', [IkmController::class, 'store'])->name('ikm.store');
+    Route::get('/people/update/{id}', [IkmController::class, 'update'])->name('ikm.update');
 });
