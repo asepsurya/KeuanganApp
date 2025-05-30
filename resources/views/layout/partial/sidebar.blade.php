@@ -47,22 +47,16 @@
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
         
             {{-- Data Mitra --}}
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['mitra', 'add_mitra']) ? 'true' : 'false' }} }">
-                <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
-                    <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
-                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.66 9.35C0.45 9.16 0.45 8.84 0.66 8.65L4.25 5.35C4.46 5.16 4.46 4.84 4.25 4.65L0.66 1.35C0.45 1.16 0.45 0.84 0.66 0.65C0.87 0.45 1.22 0.45 1.43 0.65L5.02 3.94C5.66 4.53 5.66 5.47 5.02 6.06L1.43 9.35C1.22 9.55 0.87 9.55 0.66 9.35Z" fill="currentcolor"/></svg>
-                    </div>
-                    <div class="flex items-center">
+            <li class="menu nav-item">
+                <a href="{{ route('index.mitra') }}" class="{{ $active === 'mitra' ? 'active' : '' }}">
+                    <div class="flex pl-5 items-center">
                         <x-icon name="supplier" class="text-gray-600" />
-                        <span class="pl-1">Data Mitra</span>
+                        <span class="pl-1 text-black dark:text-white">Data Mitra</span>
                     </div>
                 </a>
-                <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="{{ route('mitra.add') }}" class="{{ $active === 'add_mitra' ? 'active' : '' }}">Tambah Data</a></li>
-                    <li><a href="{{ route('index.mitra') }}" class="{{ $active === 'mitra' ? 'active' : '' }}">Data Mitra</a></li>
-                </ul>
             </li>
-        
+
+          
             {{-- Data IKM --}}
             <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm','ikm_create','ikm_update']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
@@ -73,12 +67,12 @@
                     </div>
                     <div class="flex items-center">
                         <x-icon name="user" class="text-gray-600" />
-                        <span class="pl-1">Data IKM</span>
+                        <span class="pl-1">Data Pengguna</span>
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
                     <li><a href="{{ route('ikm.create') }}" class="{{ $active === 'ikm_create' ? 'active' : '' }}" >Tambah Data</a></li>
-                    <li><a href="{{ route('index.ikm') }}" class="{{ $active === 'ikm' ? 'active' : '' }}">Data IKM</a></li>
+                    <li><a href="{{ route('index.ikm') }}" class="{{ $active === 'ikm' ? 'active' : '' }}">Data Pengguna</a></li>
                 </ul>
             </li>
            

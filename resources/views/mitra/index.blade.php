@@ -33,21 +33,19 @@
                 </div>
                 <div class="p-5">
                     <div class="text-sm text-black dark:text-white">
-                        <form action="/mitra/store" method="POST">
+                        <form action="{{ route('mitra.create') }}" method="POST">
                             <!-- CSRF Token (Laravel) -->
                             @csrf
                             <!-- Nama Mitra -->
                             <div class="mb-4">
-                                <input type="text" placeholder="User Name" class="form-input py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" readonly  value="TRS-20425/029933">
+                                <input type="text" placeholder="User Name" class="form-input py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" readonly name="kode_mitra" id="kode_mitra">
                             </div>
                             <div class="mb-4">
                                 <div class="relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
                                     <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Mitra</label>
-                                    <input type="text"  placeholder="Masukan Nama Mitra " class="form-input">
+                                    <input type="text"  placeholder="Masukan Nama Mitra " class="form-input" name="nama_mitra" id="nama_mitra" required>
                                 </div>
-                            </div>
-                    
-                        
+                            </div>                     
                             <!-- Tombol Submit -->
                             <div class="flex justify-end">
                               <button type="submit"
@@ -68,9 +66,9 @@
     <div class="bg-lightblue-100 rounded-2xl p-6">
         <p class="text-sm font-semibold text-black mb-2">Jumlah Mitra</p>
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl leading-9 font-semibold text-black">721K</h2>
+            <h2 class="text-2xl leading-9 font-semibold text-black">{{ $mitra->count() }}</h2>
             <div class="flex items-center gap-1">
-                <p class="text-xs leading-[18px] text-black">+11.01%</p>
+                <p class="text-xs leading-[18px] text-black">Toko/Mitra</p>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M8.45488 5.60777L14 4L12.6198 9.6061L10.898 7.9532L8.12069 10.8463C8.02641 10.9445 7.89615 11 7.76 11C7.62385 11 7.49359 10.9445 7.39931 10.8463L5.36 8.72199L2.36069 11.8463C2.16946 12.0455 1.85294 12.0519 1.65373 11.8607C1.45453 11.6695 1.44807 11.3529 1.63931 11.1537L4.99931 7.65373C5.09359 7.55552 5.22385 7.5 5.36 7.5C5.49615 7.5 5.62641 7.55552 5.72069 7.65373L7.76 9.77801L10.1766 7.26067L8.45488 5.60777Z" fill="#1C1C1C"></path>
                 </svg>
@@ -80,9 +78,9 @@
     <div class="bg-lightpurple-100 rounded-2xl p-6">
         <p class="text-sm font-semibold text-black mb-2">Jumlah Kota</p>
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl leading-9 font-semibold text-black">367K</h2>
+            <h2 class="text-2xl leading-9 font-semibold text-black">{{ $totalKota }}</h2>
             <div class="flex items-center gap-1">
-                <p class="text-xs leading-[18px] text-black">+9.15%</p>
+                <p class="text-xs leading-[18px] text-black">Kota</p>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M8.45488 5.60777L14 4L12.6198 9.6061L10.898 7.9532L8.12069 10.8463C8.02641 10.9445 7.89615 11 7.76 11C7.62385 11 7.49359 10.9445 7.39931 10.8463L5.36 8.72199L2.36069 11.8463C2.16946 12.0455 1.85294 12.0519 1.65373 11.8607C1.45453 11.6695 1.44807 11.3529 1.63931 11.1537L4.99931 7.65373C5.09359 7.55552 5.22385 7.5 5.36 7.5C5.49615 7.5 5.62641 7.55552 5.72069 7.65373L7.76 9.77801L10.1766 7.26067L8.45488 5.60777Z" fill="#1C1C1C"></path>
                 </svg>
@@ -91,11 +89,18 @@
     </div>
 
 </div>
+@foreach($errors->all() as $error)
+<div class="bg-red-100 text-red-800 p-4 rounded-lg mb-4">
+    <p class="text-sm">{{ $error }}</p>
+</div>
+@endforeach
+
 <div class="grid grid-cols-1 gap-7">
     {{-- Simple DataTable --}}
     <div x-data="main" x-init="init()" class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
-        <div class="mb-5">
-            <p class="text-sm font-semibold">Database Mitra dan Toko</p>
+        <div class="mb-4">
+            <p class="text-sm font-semibold">Daftar Mitra dan Toko</p>
+            <p class="text-xs text-black/60 dark:text-white/60">Berikut adalah daftar mitra dan toko yang telah terdaftar di sistem.</p>
         </div>
         <div class="overflow-auto">
             <table id="myTable" class="whitespace-nowrap table-hover table-bordered w-full"></table>
@@ -110,6 +115,20 @@
 
 @section('js')
 <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
+   <script>
+      // Generate kode produk otomatis
+        document.addEventListener('DOMContentLoaded', function() {
+            const kodeInput = document.getElementById('kode_mitra');
+            if (kodeInput) {
+                const now = new Date();
+                const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan (01-12)
+                const year = String(now.getFullYear()).slice(-2); // 2 digit terakhir tahun
+                const random = Math.floor(1000 + Math.random() * 9000); // 4 digit acak
+
+                kodeInput.value = `MTR-${month}${year}/${random}`;
+            }
+        });
+   </script>
 <script>
     document.addEventListener("alpine:init", () => {
         Alpine.data('main', () => ({
@@ -119,7 +138,7 @@
             , loadData() {
                 const table = new simpleDatatables.DataTable("#myTable", {
                     data: {
-                        headings: ["Kode Mitra", "Nama Mitra", "Alamat", "No. Telepon", "Email"]
+                        headings: ["Kode Mitra", "Nama Mitra", "Alamat", "Kota", "No. Telepon"]
                         , data: @json($mitra)
                     , }
                     , sortable: false

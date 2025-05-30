@@ -7,6 +7,7 @@ use App\Http\Controllers\auth\logoutController;
 use App\Http\Controllers\Mitra\MitraController;
 use App\Http\Controllers\auth\registerController;
 use App\Http\Controllers\Produk\ProdukController;
+use App\Http\Controllers\Region\RegionController;
 use App\Http\Controllers\Dashboard\DashboardAdminController;
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
@@ -15,6 +16,12 @@ Route::get('/register', [registerController::class, 'register'])->name('register
 Route::post('/register/auth', [registerController::class, 'registerAction'])->name('register.add')->middleware('guest');
 Route::post('/logout', [logoutController::class, 'logout'])->name('logout');
 
+// ------------------------------------------------
+// route Regency Administrasi
+// ------------------------------------------------
+Route::post('/getkabupaten',[RegionController::class,'getkabupaten'])->name('getkabupaten');
+Route::post('/getkecamatan',[RegionController::class,'getkecamatan'])->name('getkecamatan');
+Route::post('/getdesa',[RegionController::class,'getdesa'])->name('getdesa');
 
 Route::middleware(['auth'])->group(function () {
     // ------------------------------------------------
@@ -28,7 +35,11 @@ Route::middleware(['auth'])->group(function () {
     // Route Mitra
     // ------------------------------------------------
     Route::get('/mitra', [MitraController::class, 'index'])->name('index.mitra');
+    Route::get('/mitra/detail/{id}', [MitraController::class, 'mitraDetail'])->name('detail.mitra');
+    Route::post('/mitra/detail/update', [MitraController::class, 'mitraupdate'])->name('update.mitra');
+    Route::delete('/mitra/produk/delete/{id}', [MitraController::class, 'mitaProdukDelete'])->name('produk.mitra.delete');
     Route::get('/mitra/create', [MitraController::class, 'create'])->name('mitra.add');
+    Route::post('/mitra/create/action', [MitraController::class, 'createAction'])->name('mitra.create');
     // ------------------------------------------------
     // Route Produk
     // ------------------------------------------------
@@ -36,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('index.create.produk');
     Route::get('/produk/update/{id}', [ProdukController::class, 'update'])->name('index.update.produk');
     Route::post('/produk/update/', [ProdukController::class, 'updateaction'])->name('action.update');
+    Route::get('/produk/delete/{id}', [ProdukController::class, 'deleteaction'])->name('action.delete');
     Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('/produk/category', [ProdukController::class, 'category'])->name('produk.category');
     Route::post('/produk/category', [ProdukController::class, 'createCategory'])->name('category.add');
@@ -47,5 +59,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/people', [IkmController::class, 'index'])->name('index.ikm');
     Route::get('/people/create', [IkmController::class, 'create'])->name('ikm.create');
     Route::post('/people/create', [IkmController::class, 'store'])->name('ikm.store');
+    Route::get('/people/delete/{id}', [IkmController::class, 'delete'])->name('ikm.delete');
     Route::get('/people/update/{id}', [IkmController::class, 'update'])->name('ikm.update');
+    Route::post('/people/update/action', [IkmController::class, 'updateIkm'])->name('ikm.update.action');
+    Route::post('/people/update/foto', [IkmController::class, 'updateFoto'])->name('ikm.update.foto');
 });
