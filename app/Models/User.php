@@ -46,4 +46,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function ikm(){
+        return $this->belongsTo('App\Models\ikm','email','email');
+    }
 }

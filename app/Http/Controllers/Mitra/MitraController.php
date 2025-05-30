@@ -16,7 +16,7 @@ class MitraController extends Controller
 {
     public function index()
     {
-        $mitra = Mitra::all()->sortByDesc("created_at")->map(function ($item) {
+        $mitra = Mitra::where('auth', auth()->user()->id)->orderBy('created_at', 'desc')->get()->map(function ($item) {
             return [
                 '<a href="' . route("detail.mitra", $item->id) . '" class="flex items
                 -center space-x-2 text-blue-600 hover:underline">
@@ -24,7 +24,7 @@ class MitraController extends Controller
                 </a>',
                 '<div class="mobile">' . ($item->nama_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
                 '<div class="mobile">' . ($item->alamat_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
-                '<div class="mobile">' . ($item->id_kota?->name ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
+                '<div class="mobile">' . ($item->id_kota ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
                 '<div class="mobile">' . ($item->no_telp_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
             ];
         })->values();
@@ -51,7 +51,7 @@ class MitraController extends Controller
     public function createAction(Request $request)
     {
         $request->validate([
-            'kode_mitra' => 'required|string|max:255|unique:mitra,kode_mitra',
+            'kode_mitra' => 'required|string|max:255',
             'nama_mitra' => 'required|string|max:255',
         ]);
 
@@ -59,6 +59,7 @@ class MitraController extends Controller
         $mitra = Mitra::create([
             'kode_mitra' => $request->kode_mitra,
             'nama_mitra' => $request->nama_mitra,
+            'auth'=>auth()->user()->id
         ]);
         // Log aktivitas
         activity('ikm')->performedOn($mitra)->causedBy(auth()->user())->log('Menambahkan Mitra Baru ' . $request->nama_mitra);
@@ -141,5 +142,28 @@ class MitraController extends Controller
         $produk->delete();
         activity('ikm')->performedOn($produk)->causedBy(auth()->user())->log('Menghapus Produk Mitra ' . $produk->nama_produk);
         return response()->json(['success' => true]);
+    }
+
+    public function mitraDelete($id){
+        $mitra = Mitra::findOrFail($id);
+
+        // Simpan nama dan kode mitra sebelum hapus
+        $namaMitra = $mitra->nama_mitra;
+        $kodeMitra = $mitra->kode_mitra;
+        
+        // Hapus semua penawaran yang punya kode_mitra ini
+        Penawaran::where('kode_mitra', $kodeMitra)->delete();
+        
+        // Logging aktivitas
+        activity('ikm')
+            ->causedBy(auth()->user())
+            ->log("Menghapus Mitra $namaMitra");
+        
+        // Hapus mitra
+        $mitra->delete();
+        
+        toastr()->success("Data mitra dan penawaran berhasil dihapus!");
+        return redirect()->route('index.mitra');        
+        
     }
 }

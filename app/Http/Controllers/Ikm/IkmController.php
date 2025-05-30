@@ -218,7 +218,7 @@ class IkmController extends Controller
                 activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Memperbarui Data Pengguna');
             }  
          toastr()->success("Data has been saved successfully!");
-        return redirect()->back();
+         return redirect()->route('ikm.update',$request->id);
      }
 
     public function delete($id)

@@ -105,7 +105,7 @@
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Administrasi</span></h2>
         
             {{-- Data Keuangan --}}
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['keuangan-data']) ? 'true' : 'false' }} }">
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['keuangan','akun']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -118,9 +118,9 @@
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="#" class="{{ $active === 'keuangan-data' ? 'active' : '' }}">Tambah Data</a></li>
-                    <li><a href="#">Kategori Pemasukan</a></li>
-                    <li><a href="#">Kategori Pengeluaran</a></li>
+                    <li><a href="{{ route('index.keuangan') }}" class="{{ $active === 'keuangan' ? 'active' : '' }}">Buku Kas</a></li>
+                    <li><a href="{{ route('index.akun') }}" class="{{ $active === 'akun' ? 'active' : '' }}">Akun</a></li>
+                    <li><a href="#">Rekening Virtual</a></li>
                 </ul>
             </li>
         

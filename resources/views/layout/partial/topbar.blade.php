@@ -91,17 +91,23 @@
             </button>
             <div class="profile" x-data="dropdown" @click.outside="open = false">
                 <button type="button" class="flex items-center gap-1.5 xl:gap-0" @click="toggle()">
-                    <img class="h-7 w-7 rounded-full xl:mr-2" src="{{ asset('assets/images/byewind-avatar.png') }}"
+                    <img class="h-7 w-7 rounded-full xl:mr-2"
+                        src="{{ auth()->user()->ikm && auth()->user()->ikm->foto ? asset('storage/' . auth()->user()->ikm->foto) : asset('assets/images/byewind-avatar.png') }}"
                         alt="Header Avatar" />
-                    <span class="fw-medium hidden xl:block">{{ auth()->user()->name }}</span>
+
+                        <span class="fw-medium hidden xl:block" title="{{ auth()->user()->name }}">
+                            Hallo, {{ explode(' ', auth()->user()->name)[0] }}
+                        </span>
+                        
                     <x-icon name="arrow-bottom" class="text-gray-600" />
                 </button>
                 <ul x-cloak x-show="open" x-transition x-transition.duration.300ms>
                     <li>
                         <div class="flex items-center !p-1">
                             <div class="flex-none">
-                                <img class="h-7 w-7 rounded-full object-cover"
-                                    src="{{ asset('assets/images/byewind-avatar.png') }}" alt="image" />
+                                <img class="h-7 w-7 rounded-full "
+                                src="{{ auth()->user()->ikm && auth()->user()->ikm->foto ? asset('storage/' . auth()->user()->ikm->foto) : asset('assets/images/byewind-avatar.png') }}"
+                                alt="Header Avatar" />
                             </div>
                             <div class="pl-2">
                                 <h4 class="text-sm text-black dark:text-white font-medium leading-none">
@@ -125,7 +131,7 @@
 
                     <li class="h-px bg-black/5 block my-1"></li>
                     <li>
-                        <a href="javaScript:;" class="flex items-center">
+                        <a href="{{ route('ikm.update',auth()->user()->id) }}" class="flex items-center">
                             <x-icon name="user-rounded" class="text-gray-600" />
                             Profile
                         </a>
@@ -136,18 +142,7 @@
                             Settings
                         </a>
                     </li>
-                    <li>
-                        <a href="javaScript:;" class="flex items-center">
-                            <x-icon name="chat" class="text-gray-600" />
-                            Messages
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javaScript:;" class="flex items-center">
-                            <x-icon name="users" class="text-gray-600" />
-                            Support
-                        </a>
-                    </li>
+                
                     <li class="h-px bg-black/5 block my-1"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">

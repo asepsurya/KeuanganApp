@@ -8,8 +8,11 @@ use App\Http\Controllers\Mitra\MitraController;
 use App\Http\Controllers\auth\registerController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Region\RegionController;
+use App\Http\Controllers\Keuangan\KeuanganController;
 use App\Http\Controllers\Dashboard\DashboardAdminController;
 
+
+Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/register', [registerController::class, 'register'])->name('register')->middleware('guest');
@@ -39,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mitra/detail/update', [MitraController::class, 'mitraupdate'])->name('update.mitra');
     Route::delete('/mitra/produk/delete/{id}', [MitraController::class, 'mitaProdukDelete'])->name('produk.mitra.delete');
     Route::get('/mitra/create', [MitraController::class, 'create'])->name('mitra.add');
+    Route::get('/mitra/delete/{id}', [MitraController::class, 'mitraDelete'])->name('mitra.delete');
     Route::post('/mitra/create/action', [MitraController::class, 'createAction'])->name('mitra.create');
     // ------------------------------------------------
     // Route Produk
@@ -63,4 +67,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/people/update/{id}', [IkmController::class, 'update'])->name('ikm.update');
     Route::post('/people/update/action', [IkmController::class, 'updateIkm'])->name('ikm.update.action');
     Route::post('/people/update/foto', [IkmController::class, 'updateFoto'])->name('ikm.update.foto');
+    // ------------------------------------------------
+    // Route Keuangan
+    // ------------------------------------------------
+    Route::get('/keuangan', [KeuanganController::class, 'index'])->name('index.keuangan');
+    Route::get('/akun', [KeuanganController::class, 'IndexAkun'])->name('index.akun');
+    Route::post('/akun/create', [KeuanganController::class, 'akunCreate'])->name('akun.create');
+    Route::post('/akun/update', [KeuanganController::class, 'akunUpdate'])->name('akun.update');
+    Route::get('/akun/delete/{id}', [KeuanganController::class, 'akunDelete'])->name('akun.delete');
 });

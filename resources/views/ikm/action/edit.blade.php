@@ -398,7 +398,7 @@ function confirmDelete(url) {
 </form>
 
 <!-- Modal for cropping -->
-<div class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+<div class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50  justify-center items-center z-50">
     <!-- Modal Background (Overlay) -->
     <div class="absolute inset-0 bg-gray-800 bg-opacity-50 z-40"></div>
 

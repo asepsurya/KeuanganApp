@@ -51,4 +51,8 @@ class AuthController extends Controller
       ])
       ->withInput();
   }
+
+  public function index(){
+    return redirect('/login');
+  }
 }
