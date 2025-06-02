@@ -8,7 +8,9 @@ use App\Http\Controllers\Mitra\MitraController;
 use App\Http\Controllers\auth\registerController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Region\RegionController;
+use App\Http\Controllers\Keuangan\HistoryController;
 use App\Http\Controllers\Keuangan\KeuanganController;
+use App\Http\Controllers\Transaksi\TransaksiController;
 use App\Http\Controllers\Dashboard\DashboardAdminController;
 
 
@@ -71,8 +73,28 @@ Route::middleware(['auth'])->group(function () {
     // Route Keuangan
     // ------------------------------------------------
     Route::get('/keuangan', [KeuanganController::class, 'index'])->name('index.keuangan');
+    Route::get('/keuangan/kalender', [KeuanganController::class, 'kelenderIndex'])->name('keuangan.kalender');
+    Route::post('/keuangan/add', [KeuanganController::class, 'keuanganAdd'])->name('keuangan.add');
+    Route::post('/keuangan/update', [KeuanganController::class, 'keuanganUpdate'])->name('keuangan.update');
+    Route::get('/keuangan/delete/{id}', [KeuanganController::class, 'keuanganDelete'])->name('keuangan.delete');
+    // ------------------------------------------------
+    // Route Akun dan Rekening
+    // ------------------------------------------------
     Route::get('/akun', [KeuanganController::class, 'IndexAkun'])->name('index.akun');
     Route::post('/akun/create', [KeuanganController::class, 'akunCreate'])->name('akun.create');
     Route::post('/akun/update', [KeuanganController::class, 'akunUpdate'])->name('akun.update');
     Route::get('/akun/delete/{id}', [KeuanganController::class, 'akunDelete'])->name('akun.delete');
+    Route::get('/rekening', [KeuanganController::class, 'rekeningIndex'])->name('akun.rekening');
+    Route::post('/rekening', [KeuanganController::class, 'rekeningAdd'])->name('rekening.add');
+    Route::post('/rekening/update', [KeuanganController::class, 'rekeningUpdate'])->name('rekening.update');
+    Route::delete('/rekening/hapus/{id}', [KeuanganController::class, 'rekeningDelete'])->name('rekening.delete');
+    Route::get('/rekening/default/{id}', [KeuanganController::class, 'rekeningDefault'])->name('default.rekening');
+    Route::get('/rekening/{id_rekening}', [HistoryController::class, 'rekeningHistory'])->name('rekening.history');
+
+    // ------------------------------------------------
+    // Route  Transaksi Induk Mitra
+    // ------------------------------------------------
+    Route::get('/transaksi', [TransaksiController::class, 'transaksiIndex'])->name('transaksi.index');
+    Route::get('/transaksi/{id}', [TransaksiController::class, 'DetailTransaki'])->name('transaksi.detail');
+    Route::post('/transaksi/create', [TransaksiController::class, 'transaksiCreate'])->name('transaksi.create');
 });

@@ -22,8 +22,7 @@
                     + Tambah Akun Baru
                 </button>
                 <div class="fixed inset-0 bg-black/60 dark:bg-white/10 z-[999] hidden overflow-y-auto"
-                    :class="open & amp; & amp;
-                    '!block'">
+                   :class="open &amp;&amp; '!block'">
                     <div class="flex items-center justify-center min-h-screen px-4" @click.self="open = false">
                         <div x-show="open" x-transition="" x-transition.duration.300=""
                             class="bg-white dark:bg-black relative shadow-3xl border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8"
@@ -98,8 +97,7 @@
                                         <div x-data="modals">
                                             <button type="button" @click="toggle">{{ $data->nama_akun }}</button>
                                             <div class="fixed inset-0 bg-black/60 dark:bg-white/10 z-[999] hidden overflow-y-auto"
-                                                :class="open & amp; & amp;
-                                                '!block'">
+                                             :class="open &amp;&amp; '!block'">
                                                 <div class="flex items-center justify-center min-h-screen px-4"
                                                     @click.self="open = false">
                                                     <div x-show="open" x-transition="" x-transition.duration.300=""
@@ -202,8 +200,7 @@
                                         <div x-data="modals">
                                             <button type="button" @click="toggle">{{ $data->nama_akun }}</button>
                                             <div class="fixed inset-0 bg-black/60 dark:bg-white/10 z-[999] hidden overflow-y-auto"
-                                                :class="open & amp; & amp;
-                                                '!block'">
+                                               :class="open &amp;&amp; '!block'">
                                                 <div class="flex items-center justify-center min-h-screen px-4"
                                                     @click.self="open = false">
                                                     <div x-show="open" x-transition="" x-transition.duration.300=""

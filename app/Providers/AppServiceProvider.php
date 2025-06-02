@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\ikm;
-use App\Observers\IkmObserver;
+use App\Models\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // ikm::observe(IkmObserver::class);
+         // App Settings
+        $this->app->singleton('settings',function(){
+            return Cache::rememberForever('settings', function () {
+                return App::all()->pluck('value','key');
+            });
+        });
     }
 }

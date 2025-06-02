@@ -9,9 +9,9 @@
         </div>
         <!-- End Logo -->
         <!-- Start Menu -->
-        <ul class="relative h-[calc(100vh-58px)] flex flex-col gap-1 overflow-y-auto overflow-x-hidden p-4 py-0" x-data="{ activeMenu: '{{ $activeMenu }}' }">
+        <ul class="relative h-[calc(100vh-58px)] flex flex-col gap-1 overflow-y-auto overflow-x-hidden p-4 py-0" x-data="{ activeMenu: '{{ $activeMenu }}' }" id="menu">
             <li class="menu nav-item mb-3">
-                <input type="text" placeholder="Cari Menu.." class="form-input py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" required>
+                @include('layout.partial.seachmenu')
             </li>
         
             {{-- Dashboard --}}
@@ -105,7 +105,7 @@
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Administrasi</span></h2>
         
             {{-- Data Keuangan --}}
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['keuangan','akun']) ? 'true' : 'false' }} }">
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['keuangan','akun','rekening']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,14 +113,18 @@
                         </svg>
                     </div>
                     <div class="flex items-center">
-                        <x-icon name="cart" class="text-gray-600" />
-                        <span class="pl-1">Data Keuangan</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <rect x="3" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <path d="M7 12h.01M17 12h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="pl-1">Keuangan</span>
                     </div>
                 </a>
                 <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
                     <li><a href="{{ route('index.keuangan') }}" class="{{ $active === 'keuangan' ? 'active' : '' }}">Buku Kas</a></li>
                     <li><a href="{{ route('index.akun') }}" class="{{ $active === 'akun' ? 'active' : '' }}">Akun</a></li>
-                    <li><a href="#">Rekening Virtual</a></li>
+                    <li><a href="{{ route('akun.rekening') }}" class="{{ $active === 'rekening' ? 'active' : '' }}">Rekening</a></li>
                 </ul>
             </li>
         
@@ -136,7 +140,7 @@
         
             {{-- Penjualan --}}
             <li class="menu nav-item">
-                <a class="nav-link group" href="#">
+                <a class="nav-link group {{ $active === 'transaksi' ? 'active' : '' }}" href="{{ route('transaksi.index') }}">
                     <div class="flex pl-5 items-center">
                         <x-icon name="layer" class="text-gray-600" />
                         <span class="pl-1 text-black dark:text-white">Transaksi</span>

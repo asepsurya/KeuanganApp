@@ -63,7 +63,7 @@
                                     <!-- Detail mobile -->
                                     <div class="lg:hidden mt-2 text-xs text-gray-500 space-y-1">
                                         <div><strong>Created at:</strong> {{ $item->created_at->format('d M Y') }}</div>
-                                        <div><strong>Status:</strong> In stock</div>
+                                        <div><strong>Status:</strong>{{ $item->status }}({{ $item->stok }} pcs)</div>
                                         <div><strong>Amount:</strong> Rp{{ number_format($item->harga, 0, ',', '.') }}</div>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                             <!-- Kolom desktop (disembunyikan di mobile) -->
                             <td class="py-4  font-normal mobile lg:table-cell">{{ $item->kode_produk }}</td>
                             <td class="py-4 mobile lg:table-cell">
-                                <span class="inline-block rounded px-2 py-0.5 text-xs font-semibold">{{ $item->status }}</span>
+                                <span class="inline-block rounded px-2 py-0.5 text-xs font-semibold">{{ $item->status }} ({{ $item->stok }} pcs)</span>
                             </td>
                             <td class="py-4 font-semibold mobile lg:table-cell">Rp
                                 {{ number_format($item->harga, 0, ',', '.') }}</td>
