@@ -49,37 +49,72 @@
         @csrf
         <div class="px-2 py-1 mb-4 flex items-center justify-between">
             <h2 class="text-lg font-semibold">Detail Mitra / Toko</h2>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <button type="submit"
-                    class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
-                    Simpan
-                </button>
+            <div class="flex flex-col sm:flex-row gap-2">
+            <button type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
+                Simpan
+            </button>
 
-                <button type="button" onclick="confirmDelete('{{ route('mitra.delete',$mitra->id) }}')"
-                    class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150">
-                    Hapus
-                </button>
+            <button type="button" onclick="confirmDelete('{{ route('mitra.delete', $mitra->id) }}')"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150">
+                Hapus
+            </button>
+
+            <button type="button" onclick="checkTransaction('{{ route('transaksi.detail', $mitra->id) }}')"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg shadow transition duration-150">
+                Lakukan Transaksi
+            </button>
+
+            <script>
+                function checkTransaction(url) {
+                    @if ($mitra->transaksi == null)
+                        window.location.href = "{{ route('transaksi.index') }}";
+                    @else
+                        Swal.fire({
+                            title: 'Transaksi sudah ada',
+                            text: 'Apakah Anda ingin melanjutkan transaksi yang ada?',
+                            icon: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, lanjutkan transaksi',
+                            cancelButtonText: 'Batal',
+                            customClass: {
+                                confirmButton: 'bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-lg mx-2 focus:outline-none',
+                                cancelButton: 'bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1.5 rounded-lg mx-2 focus:outline-none'
+                            },
+                            buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = url;
+                            }
+                        });
+                    @endif
+                }
+            </script>
             </div>
             <script>
-                function confirmDelete(url) {
-                    Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: 'Tindakan ini tidak dapat dibatalkan!',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal',
-                        customClass: {
-                            confirmButton: 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg mx-2 focus:outline-none',
-                            cancelButton: 'bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg mx-2 focus:outline-none'
-                        },
-                        buttonsStyling: false // penting agar customClass dipakai
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = url;
-                        }
-                    });
+            function confirmDelete(url) {
+                Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: 'Tindakan ini tidak dapat dibatalkan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-lg mx-2 focus:outline-none',
+                    cancelButton: 'bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1.5 rounded-lg mx-2 focus:outline-none'
+                },
+                buttonsStyling: false
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
                 }
+                });
+            }
+
+            function redirectToTransaction(url) {
+                window.location.href = url;
+            }
             </script>
         </div>
 
@@ -177,7 +212,7 @@
                         <p class="text-sm font-semibold">Daftar barang yang dijual</p>
 
                         <button type="button"
-                            class="px-2 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+                            class="btn py-2 px-5 text-[15px]"
                             onclick="addRow()">
                             + Tambah Produk
                         </button>

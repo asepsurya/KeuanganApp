@@ -97,4 +97,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaksi', [TransaksiController::class, 'transaksiIndex'])->name('transaksi.index');
     Route::get('/transaksi/{id}', [TransaksiController::class, 'DetailTransaki'])->name('transaksi.detail');
     Route::post('/transaksi/create', [TransaksiController::class, 'transaksiCreate'])->name('transaksi.create');
+    Route::post('/transaksi/update', [TransaksiController::class, 'transaksiUpdate'])->name('transaksi.update');
+    Route::get('/transaksi/cetak/konsinyasi/{id}', [TransaksiController::class, 'konsinyasi'])->name('transaksi.konsinyasi');
+    Route::get('/transaksi/dok/konsinyasi/{id}', [TransaksiController::class, 'konsinyasidok'])->name('transaksi.konsinyasi.dok');
 });

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nota Konsinyasi{{ $id }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-900 text-white h-screen flex flex-col">
+
+    <!-- Topbar -->
+    <div class="flex items-center justify-between bg-gray-800 px-4 h-14">
+        <div class="flex items-center space-x-3">
+            <button id="menuToggle" class="md:hidden">
+                <i data-lucide="menu" class="w-5 h-5 text-white"></i>
+            </button>
+            <span class="text-sm truncate max-w-[140px] text-gray-300">Nota Konsinyasi{{ $id }}</span>
+            {{-- <button class="bg-blue-600 text-xs px-2 py-1 rounded">+ Create</button> --}}
+        </div>
+        <div class="flex items-center space-x-3">
+            {{-- <input type="text" placeholder="Find text or tools" class="hidden md:block text-sm px-2 py-1 rounded bg-gray-700 border border-gray-600 placeholder-gray-400 text-white">
+      <button><i data-lucide="search" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="download" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="upload" class="w-5 h-5 text-white"></i></button> --}}
+            <button onclick="printArea()"><i data-lucide="printer" class="w-5 h-5 text-white"></i></button>
+
+            <script>
+                function printArea() {
+                    const printContents = document.getElementById("print-area").innerHTML;
+                    const originalContents = document.body.innerHTML;
+
+                    document.body.innerHTML = printContents;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                }
+            </script>
+           
+            <button><i data-lucide="stamp" class="w-5 h-5 text-white"></i></button>
+            <button><i data-lucide="signature" class="w-5 h-5 text-white"></i></button>
+        </div>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-gray-800 flex flex-col items-center py-4 space-y-5 w-14 md:w-14 transition-all duration-300">
+      <button><i data-lucide="mouse-pointer" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="message-square" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="pencil" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="link" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="type" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="brush" class="w-5 h-5 text-white"></i></button>
+      <button><i data-lucide="more-vertical" class="w-5 h-5 text-white"></i></button>
+    </div>
+
+        <!-- Workspace -->
+        <div class="flex-1 bg-gray-900 overflow-auto flex items-start justify-center p-4" id="print-area" style="border: none;">
+            <div class="w-full h-[297mm] bg-white shadow-lg border border-gray-600 text-white p-5"
+                style="width: 210mm;"id="include-content">
+                <div></div>
+                @include('transaksi.dokumen.laporan.konsinyasi')
+                {{-- <iframe src="/transaksi/dok/konsinyasi/{{  $id }}" class="w-full h-full" frameborder="0"></iframe> --}}
+            </div>
+        </div>
+    </div>
+    <!-- Floating Button -->
+    <div class="fixed bottom-10 right-10">
+        <button id="floatingButton" class="bg-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-600 relative">
+            <i data-lucide="settings" class="w-6 h-6 text-white"></i>
+        </button>
+        <div id="floatingMenu"
+            class="hidden absolute bottom-full right-0 mb-2 bg-gray-800 p-4 rounded-lg shadow-lg space-y-3">
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" class="form-checkbox text-blue-500" id="toggleSignature"
+                    onchange="toggleVisibility('signature')">
+                <span class="text-white text-sm">Signature</span>
+            </label>
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" class="form-checkbox text-blue-500" id="toggleStamp"
+                    onchange="toggleVisibility('stamp')">
+                <span class="text-white text-sm">Stamp</span>
+            </label>
+        </div>
+
+        <script>
+            function toggleVisibility(elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.style.display = element.style.display === 'none' ? 'block' : 'none';
+                }
+            }
+
+            // Default hide elements
+            document.addEventListener('DOMContentLoaded', () => {
+                const stampElement = document.getElementById('stamp');
+                const signatureElement = document.getElementById('signature');
+                if (stampElement) stampElement.style.display = 'none';
+                if (signatureElement) signatureElement.style.display = 'none';
+            });
+
+            // Show image when checkbox is checked
+            document.getElementById('toggleStamp').addEventListener('change', (event) => {
+                const stampElement = document.getElementById('stamp');
+                if (stampElement) {
+                    stampElement.style.display = event.target.checked ? 'block' : 'none';
+                }
+            });
+
+            document.getElementById('toggleSignature').addEventListener('change', (event) => {
+                const signatureElement = document.getElementById('signature');
+                if (signatureElement) {
+                    signatureElement.style.display = event.target.checked ? 'block' : 'none';
+                }
+            });
+        </script>
+    </div>
+
+    <script>
+        const floatingButton = document.getElementById('floatingButton');
+        const floatingMenu = document.getElementById('floatingMenu');
+
+        floatingButton.addEventListener('click', () => {
+            floatingMenu.classList.toggle('hidden');
+        });
+    </script>
+    <script>
+        function printDokumen() {
+            const iframe = document.querySelector('iframe');
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        }
+    </script>
+
+
+    <script>
+        lucide.createIcons()
+
+        // Toggle sidebar di mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+
+    <style>
+        @media (max-width: 768px) {
+            #sidebar {
+                position: fixed;
+                top: 56px;
+                left: 0;
+                height: calc(100% - 56px);
+                z-index: 50;
+                transform: translateX(-100%);
+                width: 56px;
+            }
+        }
+    </style>
+</body>
+
+</html>

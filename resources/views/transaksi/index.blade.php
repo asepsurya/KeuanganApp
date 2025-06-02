@@ -175,10 +175,10 @@
             if (kodeInput) {
                 const now = new Date();
                 const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan (01-12)
-                const year = String(now.getFullYear()).slice(-2); // 2 digit terakhir tahun
-                const random = Math.floor(1000 + Math.random() * 9000); // 4 digit acak
+                const year = String(now.getFullYear()); // 2 digit terakhir tahun
+                const random = Math.floor(100 + Math.random() * 900); // 3 digit acak
 
-                kodeInput.value = `TRS-${month}${year}${random}`;
+                kodeInput.value = `B${year}${random}`;
             }
         });
    </script>

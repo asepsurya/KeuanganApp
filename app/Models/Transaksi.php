@@ -10,4 +10,8 @@ class Transaksi extends Model
      public function mitra(){
         return $this->belongsTo('App\Models\Mitra','kode_mitra','kode_mitra');
     }
+     public function penawaran(){
+        return $this->hasMany('App\Models\Penawaran','kode_mitra','kode_mitra');
+    }
+   
 }

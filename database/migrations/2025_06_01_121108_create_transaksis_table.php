@@ -16,10 +16,10 @@ return new class extends Migration
             $table->date('tanggal_transaksi')->nullable();
             $table->string('kode_transaksi')->unique();
             $table->string('kode_mitra')->nullable();
-            $table->decimal('diskon', 10, 2)->default(0);
+            $table->string('diskon')->nullable();
             $table->date('tanggal_pembayaran')->nullable();
-            $table->decimal('total', 15, 2)->nullable();
-            $table->enum('status_bayar', ['belum', 'lunas', 'sebagian'])->default('belum');
+            $table->string('total')->nullable();
+            $table->string('status_bayar')->nullable();
             $table->string('auth');
             $table->timestamps();
         });

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Keuangan;
 
 use Storage;
+use App\Models\App;
 use App\Models\Akun;
 use App\Models\Keuangan;
 use App\Models\Rekening;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Spatie\Activitylog\Models\Activity;
 use App\Models\HistoryRekening;
-use App\Models\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
+use Spatie\Activitylog\Models\Activity;
 
 class KeuanganController extends Controller
 {
@@ -165,6 +166,7 @@ class KeuanganController extends Controller
             // Cek apakah sudah ada default rekening di App
             $defaultRekening = App::where('key', 'default_rekening')->first();
             if ($defaultRekening) {
+                
                 // Gunakan rekening default yang sudah ada
                 $rekening = Rekening::where('kode_rekening', $defaultRekening->value)->first();
                 if ($rekening) {
@@ -187,9 +189,11 @@ class KeuanganController extends Controller
                         'saldo' => $rekening->jumlah,
                     ]);
                 } else {
+                    $rekeningid = 'RKN' . str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+
                     // Jika kode rekening di App tidak ditemukan di tabel rekening, buat baru
                     $rekeningBaru = Rekening::create([
-                        'kode_rekening' => $defaultRekening->value,
+                        'kode_rekening' => $rekeningid,
                         'nama_rekening' => 'Rekening Otomatis',
                         'jenis_akun' => 'default',
                         'jumlah' => $request->total,
@@ -205,6 +209,12 @@ class KeuanganController extends Controller
                         'kredit' => $request->tipe === 'pengeluaran' ? $request->total : 0,
                         'saldo' => $rekeningBaru->jumlah,
                     ]);
+                    // Tambahkan data default rekening ke tabel App (key-value)
+                    App::where('key', 'default_rekening')->update([
+                        'value' => $rekeningid
+                    ]);
+                    
+                    Artisan::call('optimize:clear');
                 }
             } else {
                 // Buat rekening baru dan simpan sebagai default
@@ -231,7 +241,7 @@ class KeuanganController extends Controller
                 // Tambahkan data default rekening ke tabel App (key-value)
                 App::create([
                     'key' => 'default_rekening',
-                    'value' => $kodeRekeningBaru,
+                    'value' => $rekeningBaru->kode_rekening,
                 ]);
             }
         } else {

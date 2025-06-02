@@ -53,15 +53,28 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
                         <!-- Harga -->
+                    
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                             <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Harga Produk</label>
-                            <input type="number" name="harga" placeholder="Harga Produk" class="form-input" />
+                            <input type="number" name="harga" placeholder="Harga Produk" class="form-input" oninput="formatCurrency(this)" />
+                            <small><span id="formattedHarga" class="text-gray-500">Rp 0</span></small>
+                            <script>
+                                function formatCurrency(input) {
+                                    const value = input.value.replace(/\D/g, '');
+                                    const formatted = new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                    }).format(value || 0);
+                                    document.getElementById('formattedHarga').textContent = formatted;
+                                }
+                            </script>
                         </div>
 
                         <!-- Stok -->
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                             <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Stok Produk</label>
                             <input type="number" name="stok" placeholder="Stok Produk" class="form-input" />
+                            
                         </div>
                     </div>
 
@@ -69,7 +82,9 @@
                         <!-- Harga -->
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                             <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih</label>
-                            <input type="number" name="berat" placeholder="Berat Bersih" class="form-input" />
+                            <input type="number" name="berat" placeholder="Berat Bersih" class="form-input"/>
+                          
+                            
                         </div>
 
                         <!-- Stok -->

@@ -7,6 +7,7 @@ use App\Models\Produk;
 use App\Models\Regency;
 use App\Models\District;
 use App\Models\Penawaran;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,7 @@ class MitraController extends Controller
                     <span>' . e($item->kode_mitra) . '</span>
                 </a>',
                 '<div class="mobile">' . ($item->nama_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
-                '<div class="mobile">' . ($item->alamat_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
+                '<div class="mobile truncate">' . (Str::limit($item->alamat_mitra, 20) ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
                 '<div class="mobile">' . ($item->id_kota ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
                 '<div class="mobile">' . ($item->no_telp_mitra ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
             ];
@@ -153,7 +154,8 @@ class MitraController extends Controller
         
         // Hapus semua penawaran yang punya kode_mitra ini
         Penawaran::where('kode_mitra', $kodeMitra)->delete();
-        
+        // Hapus semua transaksi yang terkait dengan kode_mitra ini
+        Transaksi::where('kode_mitra', $kodeMitra)->delete();
         // Logging aktivitas
         activity('ikm')
             ->causedBy(auth()->user())
