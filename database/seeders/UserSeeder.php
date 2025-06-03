@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         "name" => "Administration",
         "phone" => "087731402487",
         "password" => Hash::make("newinopak"),
+        "role"=>"admin"
       ]
     );
 

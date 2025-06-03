@@ -30,7 +30,7 @@ class MitraController extends Controller
             ];
         })->values();
         // Hitung jumlah berdasarkan Kota
-        $totalKota = Mitra::whereNotNull('id_kota')->count();
+        $totalKota = Mitra::whereNotNull('id_kota')->where('auth',auth()->user()->id)->count();
 
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('mitra.index', [

@@ -60,7 +60,7 @@
                 Hapus
             </button>
 
-            <button type="button" onclick="checkTransaction('{{ route('transaksi.detail', $mitra->id) }}')"
+            <button type="button" onclick="checkTransaction('{{ route('transaksi.detail', $mitra->transaksi->id) }}')"
                 class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg shadow transition duration-150">
                 Lakukan Transaksi
             </button>

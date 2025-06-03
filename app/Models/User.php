@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'role',
     ];
 
     /**
@@ -49,5 +50,8 @@ class User extends Authenticatable
 
     public function ikm(){
         return $this->belongsTo('App\Models\ikm','email','email');
+    }
+     public function perusahaan(){
+        return $this->belongsTo('App\Models\Perusahaan','email','email');
     }
 }

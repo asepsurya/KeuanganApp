@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\auth;
 
+use App\Models\ikm;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,10 +21,10 @@ class registerController extends Controller
   {
     $validator = Validator::make($request->all(), [
       "name" => "required|string|max:255",
-      "phone" => "required|string|max:15",
+      "phone" => "required|string|max:15|unique:users,phone",
       "email" => "required|email|unique:users,email",
       "password" => "required|string|min:8|same:cpassword",
-      "captcha" => "required|captcha",
+      
     ]);
 
     if ($validator->fails()) {
@@ -36,10 +38,17 @@ class registerController extends Controller
       "phone" => $request->phone,
       "email" => $request->email,
       "password" => Hash::make($request->password),
+      "role" => "pengguna",
     ]);
 
-
+    $pengguna = ikm::create([
+      'email'=>$request->email,
+      'nama'=>$request->name,
+      'telp'=>$request->phone,
+    ]);
+    Auth::login($user);
+    
     toastr()->success("Data has been saved successfully!");
-    return redirect()->back();
+    return redirect()->route('perusahaan.index', ['json' => encrypt($user->id)]);
   }
 }

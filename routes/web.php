@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ikm\IkmController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Nota\NotaController;
 use App\Http\Controllers\auth\logoutController;
 use App\Http\Controllers\Mitra\MitraController;
 use App\Http\Controllers\auth\registerController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Region\RegionController;
 use App\Http\Controllers\Keuangan\HistoryController;
 use App\Http\Controllers\Keuangan\KeuanganController;
 use App\Http\Controllers\Transaksi\TransaksiController;
+use App\Http\Controllers\Perusahaan\PerusahaanController;
 use App\Http\Controllers\Dashboard\DashboardAdminController;
 
 
@@ -99,5 +101,29 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/transaksi/create', [TransaksiController::class, 'transaksiCreate'])->name('transaksi.create');
     Route::post('/transaksi/update', [TransaksiController::class, 'transaksiUpdate'])->name('transaksi.update');
     Route::get('/transaksi/cetak/konsinyasi/{id}', [TransaksiController::class, 'konsinyasi'])->name('transaksi.konsinyasi');
+    Route::get('/transaksi/cetak/kwitansi/{id}', [TransaksiController::class, 'kwitansi'])->name('transaksi.kwitansi');
+    Route::get('/transaksi/cetak/invoice/{id}', [TransaksiController::class, 'kwitansi'])->name('transaksi.invoce');
+    Route::post('/transaksi/cetak/invoice/notes', [TransaksiController::class, 'notes'])->name('transaksi.notes');
+
     Route::get('/transaksi/dok/konsinyasi/{id}', [TransaksiController::class, 'konsinyasidok'])->name('transaksi.konsinyasi.dok');
+
+     // ------------------------------------------------
+    // Route Nota
+    // ------------------------------------------------
+
+    Route::get('/transaksi/nota/create/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.nota.manual');
+    Route::get('/transaksi/nota/detail/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.nota.detail');
+
+    Route::post('/transaksi/nota/add', [TransaksiController::class, 'manualadd'])->name('transaksi.nota.add');
+    Route::get('/transaksi/delete/{id}', [TransaksiController::class, 'itemDelete'])->name('transaksi.item.delete');
+    Route::get('/nota', [NotaController::class, 'nota'])->name('nota.index');
+
+
+    // ------------------------------------------------
+    // Route Perusahaan
+    // ------------------------------------------------
+    Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->name('perusahaan.index');
+    Route::post('/create/perusahaan', [PerusahaanController::class, 'create'])->name('perusahaan.create');
+    Route::get('/setting/perusahaan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
 });
+

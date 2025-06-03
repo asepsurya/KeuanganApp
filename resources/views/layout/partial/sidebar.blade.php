@@ -121,19 +121,19 @@
             </ul>
         </li>
         <li class="menu nav-item">
-            <a class="nav-link group" href="#">
+            <a class="nav-link group" href="{{ route('perusahaan.setting')}}">
                 <div class="flex pl-5 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
                     <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                    <span class="pl-1 text-black dark:text-white">Profile Perusahaan</span>
+                    <span class="pl-1 text-black dark:text-white">Data Perusahaan</span>
                 </div>
             </a>
         </li>
         
             {{-- Nota dan Kwitansi --}}
-            <li class="menu nav-item">
-                <a class="nav-link group" href="#">
+            <li class="menu nav-item"  >
+                <a class="nav-link group {{ $active === 'nota' ? 'active' : '' }}" href="{{ route('nota.index') }}"  >
                     <div class="flex pl-5 items-center">
                         <x-icon name="document" class="text-gray-600" />
                         <span class="pl-1 text-black dark:text-white">Nota dan Kwitansi</span>
@@ -147,7 +147,8 @@
         
             {{-- Setelan Aplikasi --}}
             <li class="menu nav-item">
-                <a class="nav-link group" href="#">
+          
+                <a class="nav-link group" href="">
                     <div class="flex pl-5 items-center">
                         <x-icon name="tools" class="text-gray-600" />
                         <span class="pl-1 text-black dark:text-white">Setelan Aplikasi</span>

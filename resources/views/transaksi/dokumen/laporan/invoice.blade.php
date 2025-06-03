@@ -9,6 +9,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <style>
+    @page {
+        size: A4;
+        margin: 2.54cm;
+    }
+
     .kop-surat {
         width: 100%;
         text-align: center;
@@ -31,25 +36,24 @@
         max-width: 300px;
         /* Or whatever max-width you want */
     }
-
-    @page {
-        size: A4;
-        margin: 2.54cm;
-    }
 </style>
 
 <head>
 
 <body>
+
     <div class="max-w-[900px] mx-auto p-6 text-black">
         <div class="flex justify-between items-center mb-2">
             <div class="w-36">
                 <img alt="IC INOVATE CORPORA logo with red, green, orange, and blue leaf shapes" class="w-full h-auto"
-                    height="70" src="{{ asset('assets/images/inopak.jpg') }}" width="150" />
+                    height="70" src="{{ asset('assets/images/inopak.jpg') }}" width="50" />
             </div>
 
             <div class="text-right">
-                <h1 class="text-2xl font-normal mb-1"><b>Nota Konsinyasi</b></h1>
+                <h1 class="text-2xl font-normal text-center mb-1"><b>
+                        INVOICE
+                    </b>
+                </h1>
                 <table class="border border-gray-400 text-sm w-[320px] mx-auto text-black">
                     <thead>
                         <tr class="bg-gray-300 text-center text-xs font-semibold">
@@ -64,7 +68,9 @@
                                 {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d-M-y') }}</td>
                         </tr>
                     </tbody>
+
                 </table>
+
             </div>
         </div>
         <div class="mb-1 text-[11px] leading-[13px]">
@@ -79,22 +85,24 @@
 
         <div class="text-[12px] leading-[14px] mb-3">
             <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-20 font-medium">Kepada</div>
+                <div class="w-25 font-bold">Telah Diterima dari</div>
                 <div class="w-1">:</div>
                 <div class="flex-1 font-normal">{{ $transaksi->mitra->nama_mitra }}</div>
             </div>
             <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-20 font-medium">Alamat</div>
+                <div class="font-bold" style="width: 99px">Alamat</div>
                 <div class="w-1">:</div>
                 <div class="flex-1 font-normal capitalize">{{ ucwords(strtolower($transaksi->mitra->id_kota)) }}</div>
             </div>
             <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-20 font-bold">Telepon</div>
+                <div class="font-bold" style="width: 99px">Telepon</div>
                 <div class="w-1">:</div>
                 <div class="flex-1 font-normal">{{ $transaksi->mitra->no_telp_mitra }}</div>
             </div>
+
         </div>
-        <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2">
+        <p class="text-[12px]">Pembayaran Sejumlah</p>
+        <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2 ">
             <thead>
                 <tr class="border border-black bg-white">
                     <th class="border border-black px-1 text-center w-[30px] font-semibold">No</th>
@@ -112,7 +120,7 @@
                 <!-- Variabel untuk grand total -->
                 @foreach ($transaksi->penawaran as $index => $item)
                 @php
-                $total = $item->barang_keluar * $item->harga;
+                $total = $item->barang_terjual * $item->harga;
                 $grandTotal += $total;
                 @endphp
                 <tr class="border border-black">
@@ -123,7 +131,7 @@
                         {{ $item->produk->nama_produk }}
                     </td>
                     <td class="border border-black px-1 text-center font-normal">
-                        {{ $item->barang_keluar }}
+                        {{ $item->barang_terjual }}
                     </td>
                     <td class="border border-black px-1 text-center font-normal">
                         Pcs
@@ -157,61 +165,95 @@
                 </tr>
             </tbody>
         </table>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <table class="w-full border-collapse text-[12px] leading-[14px]">
+                <tbody>
+                    <tr>
+                        <!-- Kolom Penerima -->
+                        <td class="" style="height: 180px;">
+                            <p class="text-[11px] leading-[13px] ">
+                                Pembayaran dilakukan melalui transfer ke no. Rek Mandiri. 131 000 7197603 atas nama Afin
+                                Nurfahmi Mufreni
+                                Demikian informasi yang dapat kami sampaikan. Terimakasih telah bekerja sama dengan CV
+                                INOVATE Corpora
+                            </p>
+                            <p class="py-2"><strong>Catatan</strong></p>
+                            <form action="{{ route('transaksi.notes') }}" method="post" id="myForm">
+                                @csrf
+                                <p class="p-3 border border-black">
 
-        <p class="text-[11px] leading-[13px] ">
-            Pembayaran dilakukan melalui transfer ke no.
-            <strong>Rek Mandiri. 131 000 7197603 atas nama Afin Nurfahmi Mufreni</strong>
-            setelah diterima informasi penjualan.
-        </p>
-        <table class="w-full border-collapse text-[12px] leading-[14px]">
-            <tbody>
-                <tr>
-                    <!-- Kolom Penerima -->
-                    <td class="text-center align-middle" style="height: 180px;">
-                        <div class="flex flex-col justify-center items-center h-full">
-                            <p class="font-bold">Penerima</p>
-                        </div>
-                    </td>
+                                    <input type="hidden" name="id" value="{{ $id }}">
+                                    <textarea name="notes" oninput="autoResize(this)" class="w-full"
+                                        placeholder="Masukan Catatan disini">{{ $transaksi->notes ?? '' }}</textarea>
+                                    <style>
+                                        textarea {
+                                            overflow: hidden;
+                                            /* sembunyikan scroll */
+                                            resize: none;
+                                            /* nonaktifkan drag resize */
+                                            width: 100%;
+                                            box-sizing: border-box;
+                                        }
 
-                    <!-- Kolom Hormat Kami -->
-                    <td class="text-center align-middle" style="height: 180px;">
-                        <div class="flex flex-col justify-center items-center h-full">
-                            <p class="font-bold">Hormat Kami</p>
+                                        textarea:focus {
+                                            border: none;
+                                            /* hilangkan border saat fokus */
+                                            outline: none;
+                                            /* hilangkan outline biru default */
+                                            box-shadow: none;
+                                            /* hilangkan efek shadow jika ada */
+                                        }
+                                    </style>
+                                    <script>
+                                        function autoResize(textarea) {
+                            textarea.style.height = 'auto'; // reset height
+                            textarea.style.height = textarea.scrollHeight + 'px'; // set sesuai content
+                        }
 
-                            <div class="relative flex justify-center items-center"
-                                style="height: 20px; width: 180px; margin-top: 8px;">
-                                <!-- Stempel di belakang -->
-                                <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
-                                    class="object-contain absolute z-10"
-                                    style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
+                        // Optional: inisialisasi tinggi saat halaman load
+                        window.addEventListener('DOMContentLoaded', () => {
+                            document.querySelectorAll('textarea').forEach(autoResize);
+                        });
+                                    </script>
 
-                                <!-- Tanda tangan di atas -->
-                                <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
-                                    class="object-contain absolute z-20"
-                                    style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
+                                </p>
+                            </form>
+                        </td>
+
+                        <!-- Kolom Hormat Kami -->
+                        <td class="text-center align-middle" style="height: 180px;position: relative;">
+                            <div class="flex flex-col justify-center items-center h-full">
+                                <p class="font-bold">Hormat Kami</p>
+
+                                <div class="relative flex justify-center items-center"
+                                    style="height: 20px; width: 180px; margin-top: 8px;">
+                                    <!-- Stempel di belakang -->
+                                    <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
+                                        class="object-contain absolute z-10"
+                                        style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
+
+                                    <!-- Tanda tangan di atas -->
+                                    <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
+                                        class="object-contain absolute z-20"
+                                        style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
-                <!-- Baris Garis Tanda Tangan & Nama -->
-                <tr>
-                    <td class="text-center">
-                        <div class="mx-auto border-t border-black w-36 mt-8"></div>
-                        <p class="mt-2">(Nama Penerima)</p>
-                    </td>
-                    <td class="text-center">
-                        <div class="mx-auto border-t border-black w-36 mt-8"></div>
-                        <p class="mt-2">(Nama Pengirim)</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-
-
-
-
+                    <!-- Baris Garis Tanda Tangan & Nama -->
+                    <tr>
+                        <td class="">
+                            Dicetak pada : {{ now()->format("d-m-Y") }}
+                        </td>
+                        <td class="text-center">
+                            <div class="mx-auto border-t border-black w-36 mt-2"></div>
+                            <p class="mt-2">(Nama Pengirim)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -238,7 +280,6 @@
         document.querySelector('.total-amount').innerText = 'Rp. ' + totalAmount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
     });
     </script>
-
 </body>
 
 </html>

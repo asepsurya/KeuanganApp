@@ -44,6 +44,50 @@
             border-color: #4b5563;
             /* dark border */
         }
+       
+        /* Style untuk desktop (default) */
+        #produkTable .table-responsive {
+        width: 100%;
+        overflow-x: hidden; /* Sembunyikan scroll horizontal di desktop */
+        }
+
+        /* Style khusus untuk mobile */
+        @media (max-width: 768px) {
+        #produkTable .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto; /* Aktifkan scroll horizontal */
+            -webkit-overflow-scrolling: touch; /* Scroll halus di iOS */
+            
+            /* Optional: Styling tambahan untuk mobile */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        
+        #produkTable table {
+            min-width: 600px; /* Lebar minimum tabel */
+            white-space: nowrap; /* Mencegah text wrapping */
+        }
+        
+        #produkTable th, 
+        #produkTable td {
+            padding: 8px 12px; /* Padding lebih kecil di mobile */
+        }
+        
+        /* Style scrollbar (opsional) */
+        #produkTable .table-container::-webkit-scrollbar {
+            height: 5px;
+        }
+        
+        #produkTable .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+}
+
+
+
     </style>
     <div class="px-2 py-1 mb-4 flex items-center justify-between">
         <h2 class="text-lg font-semibold">Transaksi Mitra / Toko</h2>
@@ -517,7 +561,44 @@
 
                 function updateTotals() {
                     let total = 0;
+                    // v1
+                    // document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
+                    //     const index = input.dataset.index;
+                    //     const harga = parseInt(input.dataset.harga) || 0;
+                    //     const jumlahKeluar = parseInt(input.value) || 0;
 
+                    //     const barangTerjualInput = document.querySelector('.barang-terjual-input[data-index="' + index + '"]');
+                    //     const barangReturInput = document.querySelector('.barang-retur-input[data-index="' + index + '"]');
+                    //     const totalInput = document.querySelector('.total-harga-input[data-index="' + index + '"]');
+
+                    //     let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
+
+                    //     // Batasi barang terjual maksimal ke barang keluar
+                    //     if (barangTerjual > jumlahKeluar) {
+                    //         barangTerjual = jumlahKeluar;
+                    //         if (barangTerjualInput) {
+                    //             barangTerjualInput.value = barangTerjual;
+                    //         }
+                    //     }
+
+                    //     // Hitung barang retur
+                    //     const barangRetur = jumlahKeluar - barangTerjual;
+
+                    //     if (barangReturInput) {
+                    //         barangReturInput.value = barangRetur;
+                    //     }
+
+                    //     // Total harga per baris = barang keluar * harga (sesuai permintaan kamu)
+                    //     const totalRow = jumlahKeluar * harga;
+
+                    //     if (totalInput) {
+                    //         totalInput.value = formatRupiah(totalRow);
+                    //     }
+
+                    //     // Tambah ke total keseluruhan
+                    //     total += totalRow;
+                    // });
+                    // v2
                     document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
                         const index = input.dataset.index;
                         const harga = parseInt(input.dataset.harga) || 0;
@@ -544,8 +625,13 @@
                             barangReturInput.value = barangRetur;
                         }
 
-                        // Total harga per baris = barang keluar * harga (sesuai permintaan kamu)
-                        const totalRow = jumlahKeluar * harga;
+                        // Hitung total per baris berdasarkan kondisi
+                        let totalRow = 0;
+                        if (barangTerjual > 0) {
+                            totalRow = barangTerjual * harga; // Jika barang terjual ada, hitung berdasarkan terjual
+                        } else {
+                            totalRow = jumlahKeluar * harga; // Jika tidak ada, hitung berdasarkan keluar
+                        }
 
                         if (totalInput) {
                             totalInput.value = formatRupiah(totalRow);
@@ -638,13 +724,14 @@
 
 
             <div class="flex flex-wrap gap-3">
-                <a href="{{ route('transaksi.konsinyasi',$transaksi->kode_transaksi) }}" target="_BLANK"
+                <a href="{{ route('transaksi.konsinyasi', ['id' => $transaksi->kode_transaksi, 'type' => 'konsinyasi']) }}"
+                    target="_BLANK"
                     class="inline-flex items-center px-5 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150"
-                    id="btn-kwitansi"
-                    @if (empty($mitra->status_bayar) || empty($mitra->tanggal_bayar)) disabled style="opacity:0.5;pointer-events:none;" @endif>
+                    id="btn-konsinyasi"
+                    disabled>
                     Buat Nota Konsinyasi
-                </a>
-                <a href=""
+                    </a> 
+                <a href="{{ route('transaksi.kwitansi',['id' => $transaksi->kode_transaksi,'type'=>'invoice']) }}" target="_BLANK"
                     class="inline-flex items-center px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150"
                     id="btn-invoice"
                     @php
@@ -655,62 +742,115 @@
                     @if (!$adaTerjual) disabled style="opacity:0.5;pointer-events:none;" @endif>
                     Buat Invoice
                 </a>
-                <a href=""
+                <a href="{{ route('transaksi.invoce',['id' => $transaksi->kode_transaksi,'type'=>'kwitansi']) }}" target="_BLANK"
                     class="inline-flex items-center px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150"
                     id="btn-kwitansi2"
-                    @if (empty($mitra->status_bayar) || empty($mitra->tanggal_bayar)) disabled style="opacity:0.5;pointer-events:none;" @endif>
+                    @if ($transaksi->status_bayar === 'Belum Bayar') 
+                        disabled style="opacity:0.5; pointer-events:none;" 
+                    @endif>
                     Buat Kwitansi
                 </a>
+
+
             </div>
         </div>
 
-  
-    <script>
-        // Optional: If you want to auto-disable/enable on client-side after form changes
-        document.addEventListener('DOMContentLoaded', function() {
-            function updateButtons() {
-                const status = document.getElementById('status-bayar-input')?.value;
-                const tanggal = document.getElementById('tanggal-bayar-input')?.value;
-                const btnKwitansi = document.getElementById('btn-kwitansi');
-                const btnKwitansi2 = document.getElementById('btn-kwitansi2');
-                if (!status || !tanggal) {
-                    btnKwitansi.setAttribute('disabled', true);
-                    btnKwitansi.style.opacity = 0.5;
-                    btnKwitansi.style.pointerEvents = 'none';
-                    btnKwitansi2.setAttribute('disabled', true);
-                    btnKwitansi2.style.opacity = 0.5;
-                    btnKwitansi2.style.pointerEvents = 'none';
-                } else {
-                    btnKwitansi.removeAttribute('disabled');
-                    btnKwitansi.style.opacity = 1;
-                    btnKwitansi.style.pointerEvents = '';
-                    btnKwitansi2.removeAttribute('disabled');
-                    btnKwitansi2.style.opacity = 1;
-                    btnKwitansi2.style.pointerEvents = '';
-                }
-                // Invoice button
-                let adaTerjual = false;
-                document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
-                    if (parseInt(input.value) > 0) adaTerjual = true;
-                });
-                const btnInvoice = document.getElementById('btn-invoice');
-                if (!adaTerjual) {
-                    btnInvoice.setAttribute('disabled', true);
-                    btnInvoice.style.opacity = 0.5;
-                    btnInvoice.style.pointerEvents = 'none';
-                } else {
-                    btnInvoice.removeAttribute('disabled');
-                    btnInvoice.style.opacity = 1;
-                    btnInvoice.style.pointerEvents = '';
-                }
-            }
-            document.getElementById('status-bayar-input')?.addEventListener('change', updateButtons);
-            document.getElementById('tanggal-bayar-input')?.addEventListener('input', updateButtons);
-            document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
-                input.addEventListener('input', updateButtons);
-            });
-            updateButtons();
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    function updateButtons() {
+        const status = document.getElementById('status-bayar-input')?.value;  // Status bayar input
+        const tanggal = document.getElementById('tanggal-bayar-input')?.value;  // Tanggal bayar input
+        const btnKwitansi = document.getElementById('btn-kwitansi');  // Tombol Kwitansi
+        const btnKwitansi2 = document.getElementById('btn-kwitansi2');  // Tombol Kwitansi2
+        const btnKonsinyasi = document.getElementById('btn-konsinyasi');  // Tombol Konsinyasi
+
+        // Tombol Kwitansi dan Kwitansi2
+        if (!status || !tanggal) {
+            // Jika status atau tanggal belum ada, disable kedua tombol
+            
+            btnKwitansi2.setAttribute('disabled', true);
+            btnKwitansi2.style.opacity = 0.5;
+            btnKwitansi2.style.pointerEvents = 'none';
+        } else if (status === 'Sudah Bayar') {
+          
+
+            btnKwitansi2.removeAttribute('disabled');
+            btnKwitansi2.style.opacity = 1;
+            btnKwitansi2.style.pointerEvents = '';
+        } else {
+       
+
+            btnKwitansi2.setAttribute('disabled', true);
+            btnKwitansi2.style.opacity = 0.5;
+            btnKwitansi2.style.pointerEvents = 'none';
+        }
+
+        // Tombol Konsinyasi (aktif jika ada barang terjual yang diisi)
+        let adaTerjual = false;
+        document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
+            if (parseInt(input.value) > 0) adaTerjual = true;  // Jika ada barang yang terjual
         });
-    </script>
+
+        if (adaTerjual) {
+            btnKonsinyasi.removeAttribute('disabled');  // Menghapus disabled pada tombol Konsinyasi
+            btnKonsinyasi.style.opacity = 1;  // Mengatur opacity ke normal
+            btnKonsinyasi.style.pointerEvents = '';  // Mengizinkan interaksi
+        } else {
+            btnKonsinyasi.setAttribute('disabled', true);  // Menonaktifkan tombol Konsinyasi
+            btnKonsinyasi.style.opacity = 0.5;  // Mengatur opacity agar terlihat dinonaktifkan
+            btnKonsinyasi.style.pointerEvents = 'none';  // Menonaktifkan pointer events
+        }
+
+        
+        // Tombol Konsinyasi (aktif jika ada barang keluar yang diisi)
+        const barangKeluarInput = document.querySelectorAll('.barang-keluar-input');
+        let barangKeluarTerisi = false;
+
+        // Pengecekan jika ada barang keluar yang diisi
+        barangKeluarInput.forEach(function(input) {
+            if (parseInt(input.value) > 0) barangKeluarTerisi = true;  // Jika ada barang keluar terisi
+        });
+
+        if (barangKeluarTerisi) {
+            btnKonsinyasi.removeAttribute('disabled');  // Menghapus disabled pada tombol Konsinyasi
+            btnKonsinyasi.style.opacity = 1;  // Mengatur opacity ke normal
+            btnKonsinyasi.style.pointerEvents = '';  // Mengizinkan interaksi
+        } else {
+            btnKonsinyasi.setAttribute('disabled', true);  // Menonaktifkan tombol Konsinyasi
+            btnKonsinyasi.style.opacity = 0.5;  // Mengatur opacity agar terlihat dinonaktifkan
+            btnKonsinyasi.style.pointerEvents = 'none';  // Menonaktifkan pointer events
+        }
+
+        // Tombol Invoice (hanya aktif jika ada barang terjual)
+        let adaBarangTerjual = false;
+        document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
+            if (parseInt(input.value) > 0) adaBarangTerjual = true;
+        });
+        const btnInvoice = document.getElementById('btn-invoice');
+        if (!adaBarangTerjual) {
+            btnInvoice.setAttribute('disabled', true);
+            btnInvoice.style.opacity = 0.5;
+            btnInvoice.style.pointerEvents = 'none';
+        } else {
+            btnInvoice.removeAttribute('disabled');
+            btnInvoice.style.opacity = 1;
+            btnInvoice.style.pointerEvents = '';
+        }
+    }
+
+    // Event listener ketika status bayar berubah
+    document.getElementById('status-bayar-input')?.addEventListener('change', updateButtons);
+
+    // Event listener untuk input tanggal bayar dan barang terjual
+    document.getElementById('tanggal-bayar-input')?.addEventListener('input', updateButtons);
+    document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
+        input.addEventListener('input', updateButtons);  // Pengecekan setiap kali input barang terjual berubah
+    });
+
+    // Inisialisasi tombol saat halaman dimuat
+    updateButtons();
+});
+
+  </script>
   </form>
 @endsection

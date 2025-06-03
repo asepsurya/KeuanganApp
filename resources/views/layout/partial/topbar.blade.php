@@ -29,8 +29,10 @@
                     // Label khusus jika segmen terakhir di halaman update
                     if ($isLast && Request::is('people/update/*')) {
                     $label = $ikm->nama;
-                    }elseif($isLast && Request::is('mitra/detail/*')) {
+                    }elseif($isLast && Request::is('mitra/detail/*') ) {
                       $label = $mitra->nama_mitra;  
+                    }elseif(Request::is('transaksi/*')){
+                        $label = $mitra->nama_mitra;  
                     } else {
                     $label = ucwords(str_replace('-', ' ', $segment));
                     }
@@ -131,7 +133,7 @@
 
                     <li class="h-px bg-black/5 block my-1"></li>
                     <li>
-                        <a href="{{ route('ikm.update',auth()->user()->id) }}" class="flex items-center">
+                        <a href="{{ route('ikm.update',auth()->user()->ikm->id) }}" class="flex items-center">
                             <x-icon name="user-rounded" class="text-gray-600" />
                             Profile
                         </a>

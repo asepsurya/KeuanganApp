@@ -13,5 +13,8 @@ class Transaksi extends Model
      public function penawaran(){
         return $this->hasMany('App\Models\Penawaran','kode_mitra','kode_mitra');
     }
+     public function perusahaan(){
+        return $this->belongsTo('App\Models\Perusahaan','auth','auth');
+    }
    
 }
