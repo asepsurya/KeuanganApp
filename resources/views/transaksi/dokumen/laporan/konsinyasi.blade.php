@@ -198,11 +198,11 @@
                 <tr>
                     <td class="text-center">
                         <div class="mx-auto border-t border-black w-36 mt-8"></div>
-                        <p class="mt-2">(Nama Penerima)</p>
+                        <p class="mt-2"></p>
                     </td>
                     <td class="text-center">
                         <div class="mx-auto border-t border-black w-36 mt-8"></div>
-                        <p class="mt-2">(Nama Pengirim)</p>
+                        <p class="mt-2">{{ auth()->user()->perusahaan->nama_perusahaan }}</p>
                     </td>
                 </tr>
             </tbody>
@@ -216,7 +216,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
         let grandTotal = 0;
-        
+
         // Loop untuk menghitung total per item dan grand total
         document.querySelectorAll('.item-row').forEach((row) => {
             let qty = parseFloat(row.querySelector('.qty').innerText);

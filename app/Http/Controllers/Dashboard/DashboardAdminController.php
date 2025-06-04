@@ -17,7 +17,7 @@ class DashboardAdminController extends Controller
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('dashboard.admin',[
             'activeMenu' => 'dashboard',
-            'active' => 'dashboard', 
+            'active' => 'dashboard',
         ],compact('logs'));
     }
     public function dashboardKeuangan()
@@ -53,13 +53,13 @@ class DashboardAdminController extends Controller
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('dashboard.keuangan', array_merge([
             'activeMenu' => 'dashboard',
-            'active' => 'keuangan', 
+            'active' => 'dahboardkeuangan',
         ], compact('logs','transaksi','akun','bulanLabels','pemasukanPerBulan','pengeluaranPerBulan')));
 
-       
+
     }
     public function peta_pemasaran()
-    {   
+    {
         $mitras = Mitra::select('latitude', 'longitude', 'nama_mitra')->where('auth',auth()->user()->id)->get()->map(function($item) {
             return [
                 'lat' => (float) $item->latitude,
@@ -67,7 +67,7 @@ class DashboardAdminController extends Controller
                 'label' => $item->nama_mitra,
             ];
         });
-        
+
       $jumlahPerKota = Mitra::select('id_kota', DB::raw('count(*) as total'))
         ->where('auth',auth()->user()->id)
         ->whereNotNull('id_kota')
@@ -78,7 +78,7 @@ class DashboardAdminController extends Controller
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('dashboard.peta',[
             'activeMenu' => 'dashboard',
-            'active' => 'peta', 
+            'active' => 'peta',
         ],compact('logs','mitras','jumlahPerKota'));
     }
 }

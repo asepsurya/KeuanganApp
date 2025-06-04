@@ -11,49 +11,60 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js"
         integrity="sha512-bib7srucEhHYYWglYvGY+EQb0JAAW0qSOXpkPTMgCgW8eLtswHA/K4TKyD4+FiXcRHcy8z7boYxk0HTACCTFMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        #print-area{
-            page-break-after: always; /* Memaksa halaman baru saat print */
-            break-after: page; 
-            
-        }
-        @media print {
+
+        <style>
+            /* Gaya default untuk halaman */
             body {
-                margin: 0;
-                padding: 0;
-                background: white;
+                background-color: rgb(17, 24, 39); /* Warna latar belakang default */
+                color: white;
+                font-family: Arial, sans-serif;
             }
-            #print-area {
-                box-shadow: none;
-                page-break-after: always;
+
+            /* Gaya khusus saat mencetak */
+            @media print {
+                body {
+                    background-color: white; /* Latar belakang menjadi putih saat mencetak */
+                    color: black; /* Teks menjadi hitam */
+                }
+
+                /* Menentukan ukuran halaman menjadi A4 */
+                @page {
+                    size: A4; /* Ukuran A4 */
+                    margin: 10mm; /* Margin halaman A4 */
+                }
+
+                /* Area print yang memuat konten */
+                #print-area {
+                    width: 100%; /* Lebar penuh untuk area print */
+                    min-height: 297mm; /* Minimum tinggi halaman A4 */
+                    overflow: visible;
+                }
+
+                /* Konten utama yang akan mengalir ke bawah */
+                .print-page {
+                    width: 100%; /* Lebar penuh konten */
+                    height: auto; /* Tinggi otomatis agar mengalir */
+                    min-height: 297mm; /* Menetapkan ukuran minimum halaman A4 */
+                    page-break-after: always; /* Halaman baru setelah setiap konten besar */
+                }
+
+                /* Menghindari pemisahan elemen besar seperti tabel atau gambar */
+                .content {
+                    page-break-inside: avoid; /* Hindari pemisahan konten besar */
+                }
+
+                /* Sembunyikan elemen-elemen tertentu saat print */
+                .no-print {
+                    display: none;
+                }
             }
-        }
-        table, img,{
+        </style>
 
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-        @media print {
 
-        #print-area {  
-            size: A4 portrait; /* Ukuran kertas */
-           
-        }
 
-        #print-area {
-            margin: 0 !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            border: none !important;
-            width: 210mm !important; /* Pastikan lebar pas A4 */
-            height: 297mm !important; /* Pastikan tinggi pas A4 */
-            background: white;
-        }
-    }
-    </style>
 </head>
 
-<body class="bg-gray-900 text-white h-screen flex flex-col">
+<body class=" text-white h-screen flex flex-col" >
 
     <!-- Topbar -->
     <div class="flex items-center justify-between bg-gray-800 px-4 h-14">
@@ -88,19 +99,16 @@
     </div>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- Sidebar -->
-
-
         <!-- Workspace -->
-        <div class="flex-1 overflow-auto flex items-start justify-center p-5" id="print-area" 
-            style="border: none; ">
-            <div class="w-full  bg-white shadow-lg border border-gray-600 text-white p-5" style="background-color:white; width: 210mm; height: 297mm;  min-height: 297mm; /* Default height */
-  height: auto; " class="print-page">
-            
+        <div class="flex-1 overflow-auto flex items-start justify-center p-5"
+            style="border: none; " id="print-area">
+            <div class="w-full shadow-lg border border-gray-600 text-white p-5" style="background-color:white; width: 210mm; height: 297mm;  min-height: 297mm; /* Default height */
+  height: auto; " class="print-page" >
+
                 @include('transaksi.dokumen.laporan.konsinyasiMain')
             </div>
         </div>
-        
+
     </div>
     <!-- Floating Button -->
 

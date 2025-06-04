@@ -13,9 +13,9 @@
             <li class="menu nav-item mb-3">
                 @include('layout.partial.seachmenu')
             </li>
-        
+
             {{-- Dashboard --}}
-           
+
             <li class="menu nav-item">
                 <a href="javaScript:;" class="nav-link group text-black dark:text-white active" :class="{'active' : activeMenu === 'dashboard'}" @click="activeMenu === 'dashboard' ? activeMenu = null : activeMenu = 'dashboard'">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center !rotate-90":class="{ 'active': open }" @click="open = !open">
@@ -30,7 +30,7 @@
                 </a>
                 <ul x-show="activeMenu === 'dashboard'" x-collapse="" class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
                     <li><a href="{{ route('dashboard') }}" class="{{ $active === 'dashboard' ? 'active' : '' }}" >Penjualan</a></li>
-                    <li><a href="{{ route('dashboard.keuangan') }}" class="{{ $active === 'keuangan' ? 'active' : '' }}" >Keuangan</a></li>
+                    <li><a href="{{ route('dashboard.keuangan') }}" class="{{ $active === 'dahboardkeuangan' ? 'active' : '' }}" >Keuangan</a></li>
                     <li><a href="{{ route('dashboard.peta') }}" class="{{ $active === 'peta' ? 'active' : '' }}">Peta</a></li>
                 </ul>
             </li>
@@ -57,9 +57,9 @@
                     <li><a href="{{ route('akun.rekening') }}" class="{{ $active === 'rekening' ? 'active' : '' }}">Rekening</a></li>
                 </ul>
             </li>
-        
+
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Administrasi</span></h2>
-        
+
             {{-- Data Mitra --}}
             <li class="menu nav-item">
                 <a href="{{ route('index.mitra') }}" class="{{ $active === 'mitra' ? 'active' : '' }}">
@@ -79,8 +79,8 @@
                     </div>
                 </a>
             </li>
-            
-           
+
+
             <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['add_produk','produk','category']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                     <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
@@ -99,10 +99,11 @@
                     <li><a href="{{ route('produk.category') }}" class="{{ $active === 'category' ? 'active' : '' }}">Kategori</a></li>
                 </ul>
             </li>
-           
+
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
-        
+
            {{-- Data IKM --}}
+           @if(auth()->check() && auth()->user()->role === 'admin')
            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm','ikm_create','ikm_update']) ? 'true' : 'false' }} }">
             <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }" @click="open = !open">
                 <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300" :class="{ '!rotate-90': open }">
@@ -120,6 +121,7 @@
                 <li><a href="{{ route('index.ikm') }}" class="{{ $active === 'ikm' ? 'active' : '' }}">Data Pengguna</a></li>
             </ul>
         </li>
+        @endif
         <li class="menu nav-item">
             <a class="nav-link group" href="{{ route('perusahaan.setting')}}">
                 <div class="flex pl-5 items-center">
@@ -130,7 +132,7 @@
                 </div>
             </a>
         </li>
-        
+
             {{-- Nota dan Kwitansi --}}
             <li class="menu nav-item"  >
                 <a class="nav-link group {{ $active === 'nota' ? 'active' : '' }}" href="{{ route('nota.index') }}"  >
@@ -140,14 +142,14 @@
                     </div>
                 </a>
             </li>
-        
-         
-        
+
+
+
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Pengaturan Aplikasi</span></h2>
-        
+
             {{-- Setelan Aplikasi --}}
             <li class="menu nav-item">
-          
+
                 <a class="nav-link group" href="">
                     <div class="flex pl-5 items-center">
                         <x-icon name="tools" class="text-gray-600" />
@@ -155,7 +157,7 @@
                     </div>
                 </a>
             </li>
-        
+
             {{-- Data Pengguna --}}
             <li class="menu nav-item">
                 <a class="nav-link group" href="#">
@@ -166,7 +168,7 @@
                 </a>
             </li>
         </ul>
-        
+
         <!-- End Menu -->
     </div>
 </nav>

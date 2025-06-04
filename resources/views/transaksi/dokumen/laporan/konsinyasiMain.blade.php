@@ -2,6 +2,7 @@
     @page {
         size: A4;
         margin: 2.54cm;
+        background-color: white;
     }
 
     .garis-atas {
@@ -321,10 +322,10 @@
             function showTooltip(inputElement) {
                 // Temukan div .tooltip yang berdekatan dengan inputElement
                 const tooltip = inputElement.closest('td').querySelector('.tooltip');
-                
+
                 if (tooltip) {
                     tooltip.classList.add('show-tooltip');
-                    
+
                     // Menambahkan event listener untuk menutup tooltip jika area lain di luar input dan tooltip diklik
                     document.addEventListener('click', function (event) {
                         // Pastikan klik bukan di dalam input atau tooltip
@@ -335,121 +336,258 @@
                 }
             }
         </script>
-        <script>
+        {{-- <script>
             @if($nota)
-        let getnomor = @json(optional($nota->where('kode_transaksi', $id))->count() ?: 0);
+                let getnomor = @json(optional($nota->where('kode_transaksi', $id))->count() ?: 0);
 
-        // Jika ada lebih dari satu baris, rowCount akan bertambah 1, jika tidak ada baris, rowCount dimulai dari 1
-        let rowCount = getnomor > 1 ? getnomor : 1;
-    @else
-        let rowCount = 0
-    @endif
-    let grandTotal = 0; // Total keseluruhan
+                // Jika ada lebih dari satu baris, rowCount akan bertambah 1, jika tidak ada baris, rowCount dimulai dari 1
+                let rowCount = getnomor > 1 ? getnomor : 1;
+            @else
+                let rowCount = 0
+            @endif
+            let grandTotal = 0; // Total keseluruhan
 
-    // Fungsi untuk menambah baris
-    function addRow() {
-        const table = document.getElementById('myTable');
-        const tbody = table.getElementsByTagName('tbody')[0];
+            // Fungsi untuk menambah baris
+            function addRow() {
+                const table = document.getElementById('myTable');
+                const tbody = table.getElementsByTagName('tbody')[0];
 
-        // Buat baris baru
-        const newRow = document.createElement('tr');
-        
-        // Tentukan nomor baris baru
-        const newRowIndex = tbody.rows.length + 1; // Ini akan menentukan nomor urut berdasarkan jumlah baris di tbody
+                // Buat baris baru
+                const newRow = document.createElement('tr');
 
-        // Tambahkan sel ke baris baru dengan input
-        newRow.innerHTML = `
-            <td class="border border-black px-1 text-center font-normal">${newRowIndex}</td>
-            <td class="border border-black px-1 font-normal">
-                 <div class="relative">
-                        <input name="nama_barang[]" class="w-full"
-                            placeholder="Nama Barang atau Produk"  onclick="showTooltip(this)">
-                            <div class="tooltip">
-                                <button type="button" onclick="deleteRow(this)" class="bg-red-500 text-white px-2 py-1 rounded">X</button>
-                            </div>
-                        </div>
-            </td>
-            <td class="border border-black px-1 text-center font-normal"><input name="qty[]" class="w-full text-center" oninput="calculateTotal(this)" placeholder="Qty"></td>
-            <td class="border border-black px-1 text-center font-normal"><input name="unit[]" class="w-full text-center" placeholder="Pcs"></td>
-            <td class="border border-black px-1 text-center font-normal">Rp.</td>
-            <td class="border border-black px-1 text-right font-normal"><input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)"></td>
-            <td class="border border-black px-1 text-center font-normal">Rp.</td>
-            <td class="border border-black px-1 text-right font-normal"><input name="total[]" class="w-full text-right" placeholder="Total" readonly></td>
-        `;
+                // Tentukan nomor baris baru
+                const newRowIndex = tbody.rows.length + 1; // Ini akan menentukan nomor urut berdasarkan jumlah baris di tbody
 
-        // Tambahkan baris ke dalam tabel
-        tbody.appendChild(newRow);
+                // Tambahkan sel ke baris baru dengan input
+                newRow.innerHTML = `
 
-        // Increment nomor baris secara internal
-        rowCount++;
-    }
+                    <td class="border border-black px-1 text-center font-normal">${newRowIndex}</td>
+                    <td class="border border-black px-1 font-normal">
+                         <div class="relative">
+                                <input name="nama_barang[]" class="w-full"
+                                    placeholder="Nama Barang atau Produk"  onclick="showTooltip(this)">
+                                    <div class="tooltip">
+                                        <button type="button" onclick="deleteRow(this)" class="bg-red-500 text-white px-2 py-1 rounded">X</button>
+                                    </div>
+                                </div>
+                    </td>
+                    <td class="border border-black px-1 text-center font-normal"><input name="qty[]" class="w-full text-center" oninput="calculateTotal(this)" placeholder="Qty"></td>
+                    <td class="border border-black px-1 text-center font-normal"><input name="unit[]" class="w-full text-center" placeholder="Pcs"></td>
+                    <td class="border border-black px-1 text-center font-normal">Rp.</td>
+                    <td class="border border-black px-1 text-right font-normal"><input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)"></td>
+                    <td class="border border-black px-1 text-center font-normal">Rp.</td>
+                    <td class="border border-black px-1 text-right font-normal"><input name="total[]" class="w-full text-right" placeholder="Total" readonly></td>
+                `;
 
-    // Fungsi untuk format mata uang
-    function formatCurrency(input) {
-        let value = input.value.replace(/\D/g, ''); // Menghapus karakter selain angka
-        if (value) {
-            input.value = '' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format dengan titik ribuan
-        }
-    }
+                // Tambahkan baris ke dalam tabel
+                tbody.appendChild(newRow);
 
-    // Fungsi untuk menghitung total
-    function calculateTotal(input) {
-        const row = input.closest('tr');
-        const qty = row.querySelector('input[name="qty[]"]').value;
-        let harga = row.querySelector('input[name="harga[]"]').value;
-
-        // Menghilangkan simbol 'Rp.' dan titik dari harga
-        harga = harga.replace(/[^0-9]/g, '');
-
-        // Validasi untuk memastikan qty dan harga adalah angka
-        if (!isNaN(qty) && qty !== '' && !isNaN(harga) && harga !== '') {
-            const total = parseFloat(qty) * parseFloat(harga);
-            row.querySelector('input[name="total[]"]').value = formatCurrencyToDisplay(total);
-        } else {
-            row.querySelector('input[name="total[]"]').value = '';
-        }
-
-        // Perbarui grand total
-        updateGrandTotal();
-    }
-
-    // Fungsi untuk memformat total menjadi tampilan uang
-    function formatCurrencyToDisplay(amount) {
-        // Format hanya angka dengan pemisah ribuan, tanpa desimal
-        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
-
-    // Fungsi untuk menghitung grand total
-    function updateGrandTotal() {
-        grandTotal = 0;
-        const rows = document.querySelectorAll('#myTable tbody tr');
-        rows.forEach(row => {
-            const total = row.querySelector('input[name="total[]"]');
-            if (total && total.value) {
-                const totalValue = total.value.replace(/[^0-9]/g, ''); // Hapus simbol Rp.
-                grandTotal += parseFloat(totalValue);
+                // Increment nomor baris secara internal
+                rowCount++;
             }
+
+            // Fungsi untuk format mata uang
+            function formatCurrency(input) {
+                let value = input.value.replace(/\D/g, ''); // Menghapus karakter selain angka
+                if (value) {
+                    input.value = '' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format dengan titik ribuan
+                }
+            }
+
+            // Fungsi untuk menghitung total
+            function calculateTotal(input) {
+                const row = input.closest('tr');
+                const qty = row.querySelector('input[name="qty[]"]').value;
+                let harga = row.querySelector('input[name="harga[]"]').value;
+
+                // Menghilangkan simbol 'Rp.' dan titik dari harga
+                harga = harga.replace(/[^0-9]/g, '');
+
+                // Validasi untuk memastikan qty dan harga adalah angka
+                if (!isNaN(qty) && qty !== '' && !isNaN(harga) && harga !== '') {
+                    const total = parseFloat(qty) * parseFloat(harga);
+                    row.querySelector('input[name="total[]"]').value = formatCurrencyToDisplay(total);
+                } else {
+                    row.querySelector('input[name="total[]"]').value = '';
+                }
+
+                // Perbarui grand total
+                updateGrandTotal();
+            }
+
+            // Fungsi untuk memformat total menjadi tampilan uang
+            function formatCurrencyToDisplay(amount) {
+                // Format hanya angka dengan pemisah ribuan, tanpa desimal
+                return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+
+            // Fungsi untuk menghitung grand total
+            function updateGrandTotal() {
+                grandTotal = 0;
+                const rows = document.querySelectorAll('#myTable tbody tr');
+                rows.forEach(row => {
+                    const total = row.querySelector('input[name="total[]"]');
+                    if (total && total.value) {
+                        const totalValue = total.value.replace(/[^0-9]/g, ''); // Hapus simbol Rp.
+                        grandTotal += parseFloat(totalValue);
+                    }
+                });
+
+                // Menampilkan grand total
+                document.getElementById('grandtotal').value = '' + formatCurrencyToDisplay(grandTotal);
+            }
+
+            // Fungsi untuk menghapus baris
+            function deleteRow(button) {
+                const row = button.closest('tr');
+                row.remove(); // Menghapus baris yang terkait dengan tombol Hapus
+                updateGrandTotal(); // Perbarui grand total setelah baris dihapus
+            }
+
+            // Menambahkan baris pertama secara otomatis saat halaman dimuat
+            @if($nota)
+            @else
+            document.addEventListener('DOMContentLoaded', function() {
+                addRow(); // Menambah 1 baris secara otomatis
+            });
+            @endif
+        </script> --}}
+        <script>
+            @php
+
+            // Ambil data lama dari Laravel
+            $id_item = old('id_item', []);
+            $namaBarang = old('nama_barang', []);
+            $qty = old('qty', []);
+            $unit = old('unit', []);
+            $harga = old('harga', []);
+            $total = old('total', []);
+        @endphp
+
+        // Menambahkan baris berdasarkan data lama
+        document.addEventListener('DOMContentLoaded', function() {
+            let data = {
+                id_item: @json($id_item),
+                nama_barang: @json($namaBarang),
+                qty: @json($qty),
+                unit: @json($unit),
+                harga: @json($harga),
+                total: @json($total)
+            };
+
+            // Jika ada data lama, tambahkan baris-baris tersebut
+            data.nama_barang.forEach((item, index) => {
+                addRow(item, data.qty[index], data.unit[index], data.harga[index], data.total[index]);
+            });
         });
 
-        // Menampilkan grand total
-        document.getElementById('grandtotal').value = '' + formatCurrencyToDisplay(grandTotal);
-    }
+        // Fungsi untuk menambah baris
+        function addRow(namaBarang = '', qty = '', unit = '', harga = '', total = '') {
+            const table = document.getElementById('myTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
 
-    // Fungsi untuk menghapus baris
-    function deleteRow(button) {
-        const row = button.closest('tr');
-        row.remove(); // Menghapus baris yang terkait dengan tombol Hapus
-        updateGrandTotal(); // Perbarui grand total setelah baris dihapus
-    }
+            // Buat baris baru
+            const newRow = document.createElement('tr');
 
-    // Menambahkan baris pertama secara otomatis saat halaman dimuat
-    @if($nota)
-    @else
-    document.addEventListener('DOMContentLoaded', function() {
-        addRow(); // Menambah 1 baris secara otomatis
-    });
-    @endif
+            // Tentukan nomor baris baru
+            const newRowIndex = tbody.rows.length + 1;
+
+            // Tambahkan sel ke baris baru dengan input dan data lama
+            newRow.innerHTML = `
+                <td class="border border-black px-1 text-center font-normal">${newRowIndex}</td>
+                <td class="border border-black px-1 font-normal">
+                    <div class="relative">
+                        <input name="nama_barang[]" class="w-full"
+                            placeholder="Nama Barang atau Produk" onclick="showTooltip(this)" value="${namaBarang}">
+                        <div class="tooltip">
+                            <button type="button" onclick="deleteRow(this)" class="bg-red-500 text-white px-2 py-1 rounded">X</button>
+                        </div>
+                    </div>
+                </td>
+                <td class="border border-black px-1 text-center font-normal">
+                    <input name="qty[]" class="w-full text-center" oninput="calculateTotal(this)" placeholder="Qty" value="${qty}">
+                </td>
+                <td class="border border-black px-1 text-center font-normal">
+                    <input name="unit[]" class="w-full text-center" placeholder="Pcs" value="${unit}">
+                </td>
+                <td class="border border-black px-1 text-center font-normal">Rp.</td>
+                <td class="border border-black px-1 text-right font-normal">
+                    <input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)" value="${harga}">
+                </td>
+                <td class="border border-black px-1 text-center font-normal">Rp.</td>
+                <td class="border border-black px-1 text-right font-normal">
+                    <input name="total[]" class="w-full text-right" placeholder="Total" readonly value="${total}">
+                </td>
+            `;
+
+            // Tambahkan baris ke dalam tabel
+            tbody.appendChild(newRow);
+        }
+
+        // Fungsi untuk format mata uang
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, ''); // Menghapus karakter selain angka
+            if (value) {
+                input.value = '' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format dengan titik ribuan
+            }
+        }
+
+        // Fungsi untuk menghitung total
+        function calculateTotal(input) {
+            const row = input.closest('tr');
+            const qty = row.querySelector('input[name="qty[]"]').value;
+            let harga = row.querySelector('input[name="harga[]"]').value;
+
+            // Menghilangkan simbol 'Rp.' dan titik dari harga
+            harga = harga.replace(/[^0-9]/g, '');
+
+            // Validasi untuk memastikan qty dan harga adalah angka
+            if (!isNaN(qty) && qty !== '' && !isNaN(harga) && harga !== '') {
+                const total = parseFloat(qty) * parseFloat(harga);
+                row.querySelector('input[name="total[]"]').value = formatCurrencyToDisplay(total);
+            } else {
+                row.querySelector('input[name="total[]"]').value = '';
+            }
+
+            // Perbarui grand total
+            updateGrandTotal();
+        }
+
+        // Fungsi untuk memformat total menjadi tampilan uang
+        function formatCurrencyToDisplay(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        // Fungsi untuk menghitung grand total
+        function updateGrandTotal() {
+            let grandTotal = 0;
+            const rows = document.querySelectorAll('#myTable tbody tr');
+            rows.forEach(row => {
+                const total = row.querySelector('input[name="total[]"]');
+                if (total && total.value) {
+                    const totalValue = total.value.replace(/[^0-9]/g, ''); // Hapus simbol Rp.
+                    grandTotal += parseFloat(totalValue);
+                }
+            });
+
+            // Menampilkan grand total
+            document.getElementById('grandtotal').value = '' + formatCurrencyToDisplay(grandTotal);
+        }
+
+        // Fungsi untuk menghapus baris
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove(); // Menghapus baris yang terkait dengan tombol Hapus
+            updateGrandTotal(); // Perbarui grand total setelah baris dihapus
+        }
+        @if($nota)
+            @else
+            document.addEventListener('DOMContentLoaded', function() {
+                addRow(); // Menambah 1 baris secara otomatis
+            });
+            @endif
         </script>
+
 
 
         <script>

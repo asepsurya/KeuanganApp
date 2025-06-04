@@ -47,7 +47,7 @@ class TransaksiController extends Controller
         return view('transaksi.index', [
             'activeMenu' => 'transaksi',
             'active' => 'transaksi',
-        ], compact('mitra','logs','transaksi','totalTransaksi','totalTransaksiluar')); 
+        ], compact('mitra','logs','transaksi','totalTransaksi','totalTransaksiluar'));
     }
 
     public function DetailTransaki($id){
@@ -144,7 +144,7 @@ class TransaksiController extends Controller
         return view('transaksi.dokumen.laporan.konsinyasi',compact('transaksi'));
     }
 
-    public function manualNota($id){ 
+    public function manualNota($id){
         $nota = Dokumen::where('kode_transaksi',$id)->first();
         return view('transaksi.dokumen.manual',compact('nota','id'));
     }
@@ -186,12 +186,28 @@ class TransaksiController extends Controller
             ]
         );
 
-        // Loop through the validated data and create/update the items
-        foreach ($request->id_item as $index => $barang) {
+      // Loop through the validated data and create/update the items
+        foreach ($request->nama_barang as $index => $namaBarang) {
+            // Cek jika id_item ada dan tidak null
+            $itemId = isset($request->id_item[$index]) ? $request->id_item[$index] : null;
+
+            // Jika id_item tidak ada, gunakan nama_barang untuk mencari item
+            if ($itemId === null) {
+                $item = Itemdokumen::where('nama_barang', $namaBarang)
+                                ->where('kode_transaksi', $request->kode_transaksi)
+                                ->first();  // Cek jika ada item dengan nama_barang yang sama
+                $itemId = $item ? $item->id : null;  // Jika ditemukan, gunakan id itemnya, kalau tidak id tetap null
+            }
+
+            if (empty($namaBarang)) {
+                return redirect()->back()->withErrors("Nama barang tidak boleh kosong.");
+            }
+
+            // Update atau create item
             Itemdokumen::updateOrCreate(
-                ['kode_transaksi' => $request->kode_transaksi, 'id' => $barang], // Check if item exists
-                [   
-                    'nama_barang'=>$validated['nama_barang'][$index],
+                ['kode_transaksi' => $request->kode_transaksi, 'id' => $itemId],
+                [
+                    'nama_barang' => $namaBarang,
                     'qty' => $validated['qty'][$index],
                     'unit' => $validated['unit'][$index],
                     'harga' => preg_replace('/\D/', '', $validated['harga'][$index]), // Remove non-numeric characters
@@ -200,6 +216,7 @@ class TransaksiController extends Controller
                 ]
             );
         }
+
 
         toastr()->success("Data has been saved/updated successfully!");
         return redirect()->back();

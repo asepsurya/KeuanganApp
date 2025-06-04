@@ -64,10 +64,10 @@ Route::middleware(['auth'])->group(function () {
     // ------------------------------------------------
     // Route IKM
     // ------------------------------------------------
-    Route::get('/people', [IkmController::class, 'index'])->name('index.ikm');
-    Route::get('/people/create', [IkmController::class, 'create'])->name('ikm.create');
-    Route::post('/people/create', [IkmController::class, 'store'])->name('ikm.store');
-    Route::get('/people/delete/{id}', [IkmController::class, 'delete'])->name('ikm.delete');
+    Route::get('/people', [IkmController::class, 'index'])->name('index.ikm')->middleware('checkrole:admin');
+    Route::get('/people/create', [IkmController::class, 'create'])->name('ikm.create')->middleware('checkrole:admin');
+    Route::post('/people/create', [IkmController::class, 'store'])->name('ikm.store')->middleware('checkrole:admin');
+    Route::get('/people/delete/{id}', [IkmController::class, 'delete'])->name('ikm.delete')->middleware('checkrole:admin');
     Route::get('/people/update/{id}', [IkmController::class, 'update'])->name('ikm.update');
     Route::post('/people/update/action', [IkmController::class, 'updateIkm'])->name('ikm.update.action');
     Route::post('/people/update/foto', [IkmController::class, 'updateFoto'])->name('ikm.update.foto');
