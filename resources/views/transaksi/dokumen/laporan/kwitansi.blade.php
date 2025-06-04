@@ -50,7 +50,7 @@
             </div>
 
             <div class="text-right">
-                <h1 class="text-2xl font-normal text-center mb-1"><b>
+                <h1 class="text-2xl font-normal  mb-5"><b>
                         @if(Request('type')== 'kwitansi')
                         Nota Pembayaran
                         @else
@@ -72,9 +72,7 @@
                                 {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->format('d-M-y') }}</td>
                         </tr>
                     </tbody>
-
                 </table>
-
             </div>
         </div>
         <div class="mb-1 text-[11px] leading-[13px]">
@@ -109,62 +107,67 @@
         <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2 ">
             <thead>
                 <tr class="border border-black bg-white">
-                    <th class="border border-black px-1 text-center w-[30px] font-semibold">No</th>
-                    <th class="border border-black px-1 text-left font-semibold">Nama Barang</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Qty</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Unit</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                    <th class="border border-black px-1 text-center w-[100px] font-semibold">Harga Unit</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                    <th class="border border-black px-1 text-center w-[110px] font-semibold">Sub Total Harga</th>
+                    <th class="border-collapse px-1 text-center w-[30px] font-semibold">No</th>
+                    <th class="border-collapse border-black px-1 text-left font-semibold">Nama Barang</th>
+                    <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Qty</th>
+                    <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Unit</th>
+                    <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold"></th>
+                    <th class="border-collapse border-black px-1 text-right w-[100px] font-semibold">Harga Unit</th>
+                    <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold"></th>
+                    <th class="border-collapse border-black px-1 text-right w-[110px] font-semibold">Sub Total Harga</th>
                 </tr>
             </thead>
             <tbody>
-                @php $grandTotal = 0; @endphp
-                <!-- Variabel untuk grand total -->
-                @foreach ($transaksi->penawaran as $index => $item)
-                @php
-                $total = $item->barang_terjual * $item->harga;
-                $grandTotal += $total;
+                @php 
+                    $grandTotal = 0;
+                    $ongkir = $transaksi->ongkir;
+                    $diskon = $transaksi->diskon;
                 @endphp
-                <tr class="border border-black">
-                    <td class="border border-black px-1 text-center font-normal">
-                        {{ intval($index) + 1 }}
-                    </td>
-                    <td class="border border-black px-1 font-normal">
-                        {{ $item->produk->nama_produk }}
-                    </td>
-                    <td class="border border-black px-1 text-center font-normal">
-                        {{ $item->barang_terjual }}
-                    </td>
-                    <td class="border border-black px-1 text-center font-normal">
-                        Pcs
-                    </td>
-                    <td class="border border-black px-1 text-center font-normal">Rp.</td>
-                    <td class="border border-black px-1 text-right font-normal">
-                        {{ number_format(floatval($item->harga), 2, ',', '.') }}
-                    </td>
-                    <td class="border border-black px-1 text-center font-normal">Rp.</td>
-                    <td class="border border-black px-1 text-right font-normal">
-                        {{ number_format($total, 2, ',', '.') }}
-                    </td>
-                </tr>
+            
+                {{-- Loop Produk --}}
+                @foreach ($transaksi->penawaran as $index => $item)
+                    @php
+                        $total = $item->barang_terjual * $item->harga;
+                        $grandTotal += $total;
+                    @endphp
+                    <tr class="group text-xs border-b border-black">
+                        <td class="border-collapse border-black px-1 text-center font-normal">{{ $index + 1 }}</td>
+                        <td class="border-collapse border-black px-1 font-normal">{{ $item->produk->nama_produk }}</td>
+                        <td class="border-collapse border-black px-1 text-center font-normal">{{ $item->barang_terjual }}</td>
+                        <td class="border-collapse border-black px-1 text-center font-normal">Pcs</td>
+                        <td class="border-collapse border-black px-1   text-right font-normal">Rp.</td>
+                        <td class="border-collapse border-black px-1 text-right font-normal">{{ number_format($item->harga, 2, ',', '.') }}</td>
+                        <td class="border-collapse border-black px-1  text-right font-normal">Rp.</td>
+                        <td class="border-collapse border-black px-1 text-right font-normal">{{ number_format($total, 2, ',', '.') }}</td>
+                    </tr>
                 @endforeach
-                <tr>
-                    <td class="border-b border-black px-1 text-right font-normal"></td>
-                    <td colspan="2" class="border border-black px-1  font-normal">Ongkos Kirim</td>
-                    <td class="border border-black px-1 text-right font-normal">Paket</td>
-                    <td colspan="7" class="border border-black px-1 text-right font-normal">
-                        {{ $transaksi->ongkir }}
-                    </td>
+                @if($transaksi->ongkir > 0)
+                {{-- Ongkir --}}
+                <tr  class="group text-xs border-b border-black">
+                    <td class="border-collapse border-b border-black px-1 text-right font-normal"></td>
+                    <td colspan="2" class="border-collapse border-black px-1 font-normal">Ongkos Kirim</td>
+                    <td class="border-collapse border-black px-1 text-right font-normal">Paket</td>
+                    <td colspan="3" class="border-collapse border-black px-1 text-right font-normal">Rp.</td>
+                    <td colspan="4" class="border-collapse border-black px-1 text-right font-normal">{{ number_format($ongkir, 2, ',', '.') }}</td>
                 </tr>
-                <tr>
-                    <td colspan="6"></td>
-                    <td class="border border-black px-1 font-semibold text-right">
-                        TOTAL
-                    </td>
-                    <td class="border border-black px-1 font-semibold text-right">
-                        Rp. {{ number_format($grandTotal + $transaksi->ongkir, 2, ',', '.') }}
+                @endif
+                {{-- Diskon --}}
+                @if($transaksi->diskon > 0)
+                <tr class="group text-xs border-b border-black">
+                    <td class="border-b border-black px-1 text-right font-normal"></td>
+                    <td colspan="5" class=" border-collapse border-black px-1 font-normal">Discount</td>  
+                    <td class="border-b border-black px-1 text-right font-normal">Rp.</td>      
+                    <td colspan="4" class=" border-collapse border-black px-1 text-right font-normal">{{ number_format($diskon, 2, ',', '.') }}</td>
+                </tr>
+                @endif
+                {{-- Grand Total --}}
+                
+                <tr  class="group text-xs border-b border-black">
+                    <td colspan="5"></td>
+                    <td class="text-right">TOTAL</td>
+                    <td class=" border-collapse border-black px-1 text-right">Rp.</td>
+                    <td class=" border-collapse border-black px-1 font-semibold text-right">
+                       {{ number_format($grandTotal + $ongkir - $diskon, 2, ',', '.') }}
                     </td>
                 </tr>
             </tbody>
@@ -252,7 +255,7 @@
                         </td>
                         <td class="text-center">
                             <div class="mx-auto border-t border-black w-36 mt-2"></div>
-                            <p class="mt-2">(Nama Pengirim)</p>
+                            <p class="mt-2">{{ auth()->user()->perusahaanUser->nama_perusahaan }}</p>
                         </td>
                     </tr>
                 </tbody>
@@ -277,7 +280,7 @@
         });
 
         // Update Ongkir
-        let ongkir = parseFloat(document.querySelector('.ongkir').innerText.replace('Rp. ', '').replace('.', '').replace(',', '.'));
+        let ongkir = document.querySelector('.ongkir');
 
         // Update Grand Total
         let totalAmount = grandTotal + ongkir;

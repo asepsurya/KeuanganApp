@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\App;
+use App\Models\Perusahaan;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -17,5 +18,16 @@ class AppSeeder extends Seeder
             ['key' => 'default_rekening'],
             ['value' => '']
         );
+
+        Perusahaan::updateOrCreate(
+            ['auth' => '1'], // kondisi
+            [
+                'nama_perusahaan' => 'Perusahaan Admin',
+                'telp_perusahaan' => '0874541122544',
+                'email' => 'sample2025@admin.com',
+                'alamat' => 'Tasikmalaya'
+            ]
+        );
+        
     }
 }

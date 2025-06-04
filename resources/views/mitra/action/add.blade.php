@@ -44,6 +44,15 @@
             border-color: #4b5563;
             /* dark border */
         }
+        .select2-container--default .select2-selection--single{
+            border:none;
+        }
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 {
+                /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
+                grid-template-columns: 1fr 1.5fr;
+            }
+        }
     </style>
     <form action="{{ route('update.mitra') }}" method="POST">
         @csrf
@@ -208,67 +217,69 @@
             </div>
             <div>
                 <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
-                    <div class="px-2 py-1 mb-4 flex items-center justify-between">
-                        <p class="text-sm font-semibold">Daftar barang yang dijual</p>
+                    <div class="bg-white dark:bg-black border border-black/10 dark:border-white/10 p-5 rounded-md">
+                        <div class="px-2 py-1 mb-4 flex items-center justify-between">
+                            <p class="text-sm font-semibold">Daftar barang yang dijual</p>
 
-                        <button type="button"
-                            class="btn py-2 px-5 text-[15px]"
-                            onclick="addRow()">
-                            + Tambah Produk
-                        </button>
-                    </div>
+                            <button type="button"
+                                class="btn py-2 px-5 text-[15px]"
+                                onclick="addRow()">
+                                + Tambah Produk
+                            </button>
+                        </div>
 
-                    <div class="table-responsive">
-                        <table id="productTable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th width="80%">Nama Produk</th>
-                                    <th>Harga Penawaran</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($penawaran as $index => $row)
+                        <div class="table-responsive">
+                            <table id="productTable" class="table-hover">
+                                <thead>
                                     <tr>
-                                        <td class="row-number">{{ $index + 1 }}</td>
-                                        <td>
-                                            <select class="select2 w-full" name="kode_produk[]"
-                                                onchange="updateHarga(this)">
-                                                <option value="">Pilih Produk</option>
-                                                @foreach ($produk as $item)
-                                                    <option value="{{ $item->kode_produk }}"
-                                                        data-harga="{{ $item->harga }}" @selected($item->kode_produk == $row->kode_produk)>
-                                                        {{ $item->nama_produk }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Rp.
-                                            <input type="text" name="harga[]"
-                                                value="{{ number_format($row->harga, 0, ',', '.') }}"
-                                                oninput="formatCurrency(this)" class="form-input harga-input">
-                                        </td>
-                                        <td><button type="button" class="text-red-600 hover:text-red-800"
-                                                onclick="removeRow(this)" data-id="{{ $row->id }}">Hapus</button>
-                                        </td>
+                                        <th>#</th>
+                                        <th width="80%">Nama Produk</th>
+                                        <th>Harga Penawaran</th>
+                                        <th>Aksi</th>
                                     </tr>
-                                @empty
-                                    <tr id="noDataRow">
-                                        <td colspan="4" class="text-center text-gray-500">Belum ada produk yang
-                                            ditawarkan.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse ($penawaran as $index => $row)
+                                        <tr class="group text-xs border-b border-black/20">
+                                            <td class="row-number">{{ $index + 1 }}</td>
+                                            <td>
+                                                <select class="select2 w-full" name="kode_produk[]"
+                                                    onchange="updateHarga(this)">
+                                                    <option value="">Pilih Produk</option>
+                                                    @foreach ($produk as $item)
+                                                        <option value="{{ $item->kode_produk }}"
+                                                            data-harga="{{ $item->harga }}" @selected($item->kode_produk == $row->kode_produk)>
+                                                            {{ $item->nama_produk }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                Rp.
+                                                <input type="text" name="harga[]"
+                                                    value="{{ number_format($row->harga, 0, ',', '.') }}"
+                                                    oninput="formatCurrency(this)" class="form-input harga-input" style="border:none;">
+                                            </td>
+                                            <td><button type="button" class="text-red-600 hover:text-red-800"
+                                                    onclick="removeRow(this)" data-id="{{ $row->id }}">Hapus</button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr id="noDataRow">
+                                            <td colspan="4" class="text-center text-gray-500">Belum ada produk yang
+                                                ditawarkan.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>
     <template id="rowTemplate">
-        <tr>
+        <tr class="group text-xs border-b border-black/20">
             <td class="row-number">1</td>
             <td class="w-1/2">
                 <select class="produk select2 w-full p-2 border border-gray-300 rounded-md" name="kode_produk[]"
@@ -284,7 +295,7 @@
             <td>
                 Rp.
                 <input type="text" name="harga[]" placeholder="Harga" oninput="formatCurrency(this)"
-                    class="form-input harga-input py-2.5 px-4 w-full text-black border border-black/10 rounded-lg">
+                    class="form-input harga-input py-2.5 px-4 w-full text-black border border-black/10 rounded-lg" style="border:none;">
             </td>
             <td>
                 <button type="button" class="text-red-600 hover:text-red-800" onclick="removeRow(this)">
@@ -293,7 +304,18 @@
             </td>
         </tr>
     </template>
-
+    @if(session('reload'))
+    <script>
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    </script>
+    @endif
+    <script>
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field')?.focus();
+        });
+    </script>
     <script>
         function addRow() {
             const tableBody = document.querySelector('#productTable tbody');
@@ -362,7 +384,6 @@
             $('.select2').select2();
         });
     </script>
-
 
 
     <script>

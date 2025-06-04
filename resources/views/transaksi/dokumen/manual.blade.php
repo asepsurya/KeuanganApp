@@ -4,9 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create </title>
+    <title>
+    @if (Request::is('transaksi/nota/create/*'))
+       Nota Konsinyasi 
+    @elseif (Request::is('transaksi/invoice/create/*'))
+       INVOICE
+    @else
+       Nota Pembayaran
+    @endif
+    </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!-- Load ProseMirror dependencies (wajib) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js"
         integrity="sha512-bib7srucEhHYYWglYvGY+EQb0JAAW0qSOXpkPTMgCgW8eLtswHA/K4TKyD4+FiXcRHcy8z7boYxk0HTACCTFMQ=="
@@ -77,11 +88,6 @@
         </div>
         <div class="flex items-center space-x-3">
             <button><i data-lucide="plus" class="w-5 h-5 text-white"></i></button>
-            {{-- <input type="text" placeholder="Find text or tools"
-                class="hidden md:block text-sm px-2 py-1 rounded bg-gray-700 border border-gray-600 placeholder-gray-400 text-white">
-            <button><i data-lucide="search" class="w-5 h-5 text-white"></i></button>
-            <button><i data-lucide="download" class="w-5 h-5 text-white"></i></button>
-            <button><i data-lucide="upload" class="w-5 h-5 text-white"></i></button> --}}
             <button onclick="printArea()"><i data-lucide="printer" class="w-5 h-5 text-white"></i></button>
 
             <script>
@@ -104,8 +110,14 @@
             style="border: none; " id="print-area">
             <div class="w-full shadow-lg border border-gray-600 text-white p-5" style="background-color:white; width: 210mm; height: 297mm;  min-height: 297mm; /* Default height */
   height: auto; " class="print-page" >
-
-                @include('transaksi.dokumen.laporan.konsinyasiMain')
+           @if (Request::is('transaksi/nota/*'))
+               @include('transaksi.dokumen.laporan.konsinyasiMain')
+           @elseif (Request::is('transaksi/invoice/*'))
+               @include('transaksi.dokumen.laporan.invoiceKwitansiMain')
+           @else
+               @include('transaksi.dokumen.laporan.invoiceKwitansiMain')
+           @endif
+           
             </div>
         </div>
 
@@ -152,7 +164,12 @@
         </div>
     </div>
 </div>
-
+<script>
+    flatpickr(".flatpickr-input", {
+        dateFormat: "d M Y",
+        defaultDate: "today"
+    });
+</script>
         <script>
             function toggleVisibility(elementId) {
                 const element = document.getElementById(elementId);

@@ -120,7 +120,7 @@
                                     placeholder="B200511" required value="{{ $id ?? old('kode_transaksi') }}">
                             </td>
                             <td class="border border-gray-400 px-2 py-1">
-                                <input type="text" class="w-full text-center" name="tanggal" placeholder="25-jun-2025"
+                                <input type="text" class="w-full text-center flatpickr-input" name="tanggal" placeholder="Tanggal Transaksi"
                                     value="{{ $nota->tanggal ?? old('tanggal') }}" required>
                             </td>
                         </tr>

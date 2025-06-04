@@ -104,10 +104,10 @@ class TransaksiController extends Controller
         $kode_mitra = $request->kode_mitra;
         $transaksi = Transaksi::where('kode_transaksi', $request->nomor_transaksi)->firstOrFail();
 
-        $transaksi->diskon = $request->discount ?? '0';
-        $transaksi->ongkir = $request->ongkir ?? '0';
+        $transaksi->diskon = str_replace(['.', ','], '',  $request->discount ?? '0') ;
+        $transaksi->ongkir = str_replace(['.', ','], '', $request->ongkir ?? '0') ;
         $transaksi->tanggal_pembayaran = $request->tanggal_bayar ?? $transaksi->tanggal_pembayaran;
-        $transaksi->total = str_replace(['.', ','], '', $request->total); // Remove dots and commas before saving
+        $transaksi->total = str_replace(['.', ','], '', $request->grand_total); // Remove dots and commas before saving
         $transaksi->status_bayar = $request->status_bayar;
         $transaksi->auth = auth()->user()->id;
 

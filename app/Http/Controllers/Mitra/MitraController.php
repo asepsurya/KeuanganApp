@@ -7,6 +7,7 @@ use App\Models\Produk;
 use App\Models\Regency;
 use App\Models\District;
 use App\Models\Penawaran;
+use App\Models\Transaksi;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,7 @@ class MitraController extends Controller
         // Log aktivitas
         activity('ikm')->performedOn($mitra)->causedBy(auth()->user())->log('Menambahkan Mitra Baru ' . $request->nama_mitra);
         toastr()->success("Data has been saved successfully!");
-        return redirect()->route('detail.mitra', $mitra->id);
+        return redirect()->route('detail.mitra', $mitra->id)->with('reload', true);
     }
     public function mitraDetail($id)
     {
@@ -129,7 +130,7 @@ class MitraController extends Controller
 
             DB::commit();
             toastr()->success("Data has been saved successfully!");
-            return redirect()->route('detail.mitra',$request->id);
+            return redirect()->route('detail.mitra',$request->id)->with('reload', true);
         } catch (\Exception $e) {
             DB::rollback();
             toastr()->error('Gagal menyimpan penawaran: ' . $e->getMessage());

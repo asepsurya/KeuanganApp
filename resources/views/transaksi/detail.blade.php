@@ -446,6 +446,7 @@
                                         <input type="number" name="barang_terjual[]"
                                             class="form-input w-20 text-center border-gray-300 rounded-md barang-terjual-input"
                                             value="{{ $barang_terjual }}" data-index="{{ $index }}">
+                                          
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2 text-center">
                                         <input type="number" name="barang_retur[]"
@@ -505,7 +506,7 @@
                                     <div class="flex items-center justify-center">
                                         <span class="mr-1">Rp.</span>
                                         <input type="text" name="discount" id="discount-input"
-                                            class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ $transaksi->diskon ?? '0' }}">
+                                            class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ number_format($transaksi->diskon , 0, ',', '.') }}">
                                     </div>
                                 </td>
                             </tr>
@@ -561,44 +562,6 @@
 
                 function updateTotals() {
                     let total = 0;
-                    // v1
-                    // document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
-                    //     const index = input.dataset.index;
-                    //     const harga = parseInt(input.dataset.harga) || 0;
-                    //     const jumlahKeluar = parseInt(input.value) || 0;
-
-                    //     const barangTerjualInput = document.querySelector('.barang-terjual-input[data-index="' + index + '"]');
-                    //     const barangReturInput = document.querySelector('.barang-retur-input[data-index="' + index + '"]');
-                    //     const totalInput = document.querySelector('.total-harga-input[data-index="' + index + '"]');
-
-                    //     let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
-
-                    //     // Batasi barang terjual maksimal ke barang keluar
-                    //     if (barangTerjual > jumlahKeluar) {
-                    //         barangTerjual = jumlahKeluar;
-                    //         if (barangTerjualInput) {
-                    //             barangTerjualInput.value = barangTerjual;
-                    //         }
-                    //     }
-
-                    //     // Hitung barang retur
-                    //     const barangRetur = jumlahKeluar - barangTerjual;
-
-                    //     if (barangReturInput) {
-                    //         barangReturInput.value = barangRetur;
-                    //     }
-
-                    //     // Total harga per baris = barang keluar * harga (sesuai permintaan kamu)
-                    //     const totalRow = jumlahKeluar * harga;
-
-                    //     if (totalInput) {
-                    //         totalInput.value = formatRupiah(totalRow);
-                    //     }
-
-                    //     // Tambah ke total keseluruhan
-                    //     total += totalRow;
-                    // });
-                    // v2
                     document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
                         const index = input.dataset.index;
                         const harga = parseInt(input.dataset.harga) || 0;
@@ -709,7 +672,7 @@
                     updateTotals();
                 });
 
-                            </script>
+            </script>
 
 
                 </div>
@@ -750,8 +713,6 @@
                     @endif>
                     Buat Kwitansi
                 </a>
-
-
             </div>
         </div>
 

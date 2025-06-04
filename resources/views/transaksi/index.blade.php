@@ -58,10 +58,10 @@
                                     }
                                 });
                             </script>
-                            <div class="mb-4">
+                            <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md mb-4">
                                 <label class="block text-xs text-black/40 dark:text-white/40 mb-2">Pilih Mitra</label>
-                                <div style="height:250px;overflow-y:auto;">
-                                    <table class="min-w-full bg-white border border-black/10 rounded-lg" id="tableMitra">
+                                <div style="height:220px;overflow-y:auto;">
+                                    <table class="min-w-full bg-white dark:bg-transparent border border-black/10 rounded-lg" id="tableMitra">
                                         <thead>
                                             <tr>
                                                 <th class="py-2 px-4 border-b text-left text-xs font-semibold">Pilih</th>
@@ -149,7 +149,7 @@
             <p class="text-xs text-black/60 dark:text-white/60">Berikut adalah daftar mitra dan toko yang telah terdaftar di sistem.</p>
         </div>
         <div class="overflow-auto">
-            <table id="myTable" class="whitespace-nowrap table-hover table-bordered w-full"></table>
+            <table id="myTable" class= whitespace-nowrap table-hover table-bordered w-full"></table>
         </div>
     </div>
 

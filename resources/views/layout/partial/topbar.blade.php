@@ -28,13 +28,13 @@
 
                     // Label khusus jika segmen terakhir di halaman update
                     if ($isLast && Request::is('people/update/*')) {
-                    $label = $ikm->nama;
+                        $label = $ikm->nama;
                     }elseif($isLast && Request::is('mitra/detail/*') ) {
-                      $label = $mitra->nama_mitra;  
-                    }elseif(Request::is('transaksi/*')){
+                        $label = $mitra->nama_mitra;  
+                    }elseif($isLast && Request::is('transaksi/*')){
                         $label = $mitra->nama_mitra;  
                     } else {
-                    $label = ucwords(str_replace('-', ' ', $segment));
+                        $label = ucwords(str_replace('-', ' ', $segment));
                     }
 
                     $isLinkable = !$isLast && $segment !==['update','detail'];

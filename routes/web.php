@@ -112,6 +112,8 @@ Route::middleware(['auth'])->group(function () {
     // ------------------------------------------------
 
     Route::get('/transaksi/nota/create/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.nota.manual');
+    Route::get('/transaksi/invoice/create/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.invoice.manual');
+    Route::get('/transaksi/kwitansi/create/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.kwitansi.manual');
     Route::get('/transaksi/nota/detail/{id}', [TransaksiController::class, 'manualNota'])->name('transaksi.nota.detail');
 
     Route::post('/transaksi/nota/add', [TransaksiController::class, 'manualadd'])->name('transaksi.nota.add');

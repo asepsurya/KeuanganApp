@@ -60,13 +60,20 @@ class DashboardAdminController extends Controller
     }
     public function peta_pemasaran()
     {
-        $mitras = Mitra::select('latitude', 'longitude', 'nama_mitra')->where('auth',auth()->user()->id)->get()->map(function($item) {
-            return [
-                'lat' => (float) $item->latitude,
-                'lng' => (float) $item->longitude,
-                'label' => $item->nama_mitra,
-            ];
-        });
+        $mitras = Mitra::select('latitude', 'longitude', 'nama_mitra')
+            ->where('auth', auth()->user()->id)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->where('latitude', '!=', '')
+            ->where('longitude', '!=', '')
+            ->get()
+            ->map(function($item) {
+                return [
+                    'lat' => (float) $item->latitude,
+                    'lng' => (float) $item->longitude,
+                    'label' => $item->nama_mitra,
+                ];
+            });
 
       $jumlahPerKota = Mitra::select('id_kota', DB::raw('count(*) as total'))
         ->where('auth',auth()->user()->id)

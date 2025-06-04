@@ -54,4 +54,7 @@ class User extends Authenticatable
      public function perusahaan(){
         return $this->belongsTo('App\Models\Perusahaan','email','email');
     }
+     public function perusahaanUser(){
+        return $this->belongsTo('App\Models\Perusahaan','id','auth');
+    }
 }
