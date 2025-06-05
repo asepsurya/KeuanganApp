@@ -44,7 +44,7 @@
     </div>
 </div>
 <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
-    <div class="border bg-white border-black/10 dark:border-white/10 p-5 rounded-md">
+    <div class="border bg-white dark:bg-black border-black/10 dark:border-white/10 p-5 rounded-md">
         <div class="table-responsive">
             <table class="table-hover">
                 <thead>

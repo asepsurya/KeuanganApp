@@ -183,6 +183,8 @@ class TransaksiController extends Controller
                 'email_company' => $request->email_company,
                 'grandtotal' => preg_replace('/\D/', '', $request->grandtotal),
                 'auth' => auth()->user()->id,
+                'notes'=>$request->notes ?? '',
+                'type'=>$request->type
             ]
         );
 

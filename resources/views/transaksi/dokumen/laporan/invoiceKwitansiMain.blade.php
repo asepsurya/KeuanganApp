@@ -40,7 +40,7 @@
         max-width: 300px;
         /* Or whatever max-width you want */
     }
-    
+
     .tooltip {
         display: none;
         /* Menyembunyikan tombol hapus secara default */
@@ -70,239 +70,243 @@
         </ul>
     </div>
     @endif
-    <div class="max-w-[900px] mx-auto p-6 text-black">
-        <div class="flex justify-between items-center mb-2">
-            <div class="w-36">
-                <img alt="IC INOVATE CORPORA logo with red, green, orange, and blue leaf shapes" class="w-full h-auto"
-                    height="70" src="{{ asset('assets/images/inopak.jpg') }}" width="50" />
+    <form action="{{ route('transaksi.nota.add') }}" method="post" id="myForm">
+        @csrf
+        <div class="max-w-[900px] mx-auto p-6 text-black">
+            <div class="flex justify-between items-center mb-2">
+                <div class="w-36">
+                    <img alt="IC INOVATE CORPORA logo with red, green, orange, and blue leaf shapes" class="w-full h-auto"
+                        height="70" src="{{ asset('assets/images/inopak.jpg') }}" width="50" />
+                </div>
+
+                <div class="text-right">
+                    <h1 class="text-2xl font-normal mb-1"><b>
+                            <input type="text" class="w-full text-right" name="judul" placeholder="" required
+                                value="
+                                 {{ ($nota->judul ?? '') . ' ' . (Request::is('transaksi/invoice*') ? 'INVOICE' : 'NOTA PEMBAYARAN') }}
+                                ">
+                        </b></h1>
+                        <input type="hidden" value="{{ (Request::is('transaksi/invoice*') ? 'INVOICE' : 'NOTA PEMBAYARAN') }}" name="type">
+                    <table class="border border-gray-400 text-sm w-[320px] mx-auto text-black">
+                        <thead>
+                            <tr class="bg-gray-300 text-center text-xs font-semibold">
+                                <th class="border border-gray-400 px-2 py-1">Nomor Nota</th>
+                                <th class="border border-gray-400 px-2 py-1">Tanggal Transaksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center text-xs font-bold">
+                                <td class="border border-gray-400 px-2 py-1">
+                                    <input type="text" class="w-full text-center" name="kode_transaksi"
+                                        placeholder="B200511" required value="{{ $id ?? old('kode_transaksi') }}">
+                                </td>
+                                <td class="border border-gray-400 px-2 py-1">
+                                    <input type="text" class="w-full text-center flatpickr-input" name="tanggal" placeholder="25-jun-2025"
+                                        value="{{ $nota->tanggal ?? old('tanggal') }}" required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mb-1 text-[11px] leading-[13px]">
+                <textarea class="address" name="alamat_company" required
+                    oninput="autoResize(this)">{{$nota->alamat_company ?? old('alamat_company') ?? 'Ruko Hamas, Jl. Pancasila No.1 lantai 3, Lengkongsari, Tawang, Tasikmalaya Regency, West Java 46112, Indonesia'}} </textarea>
+                <p><input type="text" class="w-full text-left" name="telp_company" placeholder="P. 0877366644" required
+                        value="{{ $nota->telp_company ?? old('telp_company') }}"></p>
+                <p><input type="text" class="w-full text-left" name="email_company" placeholder="E. example@email.com"
+                        value="{{$nota->email_company ?? old('email_company') }}" required></p>
+            </div>
+            <div class="mt-2">
+                <hr class="garis-atas">
+                <hr class="garis-bawah">
+            </div>
+            <div class="text-[12px] leading-[14px] mb-3">
+                <div class="flex space-x-2 text-[11px] leading-[13px]">
+                    <div class="w-25 font-bold">Telah Diterima dari</div>
+                    <div class="w-1">:</div>
+                    <div class="flex-1 font-normal"> <input type="text" class="w-full text-left" name="kepada"
+                            placeholder="PT.INOMARCO INDONESIA " required value="{{$nota->kepada ?? old('kepada') }}"></td>
+                    </div>
+                </div>
+                <div class="flex space-x-2 text-[11px] leading-[13px]">
+                    <div class="w-25  font-bold " style="width: 99px">Alamat</div>
+                    <div class="w-1">:</div>
+                    <div class="flex-1 font-normal capitalize"><input type="text" class="w-full text-left" name="kota"
+                            placeholder="Jl.Khoerlun Tanjung No.41 Kota Tasikmalaya" required
+                            value="{{$nota->kota ??  old('kota') }}">
+                    </div>
+                </div>
+                <div class="flex space-x-2 text-[11px] leading-[13px]">
+                    <div class="w-25 font-bold"  style="width: 99px">Telepon</div>
+                    <div class="w-1">:</div>
+                    <div class="flex-1 font-normal"><input type="text" class="w-full text-left" name="telp"
+                            value="{{ $nota->telp ?? old('telp') }}" placeholder="082 82x xxxxxxx " required></div>
+                </div>
             </div>
 
-            <div class="text-right">
-                <h1 class="text-2xl font-normal mb-1"><b>
-                        <input type="text" class="w-full text-right" name="judul" placeholder="" required
-                            value="{{ ($nota->judul ?? old('judul')) . ' ' . (Request::is('transaksi/invoice/*') ? 'INVOICE' : 'NOTA PEMBAYARAN') }}">
-                    </b></h1>
-                <table class="border border-gray-400 text-sm w-[320px] mx-auto text-black">
-                    <thead>
-                        <tr class="bg-gray-300 text-center text-xs font-semibold">
-                            <th class="border border-gray-400 px-2 py-1">Nomor Nota</th>
-                            <th class="border border-gray-400 px-2 py-1">Tanggal Transaksi</th>
-                        </tr>
-                    </thead>
+            <p class="text-[12px]">Pembayaran Sejumlah</p>
+            <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2" id="myTable">
+                <thead>
+                    <tr class="border border-black bg-white">
+                        <th class="border border-black px-1 text-center w-[30px] font-semibold">No</th>
+                        <th class="border border-black px-1 text-left font-semibold">Nama Barang</th>
+                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Qty</th>
+                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Unit</th>
+                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
+                        <th class="border border-black px-1 text-center w-[100px] font-semibold">Harga Unit</th>
+                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
+                        <th class="border border-black px-1 text-center w-[110px] font-semibold">Sub Total Harga</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($nota)
+                    @foreach($nota->produk as $index => $produk)
+                    <tr>
+                        <td class="border border-black px-1 text-center">{{ $index + 1 }}</td>
+                        <td class="border border-black px-1">
+                            <input type="hidden" value="{{ $produk->id ?? ''}}" name="id_item[]">
+                            <div class="relative">
+                                <input name="nama_barang[]" class="w-full"
+                                    value="{{ old('nama_barang.'.$index, $produk->nama_barang) }}"
+                                    placeholder="Nama Barang atau Produk">
+                                <div class="tooltip">
+                                    <a href="{{ route('transaksi.item.delete',$produk->id) }}"><button type="button"
+                                            onclick="deleteRow(this)"
+                                            class="bg-red-500 text-white px-2 py-1 rounded">X</button></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="border border-black px-1 text-center">
+                            <input name="qty[]" class="w-full text-center" value="{{ old('qty.'.$index, $produk->qty) }}"
+                                oninput="calculateTotal(this)" placeholder="Qty">
+                        </td>
+                        <td class="border border-black px-1 text-center">
+                            <input name="unit[]" class="w-full text-center" value="{{ old('unit.'.$index, $produk->unit) }}"
+                                placeholder="Pcs">
+                        </td>
+                        <td class="border border-black px-1 text-center">
+                            Rp.
+                        </td>
+                        <td class="border border-black px-1 text-right">
+                            <input name="harga[]" class="w-full text-right"
+                                value="{{ old('harga.'.$index, number_format($produk->harga, 0, ',', '.')) }}"
+                                oninput="formatCurrency(this); calculateTotal(this)" placeholder="Harga">
+                        </td>
+                        <td class="border border-black px-1 text-center">
+                            Rp.
+                        </td>
+                        <td class="border border-black px-1 text-right">
+                            <input name="total[]" class="w-full text-right"
+                                value="{{ old('total.'.$index, number_format($produk->total, 0, ',', '.')) }}" readonly
+                                placeholder="Total">
+                        </td>
+
+                    </tr>
+                    @endforeach
+                    @endif
+                </tbody>
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="border border-black px-1 font-semibold text-right">
+                        TOTAL
+                    </td>
+                    <td class="border border-black px-1 font-semibold text-right">
+                        <input type="text" name="grandtotal" id="grandtotal" class="w-full text-right"
+                            value="{{ number_format($nota->grandtotal ?? 0, 0, ',', '.') }}">
+                    </td>
+                </tr>
+            </table>
+
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <table class="w-full border-collapse text-[12px] leading-[14px]">
                     <tbody>
-                        <tr class="text-center text-xs font-bold">
-                            <td class="border border-gray-400 px-2 py-1">
-                                <input type="text" class="w-full text-center" name="kode_transaksi"
-                                    placeholder="B200511" required value="{{ $id ?? old('kode_transaksi') }}">
+                        <tr >
+
+                            <!-- Kolom Penerima -->
+                            <td width="90%" class="" style="height: 180px;">
+                                <p class="text-[11px] leading-[13px] ">
+                                    <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $nota->keterangan ?? 'Pembayaran dilakukan melalui transfer ke no. Rek Mandiri. 131 000 7197603 atas nama Afin Nurfahmi Mufreni setelah diterima informasi penjualan.' }}
+
+                                    </textarea>
+                                </p>
+                                <p class="py-2"><strong>Catatan</strong></p>
+                                    <p class="p-3 border border-black">
+                                        <input type="hidden" name="id" value="{{ $id }}">
+                                        <textarea name="notes" oninput="autoResize(this)" class="w-full"
+                                            placeholder="Masukan Catatan disini">{{ $nota->notes ?? '' }}</textarea>
+                                        <style>
+                                            textarea {
+                                                overflow: hidden;
+                                                /* sembunyikan scroll */
+                                                resize: none;
+                                                /* nonaktifkan drag resize */
+                                                width: 100%;
+                                                box-sizing: border-box;
+                                            }
+
+                                            textarea:focus {
+                                                border: none;
+                                                /* hilangkan border saat fokus */
+                                                outline: none;
+                                                /* hilangkan outline biru default */
+                                                box-shadow: none;
+                                                /* hilangkan efek shadow jika ada */
+                                            }
+                                        </style>
+                                        <script>
+                                            function autoResize(textarea) {
+                                                textarea.style.height = 'auto'; // reset height
+                                                textarea.style.height = textarea.scrollHeight + 'px'; // set sesuai content
+                                            }
+
+                                            // Optional: inisialisasi tinggi saat halaman load
+                                            window.addEventListener('DOMContentLoaded', () => {
+                                                document.querySelectorAll('textarea').forEach(autoResize);
+                                            });
+                                        </script>
+
+                                    </p>
+
                             </td>
-                            <td class="border border-gray-400 px-2 py-1">
-                                <input type="text" class="w-full text-center" name="tanggal" placeholder="25-jun-2025"
-                                    value="{{ $nota->tanggal ?? old('tanggal') }}" required>
+
+                            <!-- Kolom Hormat Kami -->
+                            <td class="text-center align-middle" style="height: 180px;position: relative;">
+                                <div class="flex flex-col justify-center items-center h-full">
+                                    <p class="font-bold">Hormat Kami</p>
+
+                                    <div class="relative flex justify-center items-center"
+                                        style="height: 20px; width: 180px; margin-top: 8px;">
+                                        <!-- Stempel di belakang -->
+                                        <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
+                                            class="object-contain absolute z-10"
+                                            style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
+
+                                        <!-- Tanda tangan di atas -->
+                                        <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
+                                            class="object-contain absolute z-20"
+                                            style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Baris Garis Tanda Tangan & Nama -->
+                        <tr>
+                            <td class="">
+                                Dicetak pada : {{ now()->format("d-m-Y") }}
+                            </td>
+                            <td class="text-center">
+                                <div class="mx-auto border-t border-black w-36 mt-2"></div>
+                                <p class="mt-2">(Nama Pengirim)</p>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="mb-1 text-[11px] leading-[13px]">
-            <textarea class="address" name="alamat_company" required
-                oninput="autoResize(this)">{{$nota->alamat_company ?? old('alamat_company') ?? 'Ruko Hamas, Jl. Pancasila No.1 lantai 3, Lengkongsari, Tawang, Tasikmalaya Regency, West Java 46112, Indonesia'}} </textarea>
-            <p><input type="text" class="w-full text-left" name="telp_company" placeholder="P. 0877366644" required
-                    value="{{ $nota->telp_company ?? old('telp_company') }}"></p>
-            <p><input type="text" class="w-full text-left" name="email_company" placeholder="E. example@email.com"
-                    value="{{$nota->email_company ?? old('email_company') }}" required></p>
-        </div>
-        <div class="mt-2">
-            <hr class="garis-atas">
-            <hr class="garis-bawah">
-        </div>
-        <div class="text-[12px] leading-[14px] mb-3">
-            <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-25 font-bold">Telah Diterima dari</div>
-                <div class="w-1">:</div>
-                <div class="flex-1 font-normal"> <input type="text" class="w-full text-left" name="kepada"
-                        placeholder="PT.INOMARCO INDONESIA " required value="{{$nota->kepada ?? old('kepada') }}"></td>
-                </div>
-            </div>
-            <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-25  font-bold " style="width: 99px">Alamat</div>
-                <div class="w-1">:</div>
-                <div class="flex-1 font-normal capitalize"><input type="text" class="w-full text-left" name="kota"
-                        placeholder="Jl.Khoerlun Tanjung No.41 Kota Tasikmalaya" required
-                        value="{{$nota->kota ??  old('kota') }}">
-                </div>
-            </div>
-            <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-25 font-bold"  style="width: 99px">Telepon</div>
-                <div class="w-1">:</div>
-                <div class="flex-1 font-normal"><input type="text" class="w-full text-left" name="telp"
-                        value="{{ $nota->telp ?? old('telp') }}" placeholder="082 82x xxxxxxx " required></div>
-            </div>
-        </div>
-
-        <p class="text-[12px]">Pembayaran Sejumlah</p>
-        <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2" id="myTable">
-            <thead>
-                <tr class="border border-black bg-white">
-                    <th class="border border-black px-1 text-center w-[30px] font-semibold">No</th>
-                    <th class="border border-black px-1 text-left font-semibold">Nama Barang</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Qty</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Unit</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                    <th class="border border-black px-1 text-center w-[100px] font-semibold">Harga Unit</th>
-                    <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                    <th class="border border-black px-1 text-center w-[110px] font-semibold">Sub Total Harga</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @if($nota)
-                @foreach($nota->produk as $index => $produk)
-                <tr>
-                    <td class="border border-black px-1 text-center">{{ $index + 1 }}</td>
-                    <td class="border border-black px-1">
-                        <input type="hidden" value="{{ $produk->id ?? ''}}" name="id_item[]">
-                        <div class="relative">
-                            <input name="nama_barang[]" class="w-full"
-                                value="{{ old('nama_barang.'.$index, $produk->nama_barang) }}"
-                                placeholder="Nama Barang atau Produk">
-                            <div class="tooltip">
-                                <a href="{{ route('transaksi.item.delete',$produk->id) }}"><button type="button"
-                                        onclick="deleteRow(this)"
-                                        class="bg-red-500 text-white px-2 py-1 rounded">X</button></a>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="border border-black px-1 text-center">
-                        <input name="qty[]" class="w-full text-center" value="{{ old('qty.'.$index, $produk->qty) }}"
-                            oninput="calculateTotal(this)" placeholder="Qty">
-                    </td>
-                    <td class="border border-black px-1 text-center">
-                        <input name="unit[]" class="w-full text-center" value="{{ old('unit.'.$index, $produk->unit) }}"
-                            placeholder="Pcs">
-                    </td>
-                    <td class="border border-black px-1 text-center">
-                        Rp.
-                    </td>
-                    <td class="border border-black px-1 text-right">
-                        <input name="harga[]" class="w-full text-right"
-                            value="{{ old('harga.'.$index, number_format($produk->harga, 0, ',', '.')) }}"
-                            oninput="formatCurrency(this); calculateTotal(this)" placeholder="Harga">
-                    </td>
-                    <td class="border border-black px-1 text-center">
-                        Rp.
-                    </td>
-                    <td class="border border-black px-1 text-right">
-                        <input name="total[]" class="w-full text-right"
-                            value="{{ old('total.'.$index, number_format($produk->total, 0, ',', '.')) }}" readonly
-                            placeholder="Total">
-                    </td>
-
-                </tr>
-                @endforeach
-                @endif
-            </tbody>
-            <tr>
-                <td colspan="6"></td>
-                <td class="border border-black px-1 font-semibold text-right">
-                    TOTAL
-                </td>
-                <td class="border border-black px-1 font-semibold text-right">
-                    <input type="text" name="grandtotal" id="grandtotal" class="w-full text-right"
-                        value="{{ number_format($nota->grandtotal ?? 0, 0, ',', '.') }}">
-                </td>
-            </tr>
-        </table>
-           <div style="display: flex; justify-content: center; align-items: center;">
-            <table class="w-full border-collapse text-[12px] leading-[14px]">
-                <tbody>
-                    <tr>
-                        <!-- Kolom Penerima -->
-                        <td class="" style="height: 180px;">
-                            <p class="text-[11px] leading-[13px] ">
-                                Pembayaran dilakukan melalui transfer ke no. Rek Mandiri. 131 000 7197603 atas nama Afin
-                                Nurfahmi Mufreni
-                                Demikian informasi yang dapat kami sampaikan. Terimakasih telah bekerja sama dengan CV
-                                INOVATE Corpora
-                            </p>
-                            <p class="py-2"><strong>Catatan</strong></p>
-                            <form action="{{ route('transaksi.notes') }}" method="post" id="myForm">
-                                @csrf
-                                <p class="p-3 border border-black">
-
-                                    <input type="hidden" name="id" value="{{ $id }}">
-                                    <textarea name="notes" oninput="autoResize(this)" class="w-full"
-                                        placeholder="Masukan Catatan disini">{{ $transaksi->notes ?? '' }}</textarea>
-                                    <style>
-                                        textarea {
-                                            overflow: hidden;
-                                            /* sembunyikan scroll */
-                                            resize: none;
-                                            /* nonaktifkan drag resize */
-                                            width: 100%;
-                                            box-sizing: border-box;
-                                        }
-
-                                        textarea:focus {
-                                            border: none;
-                                            /* hilangkan border saat fokus */
-                                            outline: none;
-                                            /* hilangkan outline biru default */
-                                            box-shadow: none;
-                                            /* hilangkan efek shadow jika ada */
-                                        }
-                                    </style>
-                                    <script>
-                                        function autoResize(textarea) {
-                            textarea.style.height = 'auto'; // reset height
-                            textarea.style.height = textarea.scrollHeight + 'px'; // set sesuai content
-                        }
-
-                        // Optional: inisialisasi tinggi saat halaman load
-                        window.addEventListener('DOMContentLoaded', () => {
-                            document.querySelectorAll('textarea').forEach(autoResize);
-                        });
-                                    </script>
-
-                                </p>
-                            </form>
-                        </td>
-
-                        <!-- Kolom Hormat Kami -->
-                        <td class="text-center align-middle" style="height: 180px;position: relative;">
-                            <div class="flex flex-col justify-center items-center h-full">
-                                <p class="font-bold">Hormat Kami</p>
-
-                                <div class="relative flex justify-center items-center"
-                                    style="height: 20px; width: 180px; margin-top: 8px;">
-                                    <!-- Stempel di belakang -->
-                                    <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
-                                        class="object-contain absolute z-10"
-                                        style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
-
-                                    <!-- Tanda tangan di atas -->
-                                    <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
-                                        class="object-contain absolute z-20"
-                                        style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Baris Garis Tanda Tangan & Nama -->
-                    <tr>
-                        <td class="">
-                            Dicetak pada : {{ now()->format("d-m-Y") }}
-                        </td>
-                        <td class="text-center">
-                            <div class="mx-auto border-t border-black w-36 mt-2"></div>
-                            <p class="mt-2">(Nama Pengirim)</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </form>
     <script>
         @php
 
