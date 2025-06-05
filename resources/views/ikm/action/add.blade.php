@@ -46,31 +46,31 @@
     <div class="grid grid-cols-1 2xl:grid-cols-2 gap-2">
         <div>
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">NIK</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">NIK <span style="color:red">*</span></label>
                 <input type="text" name="nik" placeholder="NIK" class="form-input" maxlength="16"
                     value="{{ old('nik', $item->nik ?? '') }}" />
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Nama</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Nama <span style="color:red">*</span></label>
                 <input type="text" name="nama" placeholder="Nama" class="form-input"
                     value="{{ old('nama', $item->nama ?? '') }}" />
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Tempat Lahir</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Tempat Lahir <span style="color:red">*</span></label>
                 <input type="text" name="tempat_lahir" placeholder="Tempat Lahir" class="form-input"
                     value="{{ old('tempat_lahir', $item->tempat_lahir ?? '') }}" />
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Tanggal Lahir</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Tanggal Lahir <span style="color:red">*</span></label>
                 <input type="date" name="tanggal_lahir" class="form-input"
                     value="{{ old('tanggal_lahir', $item->tanggal_lahir ?? '') }}" />
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Jenis Kelamin</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Jenis Kelamin <span style="color:red">*</span></label>
                 <select name="jenis_kelamin" class="form-input" id="jenis_kelamin">
                     <option value="">-- Pilih Jenis Kelamin --</option>
                     <option value="L" {{ old('jenis_kelamin', $item->jenis_kelamin ?? '') == 'L' ? 'selected' : ''
@@ -82,25 +82,25 @@
 
             <!-- Alamat -->
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Alamat</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Alamat <span style="color:red">*</span></label>
                 <input type="text" name="alamat" placeholder="Alamat" class="form-input"
                     value="{{ old('alamat', $item->alamat ?? '') }}" />
             </div>
 
             <div class="flex gap-3 mb-3">
                 <div class="flex-1 py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                    <label class="block mb-1 text-xs text-black/40 dark:text-white/40">RT</label>
+                    <label class="block mb-1 text-xs text-black/40 dark:text-white/40">RT <span style="color:red">*</span></label>
                     <input type="text" name="rt" placeholder="RT" class="form-input"
                         value="{{ old('rt', $item->rt ?? '') }}" />
                 </div>
                 <div class="flex-1 py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                    <label class="block mb-1 text-xs text-black/40 dark:text-white/40">RW</label>
+                    <label class="block mb-1 text-xs text-black/40 dark:text-white/40">RW <span style="color:red">*</span></label>
                     <input type="text" name="rw" placeholder="RW" class="form-input"
                         value="{{ old('rw', $item->rw ?? '') }}" />
                 </div>
             </div>
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Provinsi</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Provinsi <span style="color:red">*</span></label>
                 <select id="provinsi" name="id_provinsi" class="form-select w-full">
                     <option value="" selected>Pilih Provinsi</option>
                     @foreach ($provinsi as $item)
@@ -110,20 +110,20 @@
             </div>
 
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kota / Kabupaten</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kota / Kabupaten <span style="color:red">*</span></label>
                 <select id="kabupaten" name="id_kota" class="form-select w-full">
                     {{-- otomatis --}}
                 </select>
             </div>
 
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kecamatan</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kecamatan <span style="color:red">*</span></label>
                 <select id="kecamatan" name="id_kecamatan" class="form-select w-full">
                     {{-- otomatis --}}
                 </select>
             </div>
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Desa</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Desa <span style="color:red">*</span></label>
                 <select id="desa" name="id_desa" class="form-select w-full">
                     {{-- otomatis --}}
                 </select>
@@ -133,7 +133,7 @@
         </div>
         <div>
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Agama</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Agama <span style="color:red">*</span></label>
                 <select id="agama" name="agama" class="form-select w-full">
                     <option value="islam">Islam</option>
                     <option value="kristen_protestan">Kristen (Protestan)</option>
@@ -146,7 +146,7 @@
             </div>
 
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status <span style="color:red">*</span></label>
                 <select id="status_perkawinan" name="status_perkawinan" class="form-select w-full">
                     <option value="" selected>status perkawinan</option>
                     <option value="belum_menikah">Belum Menikah</option>
@@ -158,13 +158,13 @@
 
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Pekerjaan</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Pekerjaan <span style="color:red">*</span></label>
                 <input type="text" name="pekerjaan" placeholder="Pekerjaan" class="form-input"
                     value="{{ old('pekerjaan', $item->pekerjaan ?? '') }}" />
             </div>
 
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kewarganegaraan</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kewarganegaraan <span style="color:red">*</span></label>
                 <select id="kewarganegaraan" name="kewarganegaraan" class="form-select w-full">
                     <option value="" selected> Kewarganegaraan</option>
                     <option value="wni">Warga Negara Indonesia (WNI)</option>
@@ -173,7 +173,7 @@
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">No. Telepon</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">No. Telepon <span style="color:red">*</span></label>
                 <input type="text" name="telp" placeholder="No. Telepon" class="form-input"
                     value="{{ old('telp', $item->telp ?? '') }}" />
             </div>
@@ -191,7 +191,7 @@
             </div>
 
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Email</label>
+                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Email <span style="color:red">*</span></label>
                 <input type="email" name="email" placeholder="Email" class="form-input"
                     value="{{ old('email', $item->email ?? '') }}"  required/>
             </div>

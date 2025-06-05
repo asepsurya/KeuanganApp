@@ -28,7 +28,7 @@
     </a>
 </div>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-7 mb-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 mb-4">
     <div class="bg-lightblue-100 rounded-2xl p-6">
         <p class="text-sm font-semibold text-black mb-2">Jumlah UMKM</p>
         <div class="flex items-center justify-between">
@@ -70,7 +70,7 @@
     <div class="mb-1">
         <p class="text-sm font-semibold">Data Pengguna / UMKM</p>
     </div>
-    <div >
+    <div class="border bg-white dark:bg-black border-black/10 dark:border-white/10 p-5 rounded-md" >
         <div class="table-responsive">
             <table id="myTable" class="whitespace-nowrap table-hover table-bordered "></table>
         </div>

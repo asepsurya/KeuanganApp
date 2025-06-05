@@ -79,7 +79,7 @@
         @include('layout.partial.rightsidebar')
         <!-- End Right Sidebar -->
     </div>
-
+    
     <!-- All javascirpt -->
     <!-- Alpine js -->
     <script src="{{ asset('assets/js/alpine-collaspe.min.js') }}"></script>

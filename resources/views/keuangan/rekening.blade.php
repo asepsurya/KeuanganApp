@@ -74,15 +74,15 @@
                             </div>
                             <div
                                 class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                                <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Rekening
-                                    *</label>
+                                <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Rekening 
+                                    <span style="color: red">*</span></label>
                                 <input type="text" name="nama_rekening" placeholder="Silahkan Masukan Nama Rekening"
                                     class="form-input">
                             </div>
                             <div
                                 class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
                                 <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jenis
-                                    Akun *</label>
+                                    Akun <span style="color: red">*</span></label>
                                 <select name="jenis_akun"
                                     class="select2 form-select py-2.5 px-3 text-sm text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg focus:border-black dark:focus:border-white focus:ring-0 focus:shadow-none w-[150px] select2-hidden-accessible"
                                     tabindex="-1" aria-hidden="true">
@@ -97,7 +97,7 @@
                                 </select>
                             </div>
                             <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                                <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah</label>
+                                <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah <span style="color: red">*</span></label>
                                 <div class="flex items-center">
                                     <span class="mr-2 text-gray-500">Rp.</span>
                                     <input type="text" name="jumlah" class="form-input jumlah-input" placeholder="Masukkan nominal, contoh: 10.000"
@@ -307,11 +307,11 @@
                         readonly>
                 </div>
                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Rekening *</label>
+                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Rekening <span style="color: red">*</span></label>
                     <input type="text" name="nama_rekening" x-model="editRekening.nama_rekening" class="form-input">
                 </div>
                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jenis Akun *</label>
+                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jenis Akun <span style="color: red">*</span></label>
                     <select name="jenis_akun" x-model="editRekening.jenis_akun"
                         class="select2 form-select py-2.5 px-3 text-sm text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg focus:border-black dark:focus:border-white focus:ring-0 focus:shadow-none w-[150px]">
                         <option value="default">Default</option>
@@ -325,7 +325,7 @@
                     </select>
                 </div>
                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah</label>
+                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah <span style="color: red">*</span></label>
                     <div class="flex items-center" @readonly(true)>
                         <span class="mr-2 text-gray-500">Rp.</span>
                         <input type="text" name="jumlah" x-model="editRekening.jumlah" class="form-input" placeholder="Masukkan nominal, contoh: 100.000" 

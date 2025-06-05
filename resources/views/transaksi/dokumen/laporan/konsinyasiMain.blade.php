@@ -102,6 +102,16 @@
             </div>
 
             <div class="text-right">
+                <input type="hidden" 
+                name="type" 
+                value="{{ Request::is('transaksi/invoice*') 
+                          ? 'invoice' 
+                          : (Request::is('transaksi/nota*') 
+                              ? 'nota_konsinyasi' 
+                              : (Request::is('transaksi/kwitansi*') 
+                                  ? 'nota_pembayaran' 
+                                  : '' )) }}">
+         
                 <h1 class="text-2xl font-normal mb-1"><b>
                         <input type="text" class="w-full text-right" name="judul" placeholder="Nota Konsinyasi" required
                             value="{{ $nota->judul ?? old('judul') }}">
@@ -233,7 +243,7 @@
                 </td>
                 <td class="border border-black px-1 font-semibold text-right">
                     <input type="text" name="grandtotal" id="grandtotal" class="w-full text-right"
-                        value="{{ number_format($nota->grandtotal ?? 0, 0, ',', '.') }}">
+                        value="{{ number_format($nota->grandtotal ?? 0, 0, ',', '.') }}"   oninput="formatCurrency(this); calculateTotal(this)">
                 </td>
             </tr>
         </table>

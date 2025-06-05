@@ -87,7 +87,7 @@
 
         <div class="text-[12px] leading-[14px] mb-3">
             <div class="flex space-x-2 text-[11px] leading-[13px]">
-                <div class="w-25 font-bold">Telah Diterima dari</div>
+                <div class="w-25 font-bold" style="{{ request('type')=='invoice' ? 'width:100px' : '' }}">{{ request('type')=='kwitansi' ? 'Telah Diterima dari' : 'Kepada' }}</div>
                 <div class="w-1">:</div>
                 <div class="flex-1 font-normal">{{ $transaksi->mitra->nama_mitra }}</div>
             </div>

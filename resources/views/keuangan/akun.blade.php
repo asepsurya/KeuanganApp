@@ -49,13 +49,13 @@
                                     @csrf
                                     <div
                                         class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Akun</label>
+                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Nama Akun <span style="color: red">*</span></label>
                                         <input type="text" name="nama_akun" placeholder="Nama Akun" class="form-input">
                                     </div>
                                     <div
                                         class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
                                         <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jenis
-                                            Akun</label>
+                                            Akun <span style="color: red">*</span></label>
                                         <select name="jenis_akun"
                                             class="select2 form-select py-2.5 px-3 text-sm text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg focus:border-black dark:focus:border-white focus:ring-0 focus:shadow-none w-[150px]">
                                             <option value="pemasukan">Pemasukan</option>

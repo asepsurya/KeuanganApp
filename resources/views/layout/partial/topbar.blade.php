@@ -1,11 +1,21 @@
 <div class="border-b border-black/10 dark:border-white/10 py-[22px] px-7 flex items-center justify-between">
     <div class="flex items-center gap-2">
-        <button type="button" class="text-black dark:text-white" @click="$store.app.toggleSidebar()">
+        <button class="flex items-start  md:hidden" @click="$store.app.toggleSidebar()">
+            <!-- Logo Bulat -->
+            <div  title="CV. INOVATE CORPORA"
+                class=" cursor-default w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
+                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
+                    class="w-full h-full object-contain block dark:hidden" />
+                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
+                    class="w-full h-full object-contain hidden dark:block" />
+            </div>
+    
+        </button>
+        <button type="button" class="hidden md:block text-black dark:text-white" @click="$store.app.toggleSidebar()">
             <x-icon name="sidebar" class="text-gray-600" />
         </button>
-        <button type="button" class="text-black dark:text-white">
-            <x-icon name="start" class="text-gray-600" />
-        </button>
+    
+        
         <div class="hidden sm:block">
             <nav aria-label="breadcrumb" class="w-full py-1 px-2">
                 <ol class="flex space-x-2 text-sm">
@@ -57,20 +67,7 @@
         </div>
     </div>
     <div class="flex items-center gap-5">
-        <form class="md:flex items-center hidden">
-            <label for="voice-search" class="sr-only">Search</label>
-            <div class="relative w-full">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-[6px] pointer-events-none">
-                    <x-icon name="search" class="text-gray-600" />
-                </div>
-                <input type="text" id="voice-search"
-                    class="bg-black/5 dark:bg-white/10 border-0 text-black dark:text-white/40 text-sm rounded-lg block max-w-[160px] w-full px-[26px] p-1 focus:ring-0 focus:outline-0"
-                    placeholder="Search..." required />
-                <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-2">
-                    <x-icon name="microphone" class="text-gray-600" />
-                </button>
-            </div>
-        </form>
+      
         <div class="flex items-center gap-2">
             <div>
                 <a href="javascript:;" class="text-black dark:text-white" x-cloak x-show="$store.app.mode === 'light'"

@@ -126,6 +126,6 @@ Route::middleware(['auth'])->group(function () {
     // ------------------------------------------------
     Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->name('perusahaan.index');
     Route::post('/create/perusahaan', [PerusahaanController::class, 'create'])->name('perusahaan.create');
-    Route::get('/setting/perusahaan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
+    Route::get('/setelan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
 });
 

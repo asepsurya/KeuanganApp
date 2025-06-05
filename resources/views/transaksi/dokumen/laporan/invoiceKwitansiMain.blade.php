@@ -58,6 +58,7 @@
 </style>
 <head>
 <body>
+
     @if ($errors->any())
     <div class="floating-element">
         <ul>
@@ -82,11 +83,18 @@
                 <div class="text-right">
                     <h1 class="text-2xl font-normal mb-1"><b>
                             <input type="text" class="w-full text-right" name="judul" placeholder="" required
-                                value="
-                                 {{ ($nota->judul ?? '') . ' ' . (Request::is('transaksi/invoice*') ? 'INVOICE' : 'NOTA PEMBAYARAN') }}
-                                ">
+                            value="{{$nota->judul ?? ''}}">
                         </b></h1>
-                        <input type="hidden" value="{{ (Request::is('transaksi/invoice*') ? 'INVOICE' : 'NOTA PEMBAYARAN') }}" name="type">
+                        <input type="hidden" 
+                        name="type" 
+                        value="{{ Request::is('transaksi/invoice*') 
+                                  ? 'invoice' 
+                                  : (Request::is('transaksi/nota*') 
+                                      ? 'nota_konsinyasi' 
+                                      : (Request::is('transaksi/kwitansi*') 
+                                          ? 'nota_pembayaran' 
+                                          : '' )) }}">
+                 
                     <table class="border border-gray-400 text-sm w-[320px] mx-auto text-black">
                         <thead>
                             <tr class="bg-gray-300 text-center text-xs font-semibold">
@@ -353,7 +361,7 @@
             <td class="border border-black px-1 font-normal">
                 <div class="relative">
                     <input name="nama_barang[]" class="w-full"
-                        placeholder="Nama Barang atau Produk" onclick="showTooltip(this)" value="${namaBarang}">
+                        placeholder="Nama Barang atau Produk" onclick="showTooltip(this)" value="${namaBarang}" required>
                     <div class="tooltip">
                         <button type="button" onclick="deleteRow(this)" class="bg-red-500 text-white px-2 py-1 rounded">X</button>
                     </div>
@@ -363,15 +371,15 @@
                 <input name="qty[]" class="w-full text-center" oninput="calculateTotal(this)" placeholder="Qty" value="${qty}">
             </td>
             <td class="border border-black px-1 text-center font-normal">
-                <input name="unit[]" class="w-full text-center" placeholder="Pcs" value="${unit}">
+                <input name="unit[]" class="w-full text-center" placeholder="Pcs" value="${unit}" required>
             </td>
             <td class="border border-black px-1 text-center font-normal">Rp.</td>
             <td class="border border-black px-1 text-right font-normal">
-                <input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)" value="${harga}">
+                <input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)" value="${harga}" required>
             </td>
             <td class="border border-black px-1 text-center font-normal">Rp.</td>
             <td class="border border-black px-1 text-right font-normal">
-                <input name="total[]" class="w-full text-right" placeholder="Total" readonly value="${total}">
+                <input name="total[]" class="w-full text-right" placeholder="Total" readonly value="${total}" required>
             </td>
         `;
 

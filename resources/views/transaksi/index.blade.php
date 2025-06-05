@@ -149,7 +149,9 @@
             <p class="text-xs text-black/60 dark:text-white/60">Berikut adalah daftar mitra dan toko yang telah terdaftar di sistem.</p>
         </div>
         <div class="overflow-auto">
-            <table id="myTable" class= whitespace-nowrap table-hover table-bordered w-full"></table>
+            <div class="border bg-white dark:bg-black border-black/10 dark:border-white/10 p-5 rounded-md">
+                <table id="myTable" class= "whitespace-nowrap table-hover table-bordered w-full"></table>
+            </div>
         </div>
     </div>
 

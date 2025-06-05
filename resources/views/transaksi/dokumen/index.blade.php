@@ -61,7 +61,7 @@
             <i data-lucide="settings" class="w-6 h-6 text-white"></i>
         </button>
         <div id="floatingMenu"
-            class="hidden absolute bottom-full right-0 mb-2 bg-gray-800 p-4 rounded-lg shadow-lg space-y-3">
+            class="hidden absolute bottom-full right-0 mb-2 bg-gray-800 p-4 rounded-lg shadow-lg space-y-4">
             <label class="flex items-center space-x-2">
                 <input type="checkbox" class="form-checkbox text-blue-500" id="toggleSignature"
                     onchange="toggleVisibility('signature')">
@@ -73,10 +73,11 @@
                 <span class="text-white text-sm">Stamp</span>
             </label>
         </div>
-
+    @if(request('type') !== 'konsinyasi')
     <button class="bg-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-600"  id="submitButton">
         <i data-lucide="save" class="w-6 h-6 text-white"></i>
     </button>
+    @endif
     <script>
         // Mendapatkan tombol dan form
         const submitButton = document.getElementById('submitButton');

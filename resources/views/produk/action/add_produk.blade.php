@@ -41,13 +41,13 @@
                 <div class="space-y-4">
                     <!-- Kode Produk -->
                     <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kode Produk</label>
+                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kode Produk <span style="color: red">*</span></label>
                         <input type="text" name="kode_produk" id="kode_produk" class="form-input" readonly />
                     </div>
 
                     <!-- Nama Produk -->
                     <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Nama Produk</label>
+                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Nama Produk <span style="color: red">*</span></label>
                         <input type="text" name="nama_produk" placeholder="Nama Produk" class="form-input" />
                     </div>
 
@@ -55,7 +55,7 @@
                         <!-- Harga -->
                     
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Harga Produk</label>
+                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Harga Produk <span style="color: red">*</span></label>
                             <input type="number" name="harga" placeholder="Harga Produk" class="form-input" oninput="formatCurrency(this)" />
                             <small><span id="formattedHarga" class="text-gray-500">Rp 0</span></small>
                             <script>
@@ -72,8 +72,8 @@
 
                         <!-- Stok -->
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Stok Produk</label>
-                            <input type="number" name="stok" placeholder="Stok Produk" class="form-input" />
+                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Stok Produk <span style="color: red">*</span></label>
+                            <input type="number" name="stok" placeholder="Stok Produk" class="form-input" value="1"/>
                             
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
                         <!-- Harga -->
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih</label>
+                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih <span style="color: red">*</span></label>
                             <input type="number" name="berat" placeholder="Berat Bersih" class="form-input"/>
                           
                             
@@ -89,7 +89,7 @@
 
                         <!-- Stok -->
                         <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status Keterdiaan</label>
+                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status Keterdiaan <span style="color: red">*</span></label>
                             <select name="status" class="status form-select w-full">
                                 <option value="" selected>Pilih status</option>
                                 <option value="available">Tersedia</option>
@@ -113,17 +113,9 @@
             <div>
                 <div
                     class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md space-y-4">
-                    <!-- Upload Gambar -->
-                    <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Gambar Produk</label>
-                        <input name="gambar" type="file" accept="image/*" class="form-input"
-                            onchange="previewImage(event)" />
-                        <img id="imgPreview" src="#" alt="Preview" class="mt-4 w-full rounded-lg hidden" />
-                    </div>
-
                     <!-- Kategori -->
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kategori Produk</label>
+                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kategori Produk <span style="color: red">*</span></label>
                         <select id="select-kategori" name="kategori" class="form-select w-full">
                             <option value=""selected>Pilih Kategori</option>
                             @foreach ($category as $item)
@@ -132,6 +124,15 @@
                             <option value="other">Lainnya</option>
                         </select>
                     </div>
+                    <!-- Upload Gambar -->
+                    <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
+                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Gambar Produk</label>
+                        <input name="gambar" type="file" accept="image/*" class="form-input"
+                            onchange="previewImage(event)" />
+                        <img id="imgPreview" src="#" alt="Preview" class="mt-4 w-full rounded-lg hidden" width="50"/>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>

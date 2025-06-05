@@ -32,11 +32,12 @@ class PerusahaanController extends Controller
       
     }
 
-    public function PerusahaanSetting(request $request){
+    public function PerusahaanSetting(){
+        $perusahaan = Perusahaan::where('auth',auth()->user()->id)->first();
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
          return view('perusahaan.index',[
             'activeMenu' => 'perusahaan',
             'active' => 'perusahaan', 
-        ],compact('logs'));
+        ],compact('logs','perusahaan'));
     }
 }

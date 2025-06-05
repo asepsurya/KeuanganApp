@@ -149,6 +149,18 @@
         <div>
             <div
                 class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md space-y-4">
+                    <!-- Kategori -->
+                    <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
+                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kategori Produk</label>
+                        <select id="select-kategori" name="kategori" class="form-select w-full">
+                            <option value="" selected>Pilih Kategori</option>
+                            @foreach ($category as $item2)
+                            <option value="{{ $item2->id }}" {{ $item->kategori == $item2->id ? 'selected' : '' }}>{{
+                                $item2->name }}</option>
+                            @endforeach
+                            <option value="other" {{ $item->kategori == 'other' ? 'selected' : '' }}> Lainnya</option>
+                        </select>
+                    </div>
                 <!-- Upload Gambar -->
                 <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                     <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Gambar Produk</label>
@@ -157,24 +169,13 @@
                     @if($item->gambar)
                     <img id="imgPreview" src="{{ asset('/storage/' . $item->gambar) }}" alt="Preview"
                         class="mt-4 w-full rounded-lg"
-                        onerror="this.onerror=null;this.src='{{ asset('assets/images/404.jpg') }}';" />
+                        onerror="this.onerror=null;this.src='{{ asset('assets/images/404.jpg') }}';" width="50" />
                     @else
-                    <img id="imgPreview" src="#" alt="Preview" class="mt-4 w-full rounded-lg hidden" />
+                    <img id="imgPreview" src="#" alt="Preview" class="mt-4 w-full rounded-lg hidden" width="50" />
                     @endif
                 </div>
 
-                <!-- Kategori -->
-                <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
-                    <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kategori Produk</label>
-                    <select id="select-kategori" name="kategori" class="form-select w-full">
-                        <option value="" selected>Pilih Kategori</option>
-                        @foreach ($category as $item2)
-                        <option value="{{ $item2->id }}" {{ $item->kategori == $item2->id ? 'selected' : '' }}>{{
-                            $item2->name }}</option>
-                        @endforeach
-                        <option value="other" {{ $item->kategori == 'other' ? 'selected' : '' }}> Lainnya</option>
-                    </select>
-                </div>
+            
             </div>
         </div>
     </div>

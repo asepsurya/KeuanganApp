@@ -12,6 +12,7 @@ use App\Models\Itemdokumen;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
@@ -148,78 +149,83 @@ class TransaksiController extends Controller
         $nota = Dokumen::where('kode_transaksi',$id)->first();
         return view('transaksi.dokumen.manual',compact('nota','id'));
     }
-  public function manualadd(Request $request)
+    public function manualadd(Request $request)
     {
-        $validated = $request->validate([
-            'nama_barang' => 'required',
-            'qty' => 'required',
-            'unit' => 'required',
-            'harga' => 'required',
-            'total' => 'required',
-            'judul' => 'required',
-            'kode_transaksi' => 'required',
-            'tanggal' => 'required',
-            'alamat_company' => 'required',
-            'telp_company' => 'required',
-            'kota' => 'required',
-            'telp' => 'required',
-            'kepada' => 'required',
-            'keterangan' => 'required',
-            'email_company' => 'required',
+        // Step 1: Validate request
+        $validator = Validator::make($request->all(), [
+            'nama_barang' => 'required|array',
+            'qty' => 'required|array',
+            'unit' => 'required|array',
+            'harga' => 'required|array',
+            'total' => 'required|array',
+            'judul' => 'required|string',
+            'kode_transaksi' => 'required|string',
+            'tanggal' => 'required|date',
+            'alamat_company' => 'required|string',
+            'telp_company' => 'required|string',
+            'kota' => 'required|string',
+            'telp' => 'required|string',
+            'kepada' => 'required|string',
+            'keterangan' => 'required|string',
+            'email_company' => 'required|email',
         ]);
-
-        // Find or create the document based on the 'kode_transaksi'
+    
+        if ($validator->fails()) {
+            return redirect()->back()
+                             ->withErrors($validator)
+                             ->withInput();
+        }
+    
+        $validated = $validator->validated();
+    
+        // Step 2: Create or update the document
         $dokumen = Dokumen::updateOrCreate(
-            ['kode_transaksi' => $request->kode_transaksi], // Key for determining if document exists
+            ['kode_transaksi' => $validated['kode_transaksi']],
             [
-                'judul' => $request->judul,
-                'tanggal' => $request->tanggal,
-                'alamat_company' => $request->alamat_company,
-                'telp_company' => $request->telp_company,
-                'kota' => $request->kota,
-                'telp' => $request->telp,
-                'kepada' => $request->kepada,
-                'keterangan' => $request->keterangan,
-                'email_company' => $request->email_company,
-                'grandtotal' => preg_replace('/\D/', '', $request->grandtotal),
+                'judul' => $validated['judul'],
+                'tanggal' => $validated['tanggal'],
+                'alamat_company' => $validated['alamat_company'],
+                'telp_company' => $validated['telp_company'],
+                'kota' => $validated['kota'],
+                'telp' => $validated['telp'],
+                'kepada' => $validated['kepada'],
+                'keterangan' => $validated['keterangan'],
+                'email_company' => $validated['email_company'],
+                'grandtotal' => (int) preg_replace('/\D/', '', $request->grandtotal),
                 'auth' => auth()->user()->id,
-                'notes'=>$request->notes ?? '',
-                'type'=>$request->type
+                'notes' => $request->notes ?? '',
+                'type' => $request->type ?? '',
             ]
         );
-
-      // Loop through the validated data and create/update the items
-        foreach ($request->nama_barang as $index => $namaBarang) {
-            // Cek jika id_item ada dan tidak null
-            $itemId = isset($request->id_item[$index]) ? $request->id_item[$index] : null;
-
-            // Jika id_item tidak ada, gunakan nama_barang untuk mencari item
-            if ($itemId === null) {
-                $item = Itemdokumen::where('nama_barang', $namaBarang)
-                                ->where('kode_transaksi', $request->kode_transaksi)
-                                ->first();  // Cek jika ada item dengan nama_barang yang sama
-                $itemId = $item ? $item->id : null;  // Jika ditemukan, gunakan id itemnya, kalau tidak id tetap null
-            }
-
+    
+        // Step 3: Create or update the item rows
+        foreach ($validated['nama_barang'] as $index => $namaBarang) {
             if (empty($namaBarang)) {
                 return redirect()->back()->withErrors("Nama barang tidak boleh kosong.");
             }
-
-            // Update atau create item
+    
+            $itemId = $request->id_item[$index] ?? null;
+    
+            if ($itemId === null) {
+                $item = Itemdokumen::where('nama_barang', $namaBarang)
+                                   ->where('kode_transaksi', $validated['kode_transaksi'])
+                                   ->first();
+                $itemId = $item?->id;
+            }
+    
             Itemdokumen::updateOrCreate(
-                ['kode_transaksi' => $request->kode_transaksi, 'id' => $itemId],
+                ['kode_transaksi' => $validated['kode_transaksi'], 'id' => $itemId],
                 [
                     'nama_barang' => $namaBarang,
-                    'qty' => $validated['qty'][$index],
-                    'unit' => $validated['unit'][$index],
-                    'harga' => preg_replace('/\D/', '', $validated['harga'][$index]), // Remove non-numeric characters
-                    'total' => preg_replace('/\D/', '', $validated['total'][$index]),
+                    'qty' => $validated['qty'][$index] ?? 0,
+                    'unit' => $validated['unit'][$index] ?? '',
+                    'harga' => (int) preg_replace('/\D/', '', $validated['harga'][$index] ?? 0),
+                    'total' => (int) preg_replace('/\D/', '', $validated['total'][$index] ?? 0),
                     'auth' => auth()->user()->id,
                 ]
             );
         }
-
-
+    
         toastr()->success("Data has been saved/updated successfully!");
         return redirect()->back();
     }

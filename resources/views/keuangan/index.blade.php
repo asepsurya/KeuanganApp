@@ -158,7 +158,7 @@
                                                 <input type="hidden" name="tipe" value="pengeluaran">
                                                  <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                   <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Tanggal</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Tanggal <span style="color: red">*</span></label>
                                                         <input type="text" name="tanggal" class="form-input" id="tanggal">
                                                         <!-- Pastikan flatpickr locale id sudah di-load -->
                                                         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
@@ -173,7 +173,7 @@
                                                  </div>
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                     <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Deskripsi Transaksi</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Deskripsi Transaksi <span style="color: red">*</span></label>
                                                         <textarea name="deskripsi" class="form-input" rows="2" placeholder="Deskripsi Transaksi"></textarea>
                                                     </div>
                                                     <div x-data="{ fileName2: '', fileUrl2: '' }">
@@ -204,7 +204,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                                                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Kategori Transaksi</label>
+                                                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Kategori Transaksi <span style="color: red">*</span></label>
                                                     <select name="id_akun" class="select-form kategori_keluar w-full" style="width: 100%;" data-placeholder="Pilih Kategori Akun">
                                                         <option></option>
                                                         @foreach($akun->where('jenis_akun','pengeluaran') as $item)
@@ -224,7 +224,7 @@
                                             
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                     <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah (Rp)</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah (Rp) <span style="color: red">*</span></label>
                                                         <input 
                                                             type="text" 
                                                             name="total" 
@@ -327,7 +327,7 @@
                                                 <input type="hidden" name="tipe" value="pemasukan">
                                                  <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                   <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Tanggal</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Tanggal <span style="color: red">*</span></label>
                                                         <input type="text" name="tanggal" class="form-input" id="tanggal">
                                                         <script>
                                                             flatpickr("#tanggal", {
@@ -340,7 +340,7 @@
                                                  </div>
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                     <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Deskripsi Transaksi</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Deskripsi Transaksi <span style="color: red">*</span></label>
                                                         <textarea name="deskripsi" class="form-input" rows="2" placeholder="Deskripsi Transaksi"></textarea>
                                                     </div>
                                                     <div x-data="{ fileName: '', fileUrl: '' }">
@@ -371,7 +371,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10">
-                                                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Kategori Transaksi</label>
+                                                    <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Kategori Transaksi <span style="color: red">*</span></label>
                                                     <select name="id_akun" class="select-form kategori_keluar w-full" style="width: 100%;" data-placeholder="Pilih Kategori Akun">
                                                         <option></option>
                                                         @foreach($akun->where('jenis_akun','pemasukan') as $item)
@@ -391,7 +391,7 @@
                                             
                                                 <div class="mb-4 relative bg-white dark:bg-white/5 py-4 px-5 rounded-lg border border-black/10 flex items-center gap-4">
                                                      <div class="flex-1">
-                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah (Rp)</label>
+                                                        <label class="block text-xs text-black/40 dark:text-white/40 mb-1">Jumlah (Rp) <span style="color: red">*</span></label>
                                                         <input 
                                                             type="text" 
                                                             name="total" 

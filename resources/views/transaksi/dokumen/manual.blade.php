@@ -84,10 +84,10 @@
                 <i data-lucide="menu" class="w-5 h-5 text-white"></i>
             </button>
             <span class="text-sm truncate max-w-[140px] text-gray-300">Buat Dokument Baru</span>
-            <button class="bg-blue-600 text-xs px-2 py-1 rounded">+ Create</button>
+            <a href="{{ route('nota.index') }}" class="bg-blue-600 text-xs px-2 py-1 rounded">Kembali</a>
         </div>
         <div class="flex items-center space-x-3">
-            <button><i data-lucide="plus" class="w-5 h-5 text-white"></i></button>
+           
             <button onclick="printArea()"><i data-lucide="printer" class="w-5 h-5 text-white"></i></button>
 
             <script>
@@ -165,10 +165,14 @@
     </div>
 </div>
 <script>
-    flatpickr(".flatpickr-input", {
+  // Cek jika input belum ada value, baru set defaultDate
+document.querySelectorAll('.flatpickr-input').forEach(function (el) {
+    flatpickr(el, {
         dateFormat: "d M Y",
-        defaultDate: "today"
+        defaultDate: el.value || "today"
     });
+});
+
 </script>
         <script>
             function toggleVisibility(elementId) {
