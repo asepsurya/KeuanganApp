@@ -17,7 +17,7 @@
                 <span
                     class="block font-semibold text-gray-800 dark:text-white text-sm leading-snug line-clamp-2 cursor-default"
                     title="CV. KARYA BAKTI KENCAN SURYANA KENCANA BADAI">
-                    CV. KARYA BAKTI KENCAN SURYANA KENCANA BADAI
+                    {{ app('settings')['prusahaan'] }}
                 </span>
             </div>
         </div>

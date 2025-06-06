@@ -87,7 +87,7 @@
                     @error('phone')
                         <div class="text-red-500  text-sm">{{ $message }}</div>
                     @enderror
-                    <label class="block relative">
+                   <label class="block relative">
                         <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -96,6 +96,12 @@
                             placeholder="Email" type="email" value="{{ old('email') }}" />
 
                     </label>
+
+                        {{-- Loading dan pesan error --}}
+                        <div id="email-status" class="text-sm mt-1 pl-1">
+                            <p id="email-loading" class="text-blue-500 hidden">Memeriksa email...</p>
+                            <p id="email-error" class="text-red-500 hidden">Email sudah terdaftar, Silahakan Login dengan email tersebut</p>
+                        </div>
                     @error('email')
                         <div class="text-red-500  text-sm">{{ $message }}</div>
                     @enderror
@@ -190,6 +196,50 @@
             }
         }
     </script>
+    <script>
+    const emailInput = document.getElementById('email');
+    const loadingMsg = document.getElementById('email-loading');
+    const errorMsg = document.getElementById('email-error');
+
+    let timer = null;
+
+    emailInput.addEventListener('input', function () {
+        // Clear timeout jika user masih mengetik
+        clearTimeout(timer);
+
+        // Mulai loading
+        loadingMsg.classList.remove('hidden');
+        errorMsg.classList.add('hidden');
+
+        // Tunggu 700ms setelah terakhir diketik
+        timer = setTimeout(() => {
+            fetch('{{ route("check.email") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ email: this.value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                loadingMsg.classList.add('hidden');
+                if (data.exists) {
+                    errorMsg.classList.remove('hidden');
+                } else {
+                    errorMsg.classList.add('hidden');
+                }
+            })
+            .catch(() => {
+                loadingMsg.classList.add('hidden');
+                errorMsg.textContent = 'Terjadi kesalahan saat memeriksa email.';
+                errorMsg.classList.remove('hidden');
+            });
+        }, 700);
+    });
+</script>
+
+
 
 </body>
 

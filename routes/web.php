@@ -20,8 +20,12 @@ Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/register', [registerController::class, 'register'])->name('register')->middleware('guest');
+
+Route::post('/check-email', [registerController::class, 'checkEmail'])->name('check.email');
+
 Route::post('/register/auth', [registerController::class, 'registerAction'])->name('register.add')->middleware('guest');
 Route::post('/logout', [logoutController::class, 'logout'])->name('logout');
+
 
 // ------------------------------------------------
 // route Regency Administrasi

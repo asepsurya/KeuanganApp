@@ -51,4 +51,9 @@ class registerController extends Controller
     toastr()->success("Data has been saved successfully!");
     return redirect()->route('perusahaan.index', ['json' => encrypt($user->id)]);
   }
+
+  public function checkEmail(request $request){
+      $exists = User::where('email', $request->email)->exists();
+      return response()->json(['exists' => $exists]);
+  }
 }

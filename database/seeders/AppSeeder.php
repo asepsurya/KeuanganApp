@@ -15,9 +15,10 @@ class AppSeeder extends Seeder
     public function run(): void
     {
         App::updateOrCreate(
-            ['key' => 'default_rekening'],
-            ['value' => '']
+            ['key' => 'default_rekening', 'value'=>''],  // Condition
+            ['key' => 'id_perusahaan','value' => 1 ]
         );
+
 
         Perusahaan::updateOrCreate(
             ['auth' => '1'], // kondisi

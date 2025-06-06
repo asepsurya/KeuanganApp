@@ -12,6 +12,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class DashboardAdminController extends Controller
 {
+
+ 
     public function index()
     {
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
