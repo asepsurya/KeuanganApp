@@ -12,12 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('perusahaans', function (Blueprint $table) {
-             $table->text('id_provinsi')->nullable();
-             $table->text('id_kota')->nullable();
-             $table->text('id_kecamatan')->nullable();
-             $table->text('id_desa')->nullable();
-             $table->text('stamp')->nullable();
-             $table->text('ttd')->nullable();
+              $table->text('keterangan_pembayaran')->nullable();
         });
     }
 
@@ -27,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('perusahaans', function (Blueprint $table) {
-             $table->dropColumn(['id_provinsi','id_kota','id_kecamatan','id_desa','stamp','ttd']);
+             $table->dropColumn(['keterangan_pembayaran']);
         });
     }
 };

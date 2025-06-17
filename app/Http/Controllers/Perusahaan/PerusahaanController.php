@@ -180,38 +180,46 @@ class PerusahaanController extends Controller
 
   public function updateStamp(Request $request)
   {
-    $validated = $request->validate([
-      "stempel" => "nullable|image|mimes:png,jpg,jpeg|max:2048",
-      "cap" => "nullable|image|mimes:png,jpg,jpeg|max:2048",
-      "template_pembayaran" => "nullable|string",
-    ]);
+    // $request->validate([
+    //     'stempel' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+    //     'ttd_file' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+    //     'ttd_base64' => 'nullable|string',
+    //     'keterangan_pembayaran' => 'nullable|string'
+    // ]);
+    
+    $perusahaan = Perusahaan::findOrFail($request->id_perusahaan);
 
-    $perusahaan = Auth::user()->perusahaan ?? new Perusahaan();
+       
+    // Upload stempel file
+    if ($request->hasFile('stempel')) {
+        $stempelName = 'stempel_' . uniqid() . '.' . $request->stempel->extension();
+        $stamp = $request->file('stempel')->store('perusahaan/stampel', 'public');
+        $perusahaan->stamp =  $stamp ;
+    }
+    
 
-    // Handle stempel upload
-    if ($request->hasFile("stempel")) {
-      if ($perusahaan->stempel) {
-        Storage::delete($perusahaan->stempel);
-      }
-      $validated["stempel"] = $request
-        ->file("stempel")
-        ->store("perusahaan/stempel", "public");
+    // Upload file tanda tangan manual (jika diupload via input file)
+    if ($request->hasFile('ttd_file')) {
+        $ttdName = 'ttd_' . uniqid() . '.' . $request->ttd_file->extension();
+        $ttd = $request->file('ttd_file')->store('perusahaan/ttd', 'public');
+        $perusahaan->ttd = $ttdName;
     }
 
-    // Handle cap upload
-    if ($request->hasFile("cap")) {
-      if ($perusahaan->cap) {
-        Storage::delete($perusahaan->cap);
-      }
-      $validated["cap"] = $request
-        ->file("cap")
-        ->store("perusahaan/cap", "public");
+ 
+    // Upload dari base64 canvas
+    if ($request->filled('ttd_base64')) {
+        $imageData = str_replace('data:image/png;base64,', '', $request->ttd_base64);
+        $imageData = str_replace(' ', '+', $imageData);
+        $ttdName = 'ttd_canvas_' . uniqid() . '.png';
+        Storage::disk('public')->put('tanda_tangan/' . $ttdName, base64_decode($imageData));
+        $perusahaan->ttd = 'tanda_tangan/' . $ttdName;
     }
 
-    $perusahaan->fill($validated);
-    Auth::user()->perusahaan()->save($perusahaan);
+    // Simpan keterangan pembayaran
+    $perusahaan->keterangan_pembayaran = $request->keterangan_pembayaran;
+    $perusahaan->save();
 
-    return back()->with("success", "Stempel dan template berhasil diperbarui");
+    return redirect()->back()->with('success', 'Stempel, tanda tangan, dan keterangan berhasil diperbarui.');
   }
 
   public function HapusLegalitas($id){
