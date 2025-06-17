@@ -40,10 +40,10 @@
     <main class="flex flex-col overflow-hidden w-full min-h-screen bg-white rounded-lg md:flex-row">
 
         <section class="hidden bg-[#f0f5ff] items-center justify-center relative md:flex md:w-1/2">
-            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-            <dotlottie-player src="https://lottie.host/63d803ea-611b-4fa9-b867-4ee920f62c72/wO6aJjUNr8.lottie"
-                background="transparent" speed="1" style="width: 100%; height: auto;" loop
-                autoplay></dotlottie-player>
+            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
+            </script>
+            <dotlottie-player src="https://lottie.host/f1ec6b22-384b-46b2-b95e-a0d071ad6d8a/5f2Twos7f8.lottie"
+                background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay></dotlottie-player>
         </section>
         <section class="w-full p-8 md:w-1/2 md:p-16">
             <div class="flex space-x-2 mb-10 items-center">
@@ -62,32 +62,59 @@
                 @csrf
                 <form action="{{ route('register') }}" method="POST">
                     @csrf
-                    <label class="block relative">
-                        <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <input id="name" name="name"
-                            class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('name') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                            placeholder="Nama Lengkap Anda" type="text" value="{{ old('name') }}" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="block relative">
+                            <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <div class="relative">
+                                <div class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
 
-                    </label>
-                    @error('name')
+                                <input id="nik" name="nik"
+                                    class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('nik') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                                    placeholder="Nomor NIK" type="text" value="{{ old('nik') }}" maxlength="16"
+                                    inputmode="numeric" pattern="[0-9]*"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,16);" />
+
+                                @error('nik')
+                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                        </label>
+                        <label class="block relative">
+                            <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input id="name" name="name"
+                                class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('name') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                                placeholder="Nama Lengkap Anda" type="text" value="{{ old('name') }}" />
+
+                        </label>
+                        @error('name')
                         <div class="text-red-500  text-sm">{{ $message }}</div>
-                    @enderror
-                    <label class="block relative">
-                        <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
+                        @enderror
+                    </div>
+
+                    <div class="relative">
+                        <div class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
                             <i class="fas fa-phone"></i>
-                        </span>
-                        <input id="phone" name="phone"
-                            class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('phone') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                            placeholder="Nomor Telepon" type="tel" value="{{ old('phone') }}"
-                            pattern="[0-9]{10,15}" title="Hanya angka yang diizinkan dan panjang nomor 10-15 digit" />
-                    </label>
+                        </div>
 
-                    @error('phone')
-                        <div class="text-red-500  text-sm">{{ $message }}</div>
-                    @enderror
-                   <label class="block relative">
+                        <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}"
+                            pattern="[0-9]{10,15}" title="Hanya angka, panjang 10-15 digit" inputmode="numeric"
+                            maxlength="15" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,15);"
+                            class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('phone') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent" />
+
+                        @error('phone')
+                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+
+                    <label class="block relative">
                         <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -97,57 +124,61 @@
 
                     </label>
 
-                        {{-- Loading dan pesan error --}}
-                        <div id="email-status" class="text-sm mt-1 pl-1">
-                            <p id="email-loading" class="text-blue-500 hidden">Memeriksa email...</p>
-                            <p id="email-error" class="text-red-500 hidden">Email sudah terdaftar, Silahakan Login dengan email tersebut</p>
-                        </div>
+                    {{-- Loading dan pesan error --}}
+                    <div id="email-status" class="text-sm mt-1 pl-1">
+                        <p id="email-loading" class="text-blue-500 hidden">Memeriksa email...</p>
+                        <p id="email-error" class="text-red-500 hidden">Email sudah terdaftar, Silahakan Login dengan
+                            email tersebut</p>
+                    </div>
                     @error('email')
-                        <div class="text-red-500  text-sm">{{ $message }}</div>
+                    <div class="text-red-500  text-sm">{{ $message }}</div>
                     @enderror
-                    <label class="block relative">
-                        <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
+                    @php
+                    $inputStyle = "w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg
+                    border focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent";
+                    @endphp
+
+                    <!-- Password -->
+                    <div class="relative mb-4">
+                    
+                        <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
                             <i class="fas fa-lock"></i>
                         </span>
-                        <input id="password" name="password"
-                            class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('password') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                            placeholder="Password" type="password" />
 
-                    </label>
-                    @error('password')
-                        <div class="text-red-500 text-sm">{{ $message }}</div>
-                    @enderror
-                    <label class="block relative">
-                        <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
-                            <i class="fas fa-lock"></i>
+                        <input id="password" name="password" type="password" placeholder="Password"
+                            class="{{ $inputStyle }} @error('password') border-red-500 @enderror" />
+
+                        <!-- Toggle -->
+                        <span class="absolute inset-y-0 right-4 flex items-center text-gray-500 cursor-pointer"
+                            onclick="togglePassword('password')">
+                            <i class="fas fa-eye" id="icon-password"></i>
                         </span>
-                        <input id="cpassword" name="cpassword"
-                            class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('cpassword') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                            placeholder="Masukan Kembali Password Anda" type="password" />
 
-                    </label>
-                    @error('cpassword')
-                        <div class="text-red-500 text-sm">{{ $message }}</div>
-                    @enderror
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <!-- Kolom 1: Captcha Image -->
-                        <div>
-                            <img src="{{ captcha_src() }}" alt="captcha" class="w-full" />
-                        </div>
-
-                        <!-- Kolom 2: Input Captcha -->
-                        <div>
-                            <input type="text" name="captcha"
-                                class="w-full @error('captcha') border-red-500 @enderror pl-5 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border  focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent @error('captcha') is-invalid @enderror"
-                                placeholder="Please Insert Captcha" />
-
-                            @error('captcha')
-                                <div class="text-red-500 text-sm">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @error('password')
+                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
+                    <!-- Confirm Password -->
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
+                            <i class="fas fa-lock"></i>
+                        </span>
+
+                        <input id="cpassword" name="cpassword" type="password"
+                            placeholder="Masukkan Kembali Password Anda"
+                            class="{{ $inputStyle }} @error('cpassword') border-red-500 @enderror" />
+
+                        <!-- Toggle -->
+                        <span class="absolute inset-y-0 right-4 flex items-center text-gray-500 cursor-pointer"
+                            onclick="togglePassword('cpassword')">
+                            <i class="fas fa-eye" id="icon-cpassword"></i>
+                        </span>
+
+                        @error('cpassword')
+                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <label class="inline-flex space-x-2 mb-8 text-[#475569] text-sm items-start">
                         <input class="mt-1" type="checkbox" />
@@ -172,6 +203,22 @@
                 </p>
         </section>
     </main>
+    <script>
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById('icon-' + fieldId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 
 
     <script>
@@ -197,7 +244,7 @@
         }
     </script>
     <script>
-    const emailInput = document.getElementById('email');
+        const emailInput = document.getElementById('email');
     const loadingMsg = document.getElementById('email-loading');
     const errorMsg = document.getElementById('email-error');
 
@@ -237,7 +284,7 @@
             });
         }, 700);
     });
-</script>
+    </script>
 
 
 

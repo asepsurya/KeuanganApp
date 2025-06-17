@@ -65,7 +65,7 @@ class MitraController extends Controller
         ]);
         // Log aktivitas
         activity('ikm')->performedOn($mitra)->causedBy(auth()->user())->log('Menambahkan Mitra Baru ' . $request->nama_mitra);
-        toastr()->success("Data has been saved successfully!");
+        
         return redirect()->route('detail.mitra', $mitra->id)->with('reload', true);
     }
     public function mitraDetail($id)
@@ -129,12 +129,11 @@ class MitraController extends Controller
             }
 
             DB::commit();
-            toastr()->success("Data has been saved successfully!");
+        
             return redirect()->route('detail.mitra',$request->id)->with('reload', true);
         } catch (\Exception $e) {
             DB::rollback();
-            toastr()->error('Gagal menyimpan penawaran: ' . $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with("error", 'Gagal menyimpan penawaran: ' . $e->getMessage());
         }
     }
 
@@ -164,9 +163,8 @@ class MitraController extends Controller
         
         // Hapus mitra
         $mitra->delete();
-        
-        toastr()->success("Data mitra dan penawaran berhasil dihapus!");
-        return redirect()->route('index.mitra');        
+
+        return redirect()->route('index.mitra')->with("success", "Data mitra dan penawaran berhasil dihapus!");        
         
     }
 }

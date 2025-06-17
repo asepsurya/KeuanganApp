@@ -84,8 +84,8 @@ class TransaksiController extends Controller
                 ->causedBy(auth()->user())
                 ->performedOn($transaksi)
                 ->log('Membuat transaksi baru');
-            toastr()->success("Data has been saved successfully!");
-            return redirect()->route('transaksi.index');
+        
+            return redirect()->route('transaksi.index')->with("success", "Data has been saved successfully!");
     }
 
     public function transaksiUpdate(Request $request)
@@ -132,8 +132,8 @@ class TransaksiController extends Controller
             ->causedBy(auth()->user())
             ->performedOn($transaksi)
             ->log('Memperbarui transaksi');
-        toastr()->success("Data has been saved successfully!");
-        return redirect()->route('transaksi.detail', ['id' => $transaksi->id]);
+            
+        return redirect()->route('transaksi.detail', ['id' => $transaksi->id])->with("success", "Data has been updated successfully!");
     }
 
     public function konsinyasi($id){
@@ -225,9 +225,8 @@ class TransaksiController extends Controller
                 ]
             );
         }
-    
-        toastr()->success("Data has been saved/updated successfully!");
-        return redirect()->back();
+        
+       return back()->with("success", "Data has been updated successfully!");
     }
 
     public function itemDelete($id){
@@ -242,8 +241,7 @@ class TransaksiController extends Controller
 
     public function notes(request $request){
         Transaksi::where('kode_transaksi', $request->id)->update(['notes' => $request->notes]);
-        toastr()->success("Data has been saved/updated successfully!");
-        return redirect()->back();
+        return back()->with("success", "Data has been updated successfully!");
 
     }
 

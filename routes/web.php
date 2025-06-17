@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ikm\IkmController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Nota\NotaController;
-use App\Http\Controllers\auth\logoutController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Mitra\MitraController;
-use App\Http\Controllers\auth\registerController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Region\RegionController;
 use App\Http\Controllers\Keuangan\HistoryController;
@@ -19,12 +19,12 @@ use App\Http\Controllers\Dashboard\DashboardAdminController;
 Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
-Route::get('/register', [registerController::class, 'register'])->name('register')->middleware('guest');
+Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
 
-Route::post('/check-email', [registerController::class, 'checkEmail'])->name('check.email');
+Route::post('/check-email', [RegisterController::class, 'checkEmail'])->name('check.email');
 
-Route::post('/register/auth', [registerController::class, 'registerAction'])->name('register.add')->middleware('guest');
-Route::post('/logout', [logoutController::class, 'logout'])->name('logout');
+Route::post('/register/auth', [RegisterController::class, 'registerAction'])->name('register.add')->middleware('guest');
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 
 // ------------------------------------------------
@@ -131,5 +131,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->name('perusahaan.index');
     Route::post('/create/perusahaan', [PerusahaanController::class, 'create'])->name('perusahaan.create');
     Route::get('/setelan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
+    
+    Route::post('/perusahaan/upload-logo', [PerusahaanController::class, 'uploadLogo'])->name('perusahaan.update.logo');
+    Route::post('/perusahaan/update-profil', [PerusahaanController::class, 'updateProfil'])->name('perusahaan.update.profil');
+    Route::post('/perusahaan/update-legalitas', [PerusahaanController::class, 'updateLegalitas'])->name('perusahaan.update.legalitas');
+    Route::get('/perusahaan/hapus-legalitas/{id}', [PerusahaanController::class, 'HapusLegalitas'])->name('perusahaan.hapus.legalitas');
+    Route::post('/perusahaan/update-stamp', [PerusahaanController::class, 'updateStamp'])->name('perusahaan.update.stamp');
 });
 

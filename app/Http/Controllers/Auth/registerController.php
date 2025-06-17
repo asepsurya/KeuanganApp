@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\ikm;
 use App\Models\User;
@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class registerController extends Controller
+class RegisterController extends Controller
 {
-  public function register()
+     public function register()
   {
     return view("auth.register");
   }
@@ -42,14 +42,13 @@ class registerController extends Controller
     ]);
 
     $pengguna = ikm::create([
+      'nik'=>$request->nik,
       'email'=>$request->email,
       'nama'=>$request->name,
       'telp'=>$request->phone,
     ]);
     Auth::login($user);
-    
-    toastr()->success("Data has been saved successfully!");
-    return redirect()->route('perusahaan.index', ['json' => encrypt($user->id)]);
+    return redirect()->route('perusahaan.index', ['json' => encrypt($user->id)])->with("success", "Pendaftaran Berhasil, Silahkan Lanjutkan ke Tahap Selanjutnya");
   }
 
   public function checkEmail(request $request){

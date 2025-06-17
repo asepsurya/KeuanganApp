@@ -41,9 +41,8 @@ class ProdukController extends Controller
 
         // Create the category (assuming you have a Category model)
         $ikm = CategoryProduct::create($request->all());
-        activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Menambahkan Kategori Baru');
-        toastr()->success("Data has been saved successfully!");
-        return redirect()->back();
+        activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Menambahkan Kategori Baru'); 
+         return back()->with("success", "Data has been saved successfully!");
     }
     public function updateCategory(Request $request)
     {
@@ -58,8 +57,7 @@ class ProdukController extends Controller
         $category = CategoryProduct::findOrFail($request->id);
         activity('ikm')->performedOn($category)->causedBy(auth()->user())->log('Mengubah Data Kategori '.$request->name);
         $category->update($request->all());
-        toastr()->success("Data has been updated successfully!");
-        return redirect()->back();
+        return back()->with("success", "Data has been updated successfully!");
     }
     public function deleteCategory($id)
     {
@@ -67,8 +65,7 @@ class ProdukController extends Controller
         $category = CategoryProduct::findOrFail($id);
         activity('ikm')->performedOn($category)->causedBy(auth()->user())->log('Menghapus Data Kategori '.$category->name);
         $category->delete();
-        toastr()->success("Data has been deleted successfully!");
-        return redirect()->back();
+        return back()->with("success", "Data has been deleted successfully!");
     }
     public function create()
     {
@@ -110,8 +107,7 @@ class ProdukController extends Controller
             'gambar' => $gambarPath,
         ]);
         activity('ikm')->performedOn($produk)->causedBy(auth()->user())->log('Menambahkan Produk Baru '.$request->nama_produk);
-        toastr()->success("Data has been saved successfully!");
-        return redirect()->back();
+        return back()->with("success", "Data has been saved successfully!");
     }
     public function update($id)
     {
@@ -163,8 +159,7 @@ class ProdukController extends Controller
             'gambar' => $produk->gambar, // gunakan yang sudah diset (baru atau lama)
         ]);
     
-        toastr()->success("Data has been updated successfully!");
-        return redirect()->back();
+        return back()->with("success", "Data has been updated successfully!");
     }
 
     public function deleteaction($id)
@@ -178,7 +173,6 @@ class ProdukController extends Controller
         }
         
         $produk->delete();
-        toastr()->success("Data has been deleted successfully!");
-        return redirect()->route('index.produk');
+        return redirect()->route('index.produk')->with("success", "Data has been deleted successfully!");
     }
 }

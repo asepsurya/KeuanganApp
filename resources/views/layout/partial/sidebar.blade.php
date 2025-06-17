@@ -1,26 +1,29 @@
-<nav
-    class="sidebar fixed top-0 bottom-0 z-40 flex-none w-[212px] border-r border-black/10 dark:border-white/10 transition-all duration-300">
+<nav class="sidebar fixed top-0 bottom-0 left-0 z-40 bg-white dark:bg-gray-900 w-[212px] border-r border-black/10 dark:border-white/10 transition-all duration-300" >
+  <!-- sidebar content -->
     <div class="bg-white dark:bg-black h-full">
         <!-- Start Logo -->
-        <div class="flex items-start p-4">
-            <!-- Logo Bulat -->
-            <div
-                class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
-                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
-                    class="w-full h-full object-contain block dark:hidden" />
-                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
-                    class="w-full h-full object-contain hidden dark:block" />
-            </div>
+   <div class="flex items-center p-4">
+    <!-- Logo Bulat -->
+    
+       
+    <div
+        class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
+        <img src="{{ $logo }}" alt="logo"
+            class="w-full h-full object-contain block dark:hidden" />
+        <img src="{{ $logo }}" alt="logo"
+            class="w-full h-full object-contain hidden dark:block" />
+    </div>
 
-            <!-- Nama Perusahaan dengan tooltip -->
-            <div class="ml-3 flex-1 max-w-full group">
-                <span
-                    class="block font-semibold text-gray-800 dark:text-white text-sm leading-snug line-clamp-2 cursor-default"
-                    title="CV. KARYA BAKTI KENCAN SURYANA KENCANA BADAI">
-                    {{ app('settings')['prusahaan'] }}
-                </span>
-            </div>
-        </div>
+    <!-- Nama Perusahaan dengan tooltip -->
+    <div class="ml-3 flex-1 max-w-full group flex items-center">
+        <span
+            class="block font-semibold text-gray-800 dark:text-white text-sm leading-snug line-clamp-2 cursor-default"
+            title="{{ $nama }}">
+            {{ $nama }}
+        </span>
+    </div>
+</div>
+
 
 
 
@@ -158,10 +161,11 @@
                 </ul>
             </li>
 
-            <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
+         
 
             {{-- Data IKM --}}
             @if (auth()->check() && auth()->user()->role === 'admin')
+               <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
                 <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm', 'ikm_create', 'ikm_update']) ? 'true' : 'false' }} }">
                     <a href="javascript:;" class="nav-link group text-black dark:text-white"
                         :class="{ 'active': open }" @click="open = !open">
@@ -187,45 +191,15 @@
                     </ul>
                 </li>
             @endif
+             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Setelan</span></h2>
             <li class="menu nav-item">
                 <a class="nav-link group" href="{{ route('perusahaan.setting') }}">
                     <div class="flex pl-5 items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
-                            viewBox="0 0 24 24">
-                            <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <span class="pl-1 text-black dark:text-white">Data Perusahaan</span>
-                    </div>
-                </a>
-            </li>
-
-
-
-            <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Pengaturan Aplikasi</span></h2>
-
-            {{-- Setelan Aplikasi --}}
-            <li class="menu nav-item">
-
-                <a class="nav-link group" href="">
-                    <div class="flex pl-5 items-center">
-                        <x-icon name="tools" class="text-gray-600" />
+                       <x-icon name="tools" class="text-gray-600" />
                         <span class="pl-1 text-black dark:text-white">Setelan Aplikasi</span>
                     </div>
                 </a>
             </li>
-
-            {{-- Data Pengguna --}}
-            <li class="menu nav-item">
-                <a class="nav-link group" href="#">
-                    <div class="flex pl-5 items-center">
-                        <x-icon name="user-4" class="text-gray-600" />
-                        <span class="pl-1 text-black dark:text-white">Data Pengguna</span>
-                    </div>
-                </a>
-            </li>
-        </ul>
-
 
         <!-- End Menu -->
     </div>
@@ -266,8 +240,8 @@
         </a>
 
         <!-- Pengguna -->
-        <a href="{{ route('perusahaan.setting') }}"
-           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'ikm' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
+        <a href="{{ route('perusahaan.setting') }}" 
+           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'setelan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
            <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
             <path d="M226.76,69a8,8,0,0,0-12.84-2.88l-40.3,37.19-17.23-3.7-3.7-17.23,37.19-40.3A8,8,0,0,0,187,29.24,72,72,0,0,0,88,96,72.34,72.34,0,0,0,94,124.94L33.79,177c-.15.12-.29.26-.43.39a32,32,0,0,0,45.26,45.26c.13-.13.27-.28.39-.42L131.06,162A72,72,0,0,0,232,96,71.56,71.56,0,0,0,226.76,69ZM160,152a56.14,56.14,0,0,1-27.07-7,8,8,0,0,0-9.92,1.77L67.11,211.51a16,16,0,0,1-22.62-22.62L109.18,133a8,8,0,0,0,1.77-9.93,56,56,0,0,1,58.36-82.31l-31.2,33.81a8,8,0,0,0-1.94,7.1L141.83,108a8,8,0,0,0,6.14,6.14l26.35,5.66a8,8,0,0,0,7.1-1.94l33.81-31.2A56.06,56.06,0,0,1,160,152Z"></path>
             </svg>

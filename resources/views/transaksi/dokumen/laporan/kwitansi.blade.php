@@ -45,8 +45,13 @@
     <div class="max-w-[900px] mx-auto p-6 text-black">
         <div class="flex justify-between items-center mb-2">
             <div class="w-36">
-                <img alt="IC INOVATE CORPORA logo with red, green, orange, and blue leaf shapes" class="w-full h-auto"
-                    height="70" src="{{ asset('assets/images/inopak.jpg') }}" width="50" />
+                    @php
+                        $perusahaan = \App\Models\Perusahaan::find(auth()->user()->perusahaanUser->id);
+                        $nama = $perusahaan->nama_perusahaan ?? 'Perusahaan tidak ditemukan';
+                        $logo = $perusahaan->logo ? asset('storage/' . $perusahaan->logo) : asset('assets/default_logo.png');
+                @endphp
+                <img alt="logo" class="w-full h-auto"
+                    height="70" src="{{ $logo }}" width="150" />
             </div>
 
             <div class="text-right">

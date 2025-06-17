@@ -8,7 +8,14 @@
 
         #map {
             height: 500px;
+                  position: relative;
+    z-index: 0; /* pastikan map di belakang */
         }
+        @media (max-width: 768px) {
+    #map {
+        z-index: 0;
+    }
+}
     </style>
 @endsection
 

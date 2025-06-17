@@ -29,6 +29,12 @@
     {{-- CSS --}}
     @yield('css')
     <style>
+       /* body *:not(.fl-wrapper) {
+            z-index: auto !important;
+        } */
+        .fl-wrapper {
+            z-index: 2147483647 !important; /* Nilai maksimum z-index */
+        }
         [x-cloak] { display: none !important; }
     </style>
 </head>
@@ -41,6 +47,11 @@
     <!-- Start Right Sidebar Olverlay -->
     <div x-cloak class="fixed inset-0 bg-[black]/60 z-50 2xl:hidden" :class="{'hidden' : !$store.app.rightsidebar}" @click="$store.app.rightSidebar()"></div>
     <!-- End Right Sidebar Olverlay -->
+     @php
+            $perusahaan = \App\Models\Perusahaan::find(auth()->user()->perusahaanUser->id);
+            $nama = $perusahaan->nama_perusahaan ?? 'Perusahaan tidak ditemukan';
+            $logo = $perusahaan->logo ? asset('storage/' . $perusahaan->logo) : asset('assets/default_logo.png');
+    @endphp
 
     <!-- Start Main Content -->
     <div class="main-container navbar-sticky flex" :class="[$store.app.navbar]">

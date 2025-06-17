@@ -1,13 +1,11 @@
 <div class="border-b border-black/10 dark:border-white/10 py-[22px] px-7 flex items-center justify-between">
     <div class="flex items-center gap-2">
         <button class="flex items-start  md:hidden" @click="$store.app.toggleSidebar()">
-            <!-- Logo Bulat -->
-            <div  title="CV. INOVATE CORPORA"
+            <div  title="{{ $nama }}"
                 class=" cursor-default w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
-                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
-                    class="w-full h-full object-contain block dark:hidden" />
-                <img src="{{ asset('assets/images/INOPAK.jpg') }}" alt="logo"
-                    class="w-full h-full object-contain hidden dark:block" />
+                <img src="{{ $logo }}" alt="logo"
+                    class="w-full h-full object-contain block " />
+  
             </div>
     
         </button>

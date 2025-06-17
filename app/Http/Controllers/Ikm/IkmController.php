@@ -95,8 +95,8 @@ class IkmController extends Controller
       'email' => $validatedData['email'], // Gunakan NIK sebagai email default jika tidak ada
       'password' => $validatedData['telp'],
     ]);
-    toastr()->success("Data has been saved successfully!");
-    return redirect()->route("index.ikm");
+    
+    return redirect()->route("index.ikm")->with("success", "Data has been saved successfully!");
   }
   public function update($id)
   {
@@ -170,12 +170,10 @@ class IkmController extends Controller
                 activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Memperbarui Foto Profil Pengguna');
             }       
             
-            toastr()->success('Profile photo updated successfully.');
-            return redirect()->back();
+            return redirect()->back()->with("success", "Profile photo updated successfully.");
 
         } catch (\Exception $e) {
-            toastr()->error('An error occurred: ' . $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with("error", 'An error occurred: ' . $e->getMessage());
         }
     }
 
@@ -217,8 +215,8 @@ class IkmController extends Controller
             if($ikm){
                 activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Memperbarui Data Pengguna');
             }  
-         toastr()->success("Data has been saved successfully!");
-         return redirect()->route('ikm.update',$request->id);
+      
+         return redirect()->route('ikm.update',$request->id)->with("success", "Profile photo updated successfully.");
      }
 
     public function delete($id)
@@ -244,7 +242,6 @@ class IkmController extends Controller
             }
         }
 
-        toastr()->success("Data has been deleted successfully!");
-        return redirect()->route("index.ikm");
+        return redirect()->route("index.ikm")->with("success", "Profile photo updated successfully.");
     }
 }

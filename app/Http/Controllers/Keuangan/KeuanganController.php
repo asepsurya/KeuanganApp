@@ -9,6 +9,7 @@ use App\Models\Keuangan;
 use App\Models\Rekening;
 use Illuminate\Http\Request;
 use App\Models\HistoryRekening;
+use Flasher\Laravel\Facade\Flasher;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Activitylog\Models\Activity;
@@ -66,8 +67,7 @@ class KeuanganController extends Controller
 
         $akun = Akun::create($request->all());
         activity('ikm')->performedOn($akun)->causedBy(auth()->user())->log('Menambahkan Akun Baru ' . $request->akun);
-        toastr()->success("Data has been saved successfully!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Data has been saved successfully!");
     }
 
     public function akunUpdate(request $request){
@@ -87,8 +87,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Mengupdate Akun ' . $request->nama_akun);
     
-        toastr()->success("Data akun berhasil diupdate!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Data has been saved successfully!");
     }
 
     public function akunDelete($id){
@@ -100,8 +99,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Menghapus Akun ' . $akun->nama_akun);
 
-        toastr()->success("Data akun berhasil dihapus!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Data akun berhasil dihapus!");
     }
     public function rekeningIndex(){
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
@@ -143,8 +141,7 @@ class KeuanganController extends Controller
             'foto' => null,
         ]);
 
-        toastr()->success("Data akun berhasil ditambahkan!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Data akun berhasil ditambahkan!");
     }
 
     public function keuanganAdd(Request $request){
@@ -281,8 +278,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Menambahkan data keuangan baru');
 
-        toastr()->success("Data keuangan berhasil ditambahkan!");
-        return redirect()->back();
+         return redirect()->back()->with("success", "Berhasil menyimpan data");
     }
 
     public function keuanganUpdate(Request $request){
@@ -369,8 +365,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Mengupdate data keuangan');
 
-        toastr()->success("Data keuangan berhasil diupdate!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Berhasil menyimpan data");
     }
 
     public function keuanganDelete($id){
@@ -411,8 +406,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Menghapus data keuangan');
 
-        toastr()->success("Data keuangan berhasil dihapus!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Berhasil menghapus data");
     }
 
     public function rekeningUpdate(request $request){
@@ -465,8 +459,7 @@ class KeuanganController extends Controller
             ->causedBy(auth()->user())
             ->log('Mengupdate data rekening');
 
-        toastr()->success("Data rekening berhasil diupdate!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Berhasil mengupdate data");
     }
 
     public function rekeningDelete($id){
@@ -492,9 +485,8 @@ class KeuanganController extends Controller
             ->performedOn($rekening)
             ->causedBy(auth()->user())
             ->log('Menghapus rekening beserta seluruh transaksi terkait');
-
-        toastr()->success("Rekening dan seluruh transaksi terkait berhasil dihapus!");
-        return redirect()->back();
+    
+       return redirect()->back()->with("success", "Rekening dan seluruh transaksi terkait berhasil dihapus!");
     }
 
     public function rekeningDefault($id){
@@ -512,8 +504,8 @@ class KeuanganController extends Controller
             ->log('Mengatur rekening default: ' . $rekening->kode_rekening);
 
             \Artisan::call('optimize:clear');
-        toastr()->success("Rekening default berhasil diatur!");
-        return redirect()->back();
+        return redirect()->back()->with("success", "Rekening default berhasil diatur!");
+
     }
 
 
