@@ -7,8 +7,15 @@
     <title>PDF Editor Layout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <style>
+    body{
+        font-family: 'Roboto', sans-serif;
+    }
+    h1, h2, h3 {
+        font-family: 'Poppins', sans-serif;
+    }
     .kop-surat {
         width: 100%;
         text-align: center;
@@ -54,7 +61,7 @@
             </div>
 
             <div class="text-right">
-                <h1 class="text-2xl font-normal mb-5"><b>Nota Konsinyasi</b></h1>
+                <h1 class="text-2xl font-normal mb-5"><b>NOTA KONSINYASI</b></h1>
                 <table class="border border-gray-400 text-sm w-[320px] mx-auto text-black">
                     <thead>
                         <tr class="bg-gray-300 text-center text-xs font-semibold">
@@ -72,10 +79,16 @@
                 </table>
             </div>
         </div>
+          @php
+                $alamat = ucfirst(strtolower($perusahaan->alamat)) . ', ' .
+                        'Kelurahan/Desa ' . ucwords(strtolower($perusahaan->desa->name)) . ', ' .
+                        'Kecamatan ' . ucwords(strtolower($perusahaan->kecamatan->name)) . ', ' .
+                        'Kota/Kab. ' . ucwords(strtolower( $perusahaan->kota->name));
+            @endphp
         <div class="mb-1 text-[11px] leading-[13px]">
-            <p class="address">{{ auth()->user()->perusahaanUser->alamat }}</p>
-            <p>p. {{ auth()->user()->perusahaanUser->telp_perusahaan }}</p>
-            <p>e. {{ auth()->user()->perusahaanUser->email }}</p>
+            <p class="address">{{ $alamat }}</p>
+            <p>P. {{ auth()->user()->perusahaanUser->telp_perusahaan }}</p>
+            <p>E. {{ auth()->user()->perusahaanUser->email }}</p>
         </div>
         <div class="mt-2">
             <hr class="garis-atas">
@@ -170,9 +183,7 @@
         </table>
 
         <p class="text-[11px] leading-[13px] ">
-            Pembayaran dilakukan melalui transfer ke no.
-            <strong>Rek Mandiri. 131 000 7197603 atas nama Afin Nurfahmi Mufreni</strong>
-            setelah diterima informasi penjualan.
+            {{ $perusahaan->keterangan_pembayaran }}
         </p>
         <table class="w-full border-collapse text-[12px] leading-[14px]">
             <tbody>
@@ -185,24 +196,23 @@
                     </td>
 
                     <!-- Kolom Hormat Kami -->
-                    <td class="text-center align-middle" style="height: 180px;">
-                        <div class="flex flex-col justify-center items-center h-full">
-                            <p class="font-bold">Hormat Kami</p>
+                    <td class="text-center align-middle" style="height: 150px;">
+                                <div class="flex flex-col justify-center items-center h-full">
+                                    <p class="font-bold">Hormat Kami</p>
 
-                            <div class="relative flex justify-center items-center"
-                                style="height: 20px; width: 180px; margin-top: 8px;">
-                                <!-- Stempel di belakang -->
-                                <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
-                                    class="object-contain absolute z-10"
-                                    style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
-
-                                <!-- Tanda tangan di atas -->
-                                <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
-                                    class="object-contain absolute z-20"
-                                    style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
-                            </div>
-                        </div>
-                    </td>
+                                    <div class="relative flex justify-center items-center"
+                                        style="height: 10px; width: 180px; margin-top: 8px;">
+                                        <!-- Stempel di belakang -->
+                                        <img src="{{ optional($perusahaan)->stamp ? asset('storage/' . $perusahaan->stamp) : asset('assets/stamp-default.png') }}"
+                                                alt="Stemple" class="object-contain absolute z-10" width="140"
+                                                style="top: -20px; left: 50%; transform: translateX(-30%); display: none;"  id="stamp" hidden="">                 
+                                        <!-- Tanda tangan di atas -->
+                                        <img src="{{ optional($perusahaan)->ttd ? asset('storage/' . $perusahaan->ttd) : asset('assets/ttd-default.png') }}"
+                                                alt="tanda Tangan" class="object-contain absolute z-20" width="150"
+                                                style="top: 0px; left: 50%; transform: translateX(-50%); display: none;"  id="signature" hidden="">
+                                    </div>
+                                </div>
+                            </td>
                 </tr>
 
                 <!-- Baris Garis Tanda Tangan & Nama -->

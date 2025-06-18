@@ -161,7 +161,7 @@ class KeuanganController extends Controller
         // Handle rekening
         if (empty($request->id_rekening)) {
             // Cek apakah sudah ada default rekening di App
-            $defaultRekening = App::where('key', 'default_rekening')->first();
+            $defaultRekening = App::where(['key' => 'default_rekening','auth'=> auth()->user()->id])->first();
             if ($defaultRekening) {
                 
                 // Gunakan rekening default yang sudah ada

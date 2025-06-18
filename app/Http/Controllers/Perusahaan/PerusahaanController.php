@@ -44,6 +44,7 @@ class PerusahaanController extends Controller
 
   public function PerusahaanSetting()
   {
+     $provinsi = Province::all();
     $perusahaan = Perusahaan::where("auth", auth()->user()->id)->first();
     $logs = Activity::where([
       "causer_id" => auth()->user()->id,
@@ -58,7 +59,7 @@ class PerusahaanController extends Controller
         "activeMenu" => "setelan",
         "active" => "setelan",
       ],
-      compact("logs", "perusahaan")
+      compact("logs", "perusahaan","provinsi")
     );
   }
 
@@ -106,6 +107,10 @@ class PerusahaanController extends Controller
       "email" => "required|email|max:255",
       "alamat" => "required|string",
       "telp_perusahaan" => "required|string",
+      "id_provinsi" => "string",
+      "id_kota" => "string",
+      "id_kecamatan" => "string",
+      "id_desa" => "string",
     ]);
 
     Perusahaan::where("id", $request->id)->update($validated);
@@ -202,7 +207,7 @@ class PerusahaanController extends Controller
     if ($request->hasFile('ttd_file')) {
         $ttdName = 'ttd_' . uniqid() . '.' . $request->ttd_file->extension();
         $ttd = $request->file('ttd_file')->store('perusahaan/ttd', 'public');
-        $perusahaan->ttd = $ttdName;
+        $perusahaan->ttd = $ttd;
     }
 
  

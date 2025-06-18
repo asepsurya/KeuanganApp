@@ -80,8 +80,8 @@
         </div>
         <div class="mb-1 text-[11px] leading-[13px]">
             <p class="address">{{ $transaksi->perusahaan->alamat }}</p>
-            <p>p. {{ $transaksi->perusahaan->telp_perusahaan }}</p>
-            <p>e. {{ $transaksi->perusahaan->email }}</p>
+            <p>P. {{ $transaksi->perusahaan->telp_perusahaan }}</p>
+            <p>E. {{ $transaksi->perusahaan->email }}</p>
         </div>
         <div class="mt-2">
             <hr class="garis-atas">

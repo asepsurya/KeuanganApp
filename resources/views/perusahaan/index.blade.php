@@ -23,8 +23,65 @@
             --tw-space-x-reverse: none;
 
         }
+
+        .select2-container--default .select2-selection--single {
+            margin-left: -10px;
+            border: none;
+        }
+
+        .dark .select2-container--default .select2-selection--single {
+            background-color: rgba(0, 0, 0, 0);
+            margin-left: -10px;
+            border: none;
+        }
     </style>
 
+    <style>
+        .floating-buttons {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+            margin-right: 280px;
+        }
+
+        @media (max-width: 767px) {
+            .floating-buttons {
+                margin-right: 0;
+                margin-bottom: 50px;
+            }
+
+            #mycontent {
+                margin-bottom: 100px;
+            }
+
+        }
+
+        .btn-icon {
+            background-color: #2563eb;
+            /* biru */
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background-color: #1e40af;
+            /* biru lebih gelap */
+        }
+    </style>
     <div class=" flex items-center rounded bg-lightblue-200/50 dark:bg-lightblue-200 p-3 text-black/80 dark:text-black">
         <svg class="w-5 h-5 mr-2" width="32" height="32" viewBox="0 0 32 32" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -80,7 +137,7 @@
         </div>
 
         <!-- Content Area -->
-        <div class="w-full pl-6 p-5 border-l border-gray-200 dark:border-white/10">
+        <div id="mycontent" class=" w-full pl-6 p-5 border-l border-gray-200 dark:border-white/10">
             <div id="tab-profil" class="tab-content">
                 <form action="{{ route('perusahaan.update.profil') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -148,87 +205,96 @@
                                     Alamat Usaha
                                 </label>
                             </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 ">
+                                {{-- Provinsi --}}
+                                <div
+                                    class=" px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                    <label for="provinsi"
+                                        class="text-sm font-medium text-slate-700 mb-1 block">Provinsi</label>
+                                    <div class="relative">
+
+                                        <select id="provinsi" name="id_provinsi"
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
+                                            <option value="">Pilih Provinsi</option>
+                                            @foreach ($provinsi as $ikm2)
+                                                <option value="{{ $ikm2->id }}"
+                                                    {{ $ikm2->id == $perusahaan->id_provinsi ? 'selected' : '' }}>
+                                                    {{ $ikm2->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('id_provinsi')
+                                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Kabupaten --}}
+                                <div
+                                    class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                    <label for="kabupaten" class="text-sm font-medium text-slate-700 mb-1 block">Kota /
+                                        Kabupaten</label>
+                                    <div class="relative">
+                                        <select id="kabupaten" name="id_kota"
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
+                                            <option value="">Pilih Kota/Kabupaten</option>
+                                            <option value="{{ $perusahaan->id_kota ?? '' }}" selected>
+                                                {{ $perusahaan->kota->name ?? '' }}</option>
+                                        </select>
+                                    </div>
+                                    @error('id_kota')
+                                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Kecamatan --}}
+                                <div
+                                    class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                    <label for="kecamatan"
+                                        class="text-sm font-medium text-slate-700 mb-1 block">Kecamatan</label>
+                                    <div class="relative">
+
+                                        <select id="kecamatan" name="id_kecamatan"
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
+                                            <option value="">Pilih Kecamatan</option>
+                                            <option value="{{ $perusahaan->id_kecamatan ?? '' }}" selected>
+                                                {{ $perusahaan->kecamatan->name ?? '' }}</option>
+                                        </select>
+                                    </div>
+                                    @error('id_kecamatan')
+                                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Desa --}}
+                                <div
+                                    class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                                    <label for="desa" class="text-sm font-medium text-slate-700 mb-1 block">Desa /
+                                        Kelurahan</label>
+                                    <div class="relative">
+
+                                        <select id="desa" name="id_desa"
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
+                                            <option value="">Pilih Desa</option>
+                                            <option value="{{ $perusahaan->id_desa ?? '' }}" selected>
+                                                {{ $perusahaan->desa->name ?? '' }}</option>
+                                        </select>
+                                    </div>
+                                    @error('id_desa')
+                                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
-                            {{-- Provinsi --}}
 
-                            <div
-                                class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                                <label for="provinsi"
-                                    class="text-sm font-medium text-slate-700 mb-1 block">Provinsi</label>
-                                <div class="relative">
-
-                                    <select id="provinsi" name="id_provinsi"
-                                        class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
-                                        <option value="">Pilih Provinsi</option>
-                                        {{-- @foreach ($provinsi as $ikm2)
-                                <option value="{{ $ikm2->id }}">{{ $ikm2->name }}</option>
-                                @endforeach --}}
-                                    </select>
-                                </div>
-                                @error('id_provinsi')
-                                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Kabupaten --}}
-                            <div
-                                class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                                <label for="kabupaten" class="text-sm font-medium text-slate-700 mb-1 block">Kota /
-                                    Kabupaten</label>
-                                <div class="relative">
-                                    <select id="kabupaten" name="id_kota"
-                                        class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
-                                        <option value="">Pilih Kota/Kabupaten</option>
-                                    </select>
-                                </div>
-                                @error('id_kota')
-                                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Kecamatan --}}
-                            <div
-                                class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                                <label for="kecamatan"
-                                    class="text-sm font-medium text-slate-700 mb-1 block">Kecamatan</label>
-                                <div class="relative">
-
-                                    <select id="kecamatan" name="id_kecamatan"
-                                        class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
-                                        <option value="">Pilih Kecamatan</option>
-                                    </select>
-                                </div>
-                                @error('id_kecamatan')
-                                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            {{-- Desa --}}
-                            <div
-                                class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                                <label for="desa" class="text-sm font-medium text-slate-700 mb-1 block">Desa /
-                                    Kelurahan</label>
-                                <div class="relative">
-
-                                    <select id="desa" name="id_desa"
-                                        class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
-                                        <option value="">Pilih Desa</option>
-                                    </select>
-                                </div>
-                                @error('id_desa')
-                                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="border bg-white dark:bg-black border-black/10 dark:border-white/10 p-5 rounded-md">
-                            <div class="mb-1">
-                                <p class="text-sm font-semibold">Identitas Pemilik USaha</p>
+                        <div
+                            class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
+                            <div class="mb-3">
+                                <p class="text-sm font-semibold">Identitas Pemilik Usaha</p>
                             </div>
                             <div class="relative mb-3">
                                 <input type="text" value="{{ auth()->user()->ikm->nik ?? '' }}" id="relationship"
-                                    class="block rounded-lg px-5 pb-4 pt-[38px] w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10 peer"
-                                    placeholder="Nomor Induk Kependudukan" readonly>
+                                    class="block rounded-lg px-5 pb-4 pt-[38px] w-full text-black dark:text-white bg-white  dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10 peer"
+                                    placeholder="Nomor Induk Kependudukan" disabled>
                                 <label for="relationship"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
                                     NIK
@@ -237,15 +303,18 @@
                             <div class="relative">
                                 <input type="text" value="{{ auth()->user()->ikm->nama ?? '' }}" id="relationship"
                                     class="block rounded-lg px-5 pb-4 pt-[38px] w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10 peer"
-                                    placeholder=" ">
+                                    placeholder=" " readonly>
                                 <label for="relationship"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
                                     Nama Lengkap
                                 </label>
                             </div>
                         </div>
-                        <div class="-mx-7 -mb-7 dark:border-white/10 px-7 py-[18px] flex justify-end gap-4">
-                            <button type="submit" class="btn">Save Changes</a>
+                        <div class="floating-buttons ">
+
+                            <button type="submit" title="Simpan" class="btn-icon">
+                                <i class="fas fa-save"></i>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -412,40 +481,7 @@
                     </div>
                     <div id="container-legalitas-baru" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6"></div>
 
-                    <style>
-                        .floating-buttons {
-                            position: fixed;
-                            right: 24px;
-                            bottom: 24px;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 12px;
-                            z-index: 9999;
-                        }
-
-                        .btn-icon {
-                            background-color: #2563eb;
-                            /* biru */
-                            border: none;
-                            border-radius: 50%;
-                            width: 48px;
-                            height: 48px;
-                            color: white;
-                            font-size: 20px;
-                            cursor: pointer;
-                            box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: background-color 0.3s ease;
-                        }
-
-                        .btn-icon:hover {
-                            background-color: #1e40af;
-                            /* biru lebih gelap */
-                        }
-                    </style>
-                    <div class="floating-buttons">
+                    <div class="floating-buttons ">
                         <button type="button" onclick="addLegalitas()" title="Tambah Legalitas Baru" class="btn-icon">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -514,39 +550,40 @@
                 <form action="{{ route('perusahaan.update.stamp') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <h2 class="mb-3">Stample dan Tanda Tangan</h2>
+                    <h2 class="text-lg font-semibold mb-4">Stemple dan Cap</h2>
                     <input type="hidden" name="id_perusahaan" value="{{ $perusahaan->id }}">
                     <div
                         class="mb-3 border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
 
-                        <div class="mb-3">
-                            <p class="text-sm font-semibold">Stemple dan Cap</p>
-                        </div>
-
-                        <p class="text-xs text-black/40 dark:text-white/40 mb-3">Stample dan Tanda tangan File Berformat
-                            PNG</p>
                         <div class="flex flex-col mb-3">
                             <label class="block text-sm font-semibold mb-1">Stample (PNG)</label>
                             @if ($perusahaan->stamp)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $perusahaan->stamp) }}" alt="Stamp"
-                                        class="w-[80px] h-[80px] object-contain border rounded" width="100">
+                                    <img src="{{ optional($perusahaan)->stamp ? asset('storage/' . $perusahaan->stamp) : asset('assets/stamp-default.png') }}"
+                                        alt="Stamp" class="w-[80px] h-[80px] object-contain border rounded"
+                                        width="100">
                                 </div>
                             @endif
                             <input type="file" name="stempel" accept="image/png"
-                                class="block rounded-lg px-3 py-2 w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10">
+                                class="block rounded-lg px-3 py-2 form-input text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10">
+                            <p class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Diizinkan File Berformat
+                            PNG</p>
                         </div>
 
                         <div class="flex flex-col mb-3">
                             <label class="block text-sm font-semibold mb-1">Tanda Tangan</label>
                             @if ($perusahaan->ttd)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $perusahaan->ttd) }}" alt="Tanda Tangan"
-                                        class="w-[80px] h-[80px] object-contain border rounded" width="200">
+                                    <img src="{{ optional($perusahaan)->ttd ? asset('storage/' . $perusahaan->ttd) : asset('assets/ttd-default.png') }}"
+                                        alt="Stamp" class="w-[80px] h-[80px] object-contain border rounded"
+                                        width="200">
+
                                 </div>
                             @endif
-                            <input type="file" name="ttd_file"
+                            <input type="file" name="ttd_file" accept="image/png"
                                 class="block rounded-lg px-3 py-2 w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10">
+                         <p class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Diizinkan File Berformat
+                            PNG</p>
                         </div>
 
                         <style>
@@ -569,7 +606,8 @@
                             canvas {
                                 background: transparent;
                                 display: block;
-                                width: 500px;
+                                width: auto;
+                                max-width: 420px;
                                 /* tampilan layar */
                                 height: 200px;
                                 cursor: crosshair;
@@ -582,9 +620,9 @@
                         <input type="range" id="lineWidth" min="1" max="7" value="2">
                         <span id="lineWidthValue">2</span> px
                         <button type="button" class="btn" onclick="clearSignature()">Clear</button>
-                        <button type="button" class="btn" onclick="saveSignature()">Save as Image</button>
-                        <input type="text" name="ttd_base64" id="ttd_base64" hidden>
-
+                        <button type="button" class="btn" onclick="saveSignature()">Ok</button>
+                        <input type="text" name="ttd_base64" id="ttd_base64" hidden><br>
+                        <small class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Klik tombol Ok jika Tanda Tangan sudah di draw atau di gambar, kemudian klik tombol Simpan</small>
                     </div>
                     <div x-data="{ showModal: false }"
                         class="mb-3 flex items-center rounded bg-indigo-300/50 dark:bg-indigo-300 p-3 text-black/80 dark:text-black space-x-3">
@@ -603,9 +641,9 @@
 
                         <span class="pr-2 flex-1">Tempelate Keterangan Pembayaran</span>
 
-                        <button @click="showModal = true"
+                        <button @click="showModal = true" type="button"
                             class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                            style="z-index: 999999999999999;">
+                           >
                             Show
                         </button>
 
@@ -625,13 +663,19 @@
                     </div>
 
                     <div class="relative">
-                        <textarea id="description" name="keterangan_pembayaran"
+                        <textarea id="description" name="keterangan_pembayaran" cols="10" rows="10"
                             class="block rounded-lg px-5 pb-4 pt-[38px] w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10 peer"
-                            placeholder=" ">Pembayaran dilakukan melalui transfer ke no. Rek Mandiri. 131 000 7197603 atas nama Afin Nurfahmi Mufreni setelah diterima informasi penjualan.</textarea>
+                            placeholder="">Pembayaran dilakukan melalui transfer ke no. Rekeneing xxxxxxxx atas nama xxxxxxxxx setelah diterima informasi penjualan.</textarea>
+
                         <label for="description"
                             class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
                             Tempelate Pembayaran
                         </label>
+                    </div>
+                    <div class="floating-buttons ">
+                        <button type="submit" title="Simpan" class="btn-icon">
+                            <i class="fas fa-save"></i>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -639,8 +683,8 @@
     </div>
 
     <!-- Bottom Navigation Menu - Mobile Only -->
-    <nav
-        class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  shadow md:hidden">
+    <nav 
+        class="  fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  shadow md:hidden">
         <div class="flex justify-between items-center px-6 h-16">
 
             <!-- Profil -->
@@ -876,7 +920,7 @@
             $('.select2').select2({
                 width: '100%',
                 placeholder: 'Pilih data...', // Ganti sesuai konteks misalnya 'Pilih Provinsi'
-                allowClear: true // Menampilkan tombol hapus (x)
+              
             });
         });
     </script>
@@ -962,5 +1006,106 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
+    </script>
+    <script>
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            // Saat Provinsi dipilih
+            $('#provinsi').on('change', function() {
+                let id_provinsi = $(this).val();
+
+                // Tampilkan loading
+                $('#kabupaten').html('<option>Loading data kabupaten...</option>');
+                $('#kecamatan').html('<option value="">Pilih Kecamatan</option>');
+                $('#desa').html('<option value="">Pilih Desa</option>');
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('getkabupaten') }}",
+                    data: {
+                        id_provinsi: id_provinsi
+                    },
+                    cache: false,
+
+                    success: function(msg) {
+                        $('#kabupaten').html(msg).prop('disabled', false);
+                    },
+                    error: function(data) {
+                        console.log('error:', data)
+                    },
+                });
+            });
+
+            // Saat Kabupaten dipilih
+            $('#kabupaten').on('change', function() {
+                let id_kabupaten = $(this).val();
+
+                $('#kecamatan').html('<option>Loading data kecamatan...</option>');
+                $('#desa').html('<option value="">Pilih Desa</option>');
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('getkecamatan') }}",
+                    data: {
+                        id_kabupaten: id_kabupaten
+                    },
+                    cache: false,
+
+                    success: function(msg) {
+                        $('#kecamatan').html(msg).prop('disabled', false);
+                    },
+                    error: function(data) {
+                        console.log('error:', data)
+                    },
+                });
+            });
+
+            // Saat Kecamatan dipilih
+            $('#kecamatan').on('change', function() {
+                let id_kecamatan = $(this).val();
+
+                $('#desa').html('<option>Loading data desa...</option>');
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('getdesa') }}",
+                    data: {
+                        id_kecamatan: id_kecamatan
+                    },
+                    cache: false,
+
+                    success: function(msg) {
+                        $('#desa').html(msg).prop('disabled', false);
+                    },
+                    error: function(data) {
+                        console.log('error:', data)
+                    },
+                });
+            });
+        });
+    </script>
+    <script>
+        function autoResizeTextarea(id) {
+            const textarea = document.getElementById(id);
+            if (!textarea) return;
+
+            textarea.style.height = 'auto'; // reset dulu
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
+        // Pas load pertama
+        window.addEventListener('load', () => {
+            autoResizeTextarea('description');
+        });
+
+        // Saat diketik
+        document.getElementById('description').addEventListener('input', function() {
+            autoResizeTextarea('description');
+        });
     </script>
 @endsection

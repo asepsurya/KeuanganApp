@@ -22,6 +22,33 @@
 @section('title', 'Peta Pemasaran')
 
 @section('container')
+@php
+date_default_timezone_set('Asia/Jakarta');
+    $jam = date('H');
+    if ($jam >= 5 && $jam < 12) {
+        $ucapan = 'Selamat Pagi';
+        $icon = '☀️'; // atau bisa SVG-nya
+    } elseif ($jam >= 12 && $jam < 18) {
+        $ucapan = 'Selamat Siang';
+        $icon = '🌤️';
+    } elseif ($jam >= 18 && $jam < 22) {
+        $ucapan = 'Selamat Malam';
+        $icon = '🌙';
+    } else {
+        $ucapan = 'Selamat Malam';
+        $icon = '🌙';
+    }
+@endphp
+
+    <div
+        class="flex items-center rounded bg-lightgreen-100/50 dark:bg-lightgreen-100 p-3 text-black/80 dark:text-black mb-4">
+        <span class="pr-2">
+           <span class="pr-2">
+                  <span class="ml-1">{{ $icon }}</span> <span class="font-semibold">{{ $ucapan }},</span> {{ auth()->user()->name }}!
+                <span class="text-xs text-black/60 dark:text-white/60"></span>     
+            </span>
+     </span>
+   </div>
     <div class="px-2 py-1 mb-4">
         <h2 class="text-lg font-semibold">Peta Pemasaran Saya</h2>
     </div>

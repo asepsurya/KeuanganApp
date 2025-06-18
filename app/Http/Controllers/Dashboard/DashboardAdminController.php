@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Akun;
 use App\Models\Mitra;
 use App\Models\Keuangan;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -16,11 +17,52 @@ class DashboardAdminController extends Controller
  
     public function index()
     {
+        $transaksi = Transaksi::where('auth', auth()->user()->id)->get();
+
+        $totalTransaksiluar = Transaksi::where(['auth'=> auth()->user()->id,'status_bayar'=>'Belum Bayar'])->sum('total');
+        $totalTransaksi = Transaksi::where(['auth'=> auth()->user()->id,'status_bayar'=>'Sudah Bayar'])->sum('total');
+// Ambil data transaksi per bulan
+    $transaksiPerBulan = DB::table('transaksis')
+        ->select(DB::raw("DATE_FORMAT(tanggal_transaksi, '%M') as bulan"), DB::raw('COUNT(*) as total'))
+        ->groupBy('bulan')
+        ->pluck('total', 'bulan');
+
+    // Status pembayaran
+    $statusBayar = DB::table('transaksis')
+        ->select('status_bayar', DB::raw('COUNT(*) as total'))
+        ->groupBy('status_bayar')
+        ->pluck('total', 'status_bayar');
+
+    // Transaksi per mitra
+    $mitra = DB::table('transaksis')
+        ->join('mitras', 'transaksis.kode_mitra', '=', 'mitras.kode_mitra')
+        ->select('mitras.nama_mitra', DB::raw('COUNT(*) as total'))
+        ->groupBy('mitras.nama_mitra')
+        ->pluck('total', 'mitras.nama_mitra');
+
+   $keuntungan = DB::table('transaksis')
+    ->select(
+        DB::raw("DATE_FORMAT(tanggal_transaksi, '%M') as bulan"),
+        DB::raw('SUM(total) as total_untung')
+    )
+    ->where('status_bayar', 'Sudah Bayar')
+    ->groupBy('bulan')
+    ->pluck('total_untung', 'bulan');
+    
+    $kerugian = DB::table('transaksis')
+        ->select(DB::raw("DATE_FORMAT(tanggal_transaksi, '%M') as bulan"), DB::raw('SUM(diskon) as total_rugi'))
+        ->groupBy('bulan')
+        ->pluck('total_rugi', 'bulan');
+
         $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('dashboard.admin',[
             'activeMenu' => 'dashboard',
             'active' => 'dashboard',
-        ],compact('logs'));
+        ],compact('logs','totalTransaksiluar','totalTransaksi','transaksi',  'transaksiPerBulan',
+        'statusBayar',
+        'mitra',
+        'keuntungan',
+        'kerugian'));
     }
     public function dashboardKeuangan()
     {

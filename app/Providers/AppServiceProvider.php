@@ -28,10 +28,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(User::class, AdminPolicy::class);
          // App Settings
       $this->app->singleton('settings', function () {
-            $userId = auth()->id();
+            $userId = auth()->user()->id;
             if (!$userId) return [];
 
-            return Cache::rememberForever("settings", function () use ($userId) {
+            return Cache::rememberForever("settings_{$userId}", function () use ($userId) {
                 return App::where('auth', $userId)
                     ->pluck('value', 'key') // Format: ['key' => 'value']
                     ->toArray();

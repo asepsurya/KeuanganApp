@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('email');
             $table->string('alamat');
             $table->string('logo')->nullable();
-            $table->string('npwp')->nullable();
-            $table->string('nib')->nullable();
-            $table->string('lainnya')->nullable();
             $table->string('auth')->nullable();
             $table->timestamps();
         });

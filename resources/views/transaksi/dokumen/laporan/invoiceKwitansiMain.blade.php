@@ -8,7 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
+     body{
+        font-family: 'Roboto', sans-serif;
+    }
+    h1, h2, h3 {
+        font-family: 'Poppins', sans-serif;
+    }
     @page {
         size: A4;
         margin: 2.54cm;
@@ -82,7 +89,7 @@
                         $logo = $perusahaan->logo ? asset('storage/' . $perusahaan->logo) : asset('assets/default_logo.png');
                 @endphp
                 <img alt="logo" class="w-full h-auto"
-                    height="70" src="{{ $logo }}" width="150" />
+                    height="70" src="{{ $logo }}" width="120" />
                 </div>
 
                 <div class="text-right">
@@ -122,13 +129,19 @@
                     </table>
                 </div>
             </div>
+             @php
+                $alamat = ucfirst(strtolower($perusahaan->alamat)) . ', ' .
+                        'Kelurahan/Desa ' . ucwords(strtolower($perusahaan->desa->name)) . ', ' .
+                        'Kecamatan ' . ucwords(strtolower($perusahaan->kecamatan->name)) . ', ' .
+                        'Kota/Kab. ' . ucwords(strtolower( $perusahaan->kota->name));
+            @endphp
             <div class="mb-1 text-[11px] leading-[13px]">
                 <textarea class="address" name="alamat_company" required
-                    oninput="autoResize(this)">{{$nota->alamat_company ?? old('alamat_company') ?? 'Ruko Hamas, Jl. Pancasila No.1 lantai 3, Lengkongsari, Tawang, Tasikmalaya Regency, West Java 46112, Indonesia'}} </textarea>
+                      oninput="autoResize(this)">{{ $alamat ?? old('alamat_company') ?? $nota->alamat_company ?? '' }}</textarea>
                 <p><input type="text" class="w-full text-left" name="telp_company" placeholder="P. 0877366644" required
-                        value="{{ $nota->telp_company ?? old('telp_company') }}"></p>
+                        value="P : {{ $nota->telp_company ?? $perusahaan->telp_perusahaan ?? old('telp_company') }}"></p>
                 <p><input type="text" class="w-full text-left" name="email_company" placeholder="E. example@email.com"
-                        value="{{$nota->email_company ?? old('email_company') }}" required></p>
+                        value="E : {{$nota->email_company ?? $perusahaan->email ?? old('email_company') }}" required></p>
             </div>
             <div class="mt-2">
                 <hr class="garis-atas">
@@ -136,8 +149,8 @@
             </div>
             <div class="text-[12px] leading-[14px] mb-3">
                 <div class="flex space-x-2 text-[11px] leading-[13px]">
-                    <div class="w-25 font-bold">Telah Diterima dari</div>
-                    <div class="w-1">:</div>
+                    <div class="w-25 font-bold">Telah Diterima dari &nbsp;</div>
+                    <div class="w-1"> :</div>
                     <div class="flex-1 font-normal"> <input type="text" class="w-full text-left" name="kepada"
                             placeholder="PT.INOMARCO INDONESIA " required value="{{$nota->kepada ?? old('kepada') }}"></td>
                     </div>
@@ -158,27 +171,27 @@
                 </div>
             </div>
 
-            <p class="text-[12px]">Pembayaran Sejumlah</p>
+            <p class="text-[12px]">Pembayaran sejumlah</p>
             <table class="w-full border-collapse border border-black text-[12px] leading-[14px] mb-2" id="myTable">
                 <thead>
                     <tr class="border border-black bg-white">
-                        <th class="border border-black px-1 text-center w-[30px] font-semibold">No</th>
-                        <th class="border border-black px-1 text-left font-semibold">Nama Barang</th>
-                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Qty</th>
-                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Unit</th>
-                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                        <th class="border border-black px-1 text-center w-[100px] font-semibold">Harga Unit</th>
-                        <th class="border border-black px-1 text-center w-[40px] font-semibold">Rp</th>
-                        <th class="border border-black px-1 text-center w-[110px] font-semibold">Sub Total Harga</th>
+                        <th class="border-collapse border-black px-1 text-center w-[30px] font-semibold">No</th>
+                        <th class="border-collapse border-black px-1 text-left font-semibold">Nama Barang</th>
+                        <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Qty</th>
+                        <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Unit</th>
+                        <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Rp</th>
+                        <th class="border-collapse border-black px-1 text-center w-[100px] font-semibold">Harga Unit</th>
+                        <th class="border-collapse border-black px-1 text-center w-[40px] font-semibold">Rp</th>
+                        <th class="border-collapse border-black px-1 text-center w-[110px] font-semibold">Sub Total Harga</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     @if($nota)
                     @foreach($nota->produk as $index => $produk)
-                    <tr>
-                        <td class="border border-black px-1 text-center">{{ $index + 1 }}</td>
-                        <td class="border border-black px-1">
+                    <tr class="border  border-black px-1">
+                        <td class="border-collapse border-black px-1 text-center">{{ $index + 1 }}</td>
+                        <td class="border-collapse border-black px-1">
                             <input type="hidden" value="{{ $produk->id ?? ''}}" name="id_item[]">
                             <div class="relative">
                                 <input name="nama_barang[]" class="w-full"
@@ -191,26 +204,26 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="border border-black px-1 text-center">
+                        <td class="border-collapse border-black px-1 text-center">
                             <input name="qty[]" class="w-full text-center" value="{{ old('qty.'.$index, $produk->qty) }}"
                                 oninput="calculateTotal(this)" placeholder="Qty">
                         </td>
-                        <td class="border border-black px-1 text-center">
+                        <td class="border-collapse border-black px-1 text-center">
                             <input name="unit[]" class="w-full text-center" value="{{ old('unit.'.$index, $produk->unit) }}"
                                 placeholder="Pcs">
                         </td>
-                        <td class="border border-black px-1 text-center">
+                        <td class="border-collapse border-black px-1 text-center">
                             Rp.
                         </td>
-                        <td class="border border-black px-1 text-right">
+                        <td class="border-collapse border-black px-1 text-right">
                             <input name="harga[]" class="w-full text-right"
                                 value="{{ old('harga.'.$index, number_format($produk->harga, 0, ',', '.')) }}"
                                 oninput="formatCurrency(this); calculateTotal(this)" placeholder="Harga">
                         </td>
-                        <td class="border border-black px-1 text-center">
+                        <td class="border-collapse border-black px-1 text-center">
                             Rp.
                         </td>
-                        <td class="border border-black px-1 text-right">
+                        <td class="border-collapse border-black px-1 text-right">
                             <input name="total[]" class="w-full text-right"
                                 value="{{ old('total.'.$index, number_format($produk->total, 0, ',', '.')) }}" readonly
                                 placeholder="Total">
@@ -221,11 +234,12 @@
                     @endif
                 </tbody>
                 <tr>
-                    <td colspan="6"></td>
-                    <td class="border border-black px-1 font-semibold text-right">
+                    <td colspan="5"></td>
+                    <td class="border-collapse border-black px-1 font-semibold text-right">
                         TOTAL
                     </td>
-                    <td class="border border-black px-1 font-semibold text-right">
+                    <td class="border-collapse border-black px-1 font-semibold text-center"> Rp. </td>
+                    <td class="border-collapse border-black px-1 font-semibold text-right">
                         <input type="text" name="grandtotal" id="grandtotal" class="w-full text-right"
                             value="{{ number_format($nota->grandtotal ?? 0, 0, ',', '.') }}">
                     </td>
@@ -240,7 +254,7 @@
                             <!-- Kolom Penerima -->
                             <td width="90%" class="" style="height: 180px;">
                                 <p class="text-[11px] leading-[13px] ">
-                                    <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $nota->keterangan ?? 'Pembayaran dilakukan melalui transfer ke no. Rek Mandiri. 131 000 7197603 atas nama Afin Nurfahmi Mufreni setelah diterima informasi penjualan.' }}
+                                    <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $nota->keterangan ?? $perusahaan->keterangan_pembayaran ?? '' }}
 
                                     </textarea>
                                 </p>
@@ -285,21 +299,20 @@
                             </td>
 
                             <!-- Kolom Hormat Kami -->
-                            <td class="text-center align-middle" style="height: 180px;position: relative;">
+                            <td class="text-center align-middle" style="height: 150px;">
                                 <div class="flex flex-col justify-center items-center h-full">
                                     <p class="font-bold">Hormat Kami</p>
 
                                     <div class="relative flex justify-center items-center"
-                                        style="height: 20px; width: 180px; margin-top: 8px;">
+                                        style="height: 10px; width: 180px; margin-top: 8px;">
                                         <!-- Stempel di belakang -->
-                                        <img src="{{ asset('assets/images/stamp.png') }}" alt="Stempel" width="140"
-                                            class="object-contain absolute z-10"
-                                            style="top: -40px; left: 50%;transform: translateX(-30%);" id="stamp" hidden>
-
+                                        <img src="{{ optional($perusahaan)->stamp ? asset('storage/' . $perusahaan->stamp) : asset('assets/stamp-default.png') }}"
+                                                alt="Stemple" class="object-contain absolute z-10" width="140"
+                                                style="top: -20px; left: 50%; transform: translateX(-30%); display: none;"  id="stamp" hidden="">                 
                                         <!-- Tanda tangan di atas -->
-                                        <img src="{{ asset('assets/images/ttd.png') }}" alt="Tanda Tangan" width="140"
-                                            class="object-contain absolute z-20"
-                                            style="top: 0; left: 50%;transform: translateX(-50%);" id="signature" hidden>
+                                        <img src="{{ optional($perusahaan)->ttd ? asset('storage/' . $perusahaan->ttd) : asset('assets/ttd-default.png') }}"
+                                                alt="tanda Tangan" class="object-contain absolute z-20" width="150"
+                                                style="top: 0px; left: 50%; transform: translateX(-50%); display: none;"  id="signature" hidden="">
                                     </div>
                                 </div>
                             </td>
@@ -312,7 +325,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="mx-auto border-t border-black w-36 mt-2"></div>
-                                <p class="mt-2">(Nama Pengirim)</p>
+                                <p class="mt-2">{{ $perusahaan->nama_perusahaan }}</p>
                             </td>
                         </tr>
                     </tbody>
@@ -356,14 +369,14 @@
 
         // Buat baris baru
         const newRow = document.createElement('tr');
-
+        newRow.classList.add('border', 'border-black');
         // Tentukan nomor baris baru
         const newRowIndex = tbody.rows.length + 1;
 
         // Tambahkan sel ke baris baru dengan input dan data lama
         newRow.innerHTML = `
-            <td class="border border-black px-1 text-center font-normal">${newRowIndex}</td>
-            <td class="border border-black px-1 font-normal">
+            <td class="border-collapse border-black px-1 text-center font-normal">${newRowIndex}</td>
+            <td class="border-collapse border-black px-1 font-normal">
                 <div class="relative">
                     <input name="nama_barang[]" class="w-full"
                         placeholder="Nama Barang atau Produk" onclick="showTooltip(this)" value="${namaBarang}" required>
@@ -372,18 +385,18 @@
                     </div>
                 </div>
             </td>
-            <td class="border border-black px-1 text-center font-normal">
+            <td class="border-collapse border-black px-1 text-center font-normal">
                 <input name="qty[]" class="w-full text-center" oninput="calculateTotal(this)" placeholder="Qty" value="${qty}">
             </td>
-            <td class="border border-black px-1 text-center font-normal">
+            <td class="border-collapse border-black px-1 text-center font-normal">
                 <input name="unit[]" class="w-full text-center" placeholder="Pcs" value="${unit}" required>
             </td>
-            <td class="border border-black px-1 text-center font-normal">Rp.</td>
-            <td class="border border-black px-1 text-right font-normal">
+            <td class="border-collapse border-black px-1 text-center font-normal">Rp.</td>
+            <td class="border-collapse border-black px-1 text-right font-normal">
                 <input name="harga[]" placeholder="Harga" class="w-full text-right" oninput="formatCurrency(this); calculateTotal(this)" value="${harga}" required>
             </td>
-            <td class="border border-black px-1 text-center font-normal">Rp.</td>
-            <td class="border border-black px-1 text-right font-normal">
+            <td class="border-collapse border-black px-1 text-center font-normal">Rp.</td>
+            <td class="border-collapse border-black px-1 text-right font-normal">
                 <input name="total[]" class="w-full text-right" placeholder="Total" readonly value="${total}" required>
             </td>
         `;
