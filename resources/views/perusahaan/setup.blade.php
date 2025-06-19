@@ -84,7 +84,6 @@
 
 <body>
     <main class="flex flex-col overflow-hidden w-full min-h-screen bg-white rounded-lg md:flex-row">
-
         <section class="hidden bg-[#f0f5ff] items-center justify-center relative md:flex md:w-1/2">
             <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
             </script>
@@ -105,7 +104,11 @@
                 Masukan identitas perusahaan yang anda kelola
             </p>
             <form class="space-y-5" action="{{ route('perusahaan.create') }}" method="POST">
-
+                @if (session('Perhatian'))
+                    <div class="mb-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
+                        {{ session('Perhatian') }}
+                    </div>
+                @endif
                 @csrf
                 <label class="block relative">
                     <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">

@@ -15,14 +15,15 @@ class UserSeeder extends Seeder
    */
   public function run(): void
   {
-    User::updateOrCreate(
-      ["email" => "asepsurya1998@gmail.com"],
-      [
-        "name" => "Administration",
-        "phone" => "087731402487",
-        "password" => Hash::make("newinopak"),
-        "role"=>"admin"
-      ]
+      User::updateOrCreate(
+        ['email' => 'asepsurya1998@gmail.com'],
+        [
+            'name'              => 'Administration',
+            'phone'             => '087731402487',
+            'password'          => Hash::make('newinopak'),
+            'role'              => 'admin',
+            'email_verified_at' => now(),
+        ]
     );
 
      ikm::updateOrCreate(

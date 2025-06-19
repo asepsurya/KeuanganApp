@@ -20,9 +20,12 @@ Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
+Route::post('/mail/resend/', [RegisterController::class, 'resend'])->name('resend')->middleware('guest');
+
+Route::get('/account/activate/{token}', [RegisterController::class, 'activate'])->name('activate')->middleware('guest');
+Route::get('/register/success/{token}', [RegisterController::class, 'successRegister'])->name('successRegister');
 
 Route::post('/check-email', [RegisterController::class, 'checkEmail'])->name('check.email');
-
 Route::post('/register/auth', [RegisterController::class, 'registerAction'])->name('register.add')->middleware('guest');
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
@@ -34,7 +37,7 @@ Route::post('/getkabupaten',[RegionController::class,'getkabupaten'])->name('get
 Route::post('/getkecamatan',[RegionController::class,'getkecamatan'])->name('getkecamatan');
 Route::post('/getdesa',[RegionController::class,'getdesa'])->name('getdesa');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','checkPerusahaan'])->group(function () {
     // ------------------------------------------------
     // Dashboard Admin
     // ------------------------------------------------
@@ -137,5 +140,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/perusahaan/update-legalitas', [PerusahaanController::class, 'updateLegalitas'])->name('perusahaan.update.legalitas');
     Route::get('/perusahaan/hapus-legalitas/{id}', [PerusahaanController::class, 'HapusLegalitas'])->name('perusahaan.hapus.legalitas');
     Route::post('/perusahaan/update-stamp', [PerusahaanController::class, 'updateStamp'])->name('perusahaan.update.stamp');
+
+    // ------------------------------------------------
+    // Route Exsport PDF
+    // ------------------------------------------------
+    Route::post('/exsport/pdf/konsiyasi', [PerusahaanController::class, 'uploadLogo'])->name('perusahaan.update.logo');
 });
 

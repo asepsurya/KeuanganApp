@@ -7,21 +7,28 @@
     
        
     <div
-        class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
-        <img src="{{ $logo }}" alt="logo"
-            class="w-full h-full object-contain block dark:hidden" />
-        <img src="{{ $logo }}" alt="logo"
-            class="w-full h-full object-contain hidden dark:block" />
-    </div>
+    class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
+    
+    <!-- Logo normal (light mode) -->
+    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}" 
+         alt="logo"
+         class="w-full h-full object-contain block dark:hidden" />
 
-    <!-- Nama Perusahaan dengan tooltip -->
-    <div class="ml-3 flex-1 max-w-full group flex items-center">
-        <span
-            class="block font-semibold text-gray-800 dark:text-white text-sm leading-snug line-clamp-2 cursor-default"
-            title="{{ $nama }}">
-            {{ $nama }}
-        </span>
-    </div>
+    <!-- Logo dark mode -->
+    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}" 
+         alt="logo"
+         class="w-full h-full object-contain hidden dark:block" />
+</div>
+
+<!-- Nama Perusahaan dengan tooltip -->
+<div class="ml-3 flex-1 max-w-full group flex items-center">
+    <span
+        class="block font-semibold text-gray-800 dark:text-white text-sm leading-snug line-clamp-2 cursor-default"
+        title="{{ $perusahaan_sidebar->nama_perusahaan }}">
+        {{ $perusahaan_sidebar->nama_perusahaan }}
+    </span>
+</div>
+
 </div>
 
 

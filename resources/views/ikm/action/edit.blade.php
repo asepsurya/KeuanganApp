@@ -18,7 +18,7 @@
         border: none;
     }
 </style>
-
+<h2 class="py-5 text-lg font-semibold text-gray-800 dark:text-white">Detail Data</h2>
 <div class="bg-lightwhite dark:bg-white/5 rounded-2xl p-6">
     <div class="flex items-start justify-between gap-4 mb-[2px]">
         <h2 class="text-lg font-semibold">{{ $ikm->nama }}</h2>
@@ -153,25 +153,14 @@
             <p class="text-sm text-red-500 mt-1">Masih ada {{ $emptyFields }} data yang belum diisi.</p>
             @endif
         </div>
-        <div class="md:px-7">
-            <p class="mb-1">Earnings</p>
-            <p class="text-lg font-semibold">$4,500</p>
-        </div>
-        <div class="md:px-7">
-            <p class="mb-1">Produk</p>
-            <p class="text-lg font-semibold">0</p>
-        </div>
-        <div class="md:pl-7">
-            <p class="mb-1">Mitra</p>
-            <p class="text-lg font-semibold">60%</p>
-        </div>
+       
     </div>
 </div>
 
 <form action="{{ route('ikm.update.action') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="px-2 py-1 mb-4 mt-3 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-    <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Detail Data</h2>
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white"></h2>
     
     <div class="flex flex-col sm:flex-row gap-3">
         <button

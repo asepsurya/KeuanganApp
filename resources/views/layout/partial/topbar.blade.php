@@ -1,9 +1,9 @@
 <div class="border-b border-black/10 dark:border-white/10 py-[22px] px-7 flex items-center justify-between">
     <div class="flex items-center gap-2">
         <button class="flex items-start  md:hidden" @click="$store.app.toggleSidebar()">
-            <div  title="{{ $nama }}"
+            <div  title="{{ $perusahaan_sidebar->nama_perusahaan }}"
                 class=" cursor-default w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
-                <img src="{{ $logo }}" alt="logo"
+                <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}" alt="logo"
                     class="w-full h-full object-contain block " />
   
             </div>

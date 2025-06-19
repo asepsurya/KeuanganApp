@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'checkrole' => CheckUserRole::class,
-           
+            'checkPerusahaan' => \App\Http\Middleware\CheckPerusahaanAndVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
