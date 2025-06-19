@@ -1,6 +1,6 @@
 <div
     class="right-sidebar fixed right-0 bg-white dark:bg-black bottom-0 z-50 w-[280px] border-l border-black/10 dark:border-white/10 transition-all duration-300">
-    <div class="flex flex-col gap-6 px-6 py-[22px] h-screen overflow-y-auto overflow-x-hidden">
+    <div class="flex flex-col gap-6 px-6 py-[22px] h-screen overflow-y-auto overflow-x-hidden" id="rigtcontent">
         <h4 class="font-semibold text-black dark:text-white mb-5">Log Aktivitas</h4>
         @foreach($logs as $log)
         <div class="flex gap-3 items-start mb-3 text-sm text-gray-700 dark:text-gray-300">

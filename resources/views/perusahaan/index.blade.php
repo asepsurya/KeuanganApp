@@ -35,7 +35,25 @@
             border: none;
         }
     </style>
+    <script>
+        document.getElementById('rightSidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('rigtcontent');
+            const floatingButtons = document.querySelector('.floating-buttons');
 
+            // Kalau sidebar sedang tampil (display !== 'none')
+            if (window.getComputedStyle(sidebar).display !== 'none') {
+                // Sembunyikan sidebar
+                sidebar.style.display = 'none';
+                // Geser floating button ke 0
+                floatingButtons.style.marginRight = '0';
+            } else {
+                // Tampilkan sidebar
+                sidebar.style.display = 'block';
+                // Geser floating button ke 280px
+                floatingButtons.style.marginRight = '280px';
+            }
+        });
+    </script>
     <style>
         .floating-buttons {
             position: fixed;
@@ -46,23 +64,38 @@
             gap: 12px;
             z-index: 9999;
             margin-right: 280px;
+            transition: margin-right 0.3s ease;
         }
 
-        @media (max-width: 767px) {
+        /* Untuk HP & tablet kecil */
+        @media (max-width: 768px) {
             .floating-buttons {
                 margin-right: 0;
-                margin-bottom: 50px;
+                margin-bottom:50px;
             }
 
             #mycontent {
                 margin-bottom: 100px;
             }
-
         }
 
+        /* Untuk tablet besar & laptop kecil sampai 1030px */
+        @media (max-width: 1030px) {
+            .floating-buttons {
+                margin-right: 0;
+            }
+        }
+
+        /* Untuk layar menengah ke atas sampai 1502px */
+        @media (max-width: 1502px) {
+            .floating-buttons {
+                margin-right: 0;
+            }
+        }
+
+        /* Tombol bulat floating */
         .btn-icon {
             background-color: #2563eb;
-            /* biru */
             border: none;
             border-radius: 50%;
             width: 48px;
@@ -79,7 +112,6 @@
 
         .btn-icon:hover {
             background-color: #1e40af;
-            /* biru lebih gelap */
         }
     </style>
     <div class=" flex items-center rounded bg-lightblue-200/50 dark:bg-lightblue-200 p-3 text-black/80 dark:text-black">
@@ -567,7 +599,7 @@
                             <input type="file" name="stempel" accept="image/png"
                                 class="block rounded-lg px-3 py-2 form-input text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10">
                             <p class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Diizinkan File Berformat
-                            PNG</p>
+                                PNG</p>
                         </div>
 
                         <div class="flex flex-col mb-3">
@@ -582,8 +614,8 @@
                             @endif
                             <input type="file" name="ttd_file" accept="image/png"
                                 class="block rounded-lg px-3 py-2 w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10">
-                         <p class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Diizinkan File Berformat
-                            PNG</p>
+                            <p class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Diizinkan File Berformat
+                                PNG</p>
                         </div>
 
                         <style>
@@ -622,7 +654,8 @@
                         <button type="button" class="btn" onclick="clearSignature()">Clear</button>
                         <button type="button" class="btn" onclick="saveSignature()">Ok</button>
                         <input type="text" name="ttd_base64" id="ttd_base64" hidden><br>
-                        <small class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Klik tombol Ok jika Tanda Tangan sudah di draw atau di gambar, kemudian klik tombol Simpan</small>
+                        <small class="mt-2 text-xs text-black/40 dark:text-white/40 mb-3">Klik tombol Ok jika Tanda Tangan
+                            sudah di draw atau di gambar, kemudian klik tombol Simpan</small>
                     </div>
                     <div x-data="{ showModal: false }"
                         class="mb-3 flex items-center rounded bg-indigo-300/50 dark:bg-indigo-300 p-3 text-black/80 dark:text-black space-x-3">
@@ -642,8 +675,7 @@
                         <span class="pr-2 flex-1">Tempelate Keterangan Pembayaran</span>
 
                         <button @click="showModal = true" type="button"
-                            class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                           >
+                            class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                             Show
                         </button>
 
@@ -683,7 +715,7 @@
     </div>
 
     <!-- Bottom Navigation Menu - Mobile Only -->
-    <nav 
+    <nav
         class="  fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  shadow md:hidden">
         <div class="flex justify-between items-center px-6 h-16">
 
@@ -920,7 +952,7 @@
             $('.select2').select2({
                 width: '100%',
                 placeholder: 'Pilih data...', // Ganti sesuai konteks misalnya 'Pilih Provinsi'
-              
+
             });
         });
     </script>

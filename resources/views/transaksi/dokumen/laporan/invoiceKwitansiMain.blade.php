@@ -130,10 +130,10 @@
                 </div>
             </div>
              @php
-                $alamat = ucfirst(strtolower($perusahaan->alamat)) . ', ' .
-                        'Kelurahan/Desa ' . ucwords(strtolower($perusahaan->desa->name)) . ', ' .
-                        'Kecamatan ' . ucwords(strtolower($perusahaan->kecamatan->name)) . ', ' .
-                        'Kota/Kab. ' . ucwords(strtolower( $perusahaan->kota->name));
+                $alamat = ucfirst(strtolower($perusahaan->alamat ?? '-')) . ', ' .
+                        'Kelurahan/Desa ' . ucwords(strtolower($perusahaan->desa->name ?? '-')) . ', ' .
+                        'Kecamatan ' . ucwords(strtolower($perusahaan->kecamatan->name ?? '-')) . ', ' .
+                        'Kota/Kab. ' . ucwords(strtolower( $perusahaan->kota->name ?? '-'));
             @endphp
             <div class="mb-1 text-[11px] leading-[13px]">
                 <textarea class="address" name="alamat_company" required

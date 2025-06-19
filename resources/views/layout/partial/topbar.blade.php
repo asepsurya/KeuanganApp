@@ -78,7 +78,7 @@
                 </a>
             </div>
             <button type="button" class="relative w-7 h-7 p-1 text-black dark:text-white"
-                @click="$store.app.rightSidebar()">
+                @click="$store.app.rightSidebar()" id="rightSidebar">
                 <x-icon name="notif" class="text-gray-600" />
                 <span class="flex absolute w-3 h-3 right-px top-[5px]">
                     <span
