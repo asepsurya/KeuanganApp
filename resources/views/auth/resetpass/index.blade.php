@@ -15,11 +15,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
     <style>
-        body {
+      body {
             font-family: 'Inter', sans-serif;
-            background-color: #daf2ff
+            background-image: url('{{ asset('assets/bg3.jpg') }}');
+            background-size: cover;
+            background-position: center;
         }
-
         /* Untuk HP & tablet kecil */
         /* @media (max-width: 768px) {
             #content {
@@ -52,7 +53,7 @@
 </head>
 
 <body class="flex items-center justify-center min-h-screen" style="">
-<main class="w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden flex flex-col md:flex-row shadow-lg">
+<main class="w-full max-w-5xl mx-auto bg-white rounded-lg overflow-hidden flex flex-col md:flex-row ">
 
     <!-- Side Animation - Only Desktop -->
     <section class="hidden md:flex w-1/2 bg-[#f0f5ff] items-center justify-center">

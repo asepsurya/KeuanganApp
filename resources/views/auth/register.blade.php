@@ -45,7 +45,7 @@
             <dotlottie-player src="https://lottie.host/8e0e4b17-e2ea-4bb2-b71e-93332419efca/T6eWi584uY.lottie"
                 background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay></dotlottie-player>
         </section>
-        <section class="w-full p-8 md:w-1/2 md:p-16">
+        <section class="w-full p-8 md:w-1/2 md:p-16  bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover bg-center">
             <div class="flex space-x-2 mb-10 items-center">
                 <img alt="WowDash logo icon with blue background and white W letter" class="w-10 h-10" height="40"
                     src="https://storage.googleapis.com/a1aa/image/891a7e97-6121-4aef-40de-7fe839698707.jpg"

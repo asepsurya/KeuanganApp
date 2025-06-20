@@ -17,16 +17,18 @@
 </head>
 
 <body>
-    <main class="bg-white w-full rounded-lg flex flex-col md:flex-row overflow-hidden min-h-screen">
-        <section class="hidden md:flex md:w-1/2 bg-[#f0f5ff] items-center justify-center relative">
+    <main class="bg-white bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover  w-full rounded-lg flex flex-col md:flex-row overflow-hidden min-h-screen">
+       <section class="hidden md:flex md:w-1/2  items-center justify-center relative">
             <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
             </script>
 
-            <dotlottie-player src="https://lottie.host/f1ec6b22-384b-46b2-b95e-a0d071ad6d8a/5f2Twos7f8.lottie"
+            <dotlottie-player src="https://lottie.host/0f71f699-ce36-42a1-8b74-39cf077671ef/yiFLAZmNen.lottie"
                 background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay>
             </dotlottie-player>
         </section>
-        <section class="w-full md:w-1/2 p-8 md:p-16">
+       <section 
+    class="w-full md:w-1/2 p-8 md:p-16 bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover bg-center" 
+    style="padding-top:130px;">
             <div class="flex items-center space-x-2 mb-10">
                 <img alt="WowDash logo icon with blue background and white W letter" class="w-10 h-10" height="40"
                     src="https://storage.googleapis.com/a1aa/image/891a7e97-6121-4aef-40de-7fe839698707.jpg"
@@ -53,7 +55,9 @@
             @endif
             <form class="space-y-5" method="POST" action="/login" onsubmit="showLoading()">
                 @csrf
+            
                 <label class="relative block">
+                
                     <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
                         <i class="fas fa-user">
                         </i>
@@ -77,9 +81,7 @@
                 </label>
                 <div class="flex items-start justify-between mb-8 text-sm text-[#475569]">
                     <label class="inline-flex items-start space-x-2 w-1/2">
-                        <input class="mt-1" type="checkbox" checked />
-                        <span>Setuju dengan <span class="text-blue-600">Syarat & Ketentuan</span> dan <span class="text-blue-600">Kebijakan Privasi</span> kami.
-                        </span>
+                     
                     </label>
 
                     <div class="w-1/2 text-right">
