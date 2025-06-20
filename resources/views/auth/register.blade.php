@@ -42,7 +42,7 @@
         <section class="hidden bg-[#f0f5ff] items-center justify-center relative md:flex md:w-1/2">
             <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
             </script>
-            <dotlottie-player src="https://lottie.host/f1ec6b22-384b-46b2-b95e-a0d071ad6d8a/5f2Twos7f8.lottie"
+            <dotlottie-player src="https://lottie.host/8e0e4b17-e2ea-4bb2-b71e-93332419efca/T6eWi584uY.lottie"
                 background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay></dotlottie-player>
         </section>
         <section class="w-full p-8 md:w-1/2 md:p-16">
@@ -58,7 +58,20 @@
             <p class="mb-8 text-[#334155] text-base">
                 Selamat datang kembali! Silakan masukkan detail Anda.
             </p>
-            <form class="space-y-5" action="{{ route('register.add') }}" method="POST">
+            
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Terjadi kesalahan:</strong>
+                    <ul class="mt-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
+            <form class="space-y-5" action="{{ route('register.add') }}" method="POST" onsubmit="showLoading()">
                 @csrf
                 <form action="{{ route('register') }}" method="POST">
                     @csrf
@@ -78,11 +91,8 @@
                                     inputmode="numeric" pattern="[0-9]*"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,16);" />
 
-                                @error('nik')
-                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                                @enderror
+                              
                             </div>
-
                         </label>
                         <label class="block relative">
                             <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
@@ -93,9 +103,7 @@
                                 placeholder="Nama Lengkap Anda" type="text" value="{{ old('name') }}" />
 
                         </label>
-                        @error('name')
-                        <div class="text-red-500  text-sm">{{ $message }}</div>
-                        @enderror
+                        
                     </div>
 
                     <div class="relative">
@@ -103,14 +111,26 @@
                             <i class="fas fa-phone"></i>
                         </div>
 
-                        <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}"
-                            pattern="[0-9]{10,15}" title="Hanya angka, panjang 10-15 digit" inputmode="numeric"
-                            maxlength="15" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,15);"
+                       <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx" value="{{ old('phone') }}"
+                            pattern="[0-9]{9,15}" title="Hanya angka, panjang 9-15 digit"
+                            inputmode="numeric" maxlength="15"
+                            oninput="formatToWhatsApp(this)"
                             class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('phone') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent" />
 
-                        @error('phone')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
+                        <script>
+                        function formatToWhatsApp(el) {
+                            let val = el.value.replace(/[^0-9]/g, ''); // hapus selain angka
+                            if (val.startsWith('0')) {
+                                val = '+62' + val.slice(1); // ubah 08xxx jadi +628xxx
+                            } else if (val.startsWith('62')) {
+                                val = '+62' + val.slice(2);
+                            } else if (!val.startsWith('+62')) {
+                                val = '+62' + val;
+                            }
+                            el.value = val.slice(0, 15 + 1); // max 15 digit (tanpa +)
+                        }
+                        </script>
+                     
                     </div>
 
 
@@ -130,9 +150,7 @@
                         <p id="email-error" class="text-red-500 hidden">Email sudah terdaftar, Silahakan Login dengan
                             email tersebut</p>
                     </div>
-                    @error('email')
-                    <div class="text-red-500  text-sm">{{ $message }}</div>
-                    @enderror
+              
                     @php
                     $inputStyle = "w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg
                     border focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent";
@@ -154,9 +172,7 @@
                             <i class="fas fa-eye" id="icon-password"></i>
                         </span>
 
-                        @error('password')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
+                       
                     </div>
 
                     <!-- Confirm Password -->
@@ -175,26 +191,38 @@
                             <i class="fas fa-eye" id="icon-cpassword"></i>
                         </span>
 
-                        @error('cpassword')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
+                     
                     </div>
 
                     <label class="inline-flex space-x-2 mb-8 text-[#475569] text-sm items-start">
-                        <input class="mt-1" type="checkbox" />
+                        <input class="mt-1" type="checkbox" checked />
                         <span>
-                            Dengan membuat akun, berarti Anda setuju dengan Syarat & Ketentuan
-                            dan Kebijakan Privasi kami.
+                            Dengan membuat akun, berarti Anda setuju dengan <span class="text-blue-600">Syarat & Ketentuan</span>
+                            dan <span class="text-blue-600">Kebijakan Privasi</span> kami.
                         </span>
                     </label>
-                    <button
-                        class="w-full py-3 text-white font-semibold bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
-                        type="submit" id="signup-button">
-                        <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2" id="signup-icon"></i>
-                        Mendaftar
+                    <button id="submit-btn" type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center">
+                        <span id="btn-spinner" class="hidden mr-2">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span> 
+                        <span id="btn-text">Mendaftar</span>
                     </button>
                 </form>
+                  <script>
+            function showLoading() {
+                const btn = document.getElementById('submit-btn');
+                const text = document.getElementById('btn-text');
+                const spinner = document.getElementById('btn-spinner');
 
+                text.textContent = 'Memproses...';
+                spinner.classList.remove('hidden');
+
+                // Nonaktifkan tombol untuk cegah submit dobel
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+            }
+        </script>
                 <p class="mt-10 text-center text-[#64748b] text-sm">
                     Sudah memiliki akun?
                     <a class="text-blue-600 font-semibold hover:underline" href="/login">

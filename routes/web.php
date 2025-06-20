@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ikm\IkmController;
 use App\Http\Controllers\Auth\AuthController;
@@ -19,6 +20,10 @@ use App\Http\Controllers\Dashboard\DashboardAdminController;
 Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::get('/reset-password', [AuthController::class, 'passReset'])->name('passReset')->middleware('guest');
+
+
+
 Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
 Route::post('/mail/resend/', [RegisterController::class, 'resend'])->name('resend')->middleware('guest');
 

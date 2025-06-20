@@ -212,7 +212,7 @@
     </div>
 </nav>
 <!-- Bottom Mobile Menu -->
-<nav class="w-full fixed bottom-0 inset-x-0 z-[100] bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  md:hidden">
+<nav class="w-full fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  md:hidden" >
     <div class="flex justify-between">
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}"

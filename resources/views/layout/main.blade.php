@@ -26,6 +26,8 @@
      {{-- datepicker --}}
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
+
     {{-- CSS --}}
     @yield('css')
     <style>
@@ -36,6 +38,12 @@
             z-index: 2147483647 !important; /* Nilai maksimum z-index */
         }
         [x-cloak] { display: none !important; }
+         @media (max-width: 768px) {
+
+            #container {
+                margin-bottom: 100px;
+            }
+        }
     </style>
 </head>
 
@@ -63,7 +71,7 @@
 
             <!-- Start Content -->
             <div class="h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden">
-                 <div class="sm:p-7 min-h-[calc(100vh-145px)]">
+                 <div class="@if(request::is('setelan')) p-0 @else p-3 @endif sm:p-7 min-h-[calc(100vh-145px)]" id="container">
                     @yield('container')
                  </div>
                 

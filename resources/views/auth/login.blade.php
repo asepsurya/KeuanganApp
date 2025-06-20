@@ -19,7 +19,8 @@
 <body>
     <main class="bg-white w-full rounded-lg flex flex-col md:flex-row overflow-hidden min-h-screen">
         <section class="hidden md:flex md:w-1/2 bg-[#f0f5ff] items-center justify-center relative">
-            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
+            </script>
 
             <dotlottie-player src="https://lottie.host/f1ec6b22-384b-46b2-b95e-a0d071ad6d8a/5f2Twos7f8.lottie"
                 background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay>
@@ -40,7 +41,17 @@
             <p class="text-[#334155] mb-8 text-base">
                 Selamat datang kembali! Silakan masukkan detail Anda.
             </p>
-            <form class="space-y-5" method="POST" action="/login">
+            @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Terjadi kesalahan:</strong>
+                <ul class="mt-2 list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <form class="space-y-5" method="POST" action="/login" onsubmit="showLoading()">
                 @csrf
                 <label class="relative block">
                     <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
@@ -51,9 +62,7 @@
                         class="@error('email') border-red-500 @enderror w-full pl-12 pr-4 py-3 rounded-lg border  bg-[#f8fafc] text-[#334155] placeholder-[#64748b] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                         placeholder="Username, Telepon, Email" type="text" />
                 </label>
-                @error('email')
-                    <div class="text-red-500 text-sm">{{ $message }}</div>
-                @enderror
+
                 <label class="relative block">
                     <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
                         <i class="fas fa-lock"></i>
@@ -66,26 +75,40 @@
                         <i id="eye-icon-password" class="fas fa-eye"></i>
                     </span>
                 </label>
-                @error('password')
-                    <div class="text-red-500 text-sm">{{ $message }}</div>
-                @enderror
-                <label class="inline-flex items-start space-x-2 text-[#475569] text-sm mb-8">
-                    <input class="mt-1" type="checkbox" checked />
-                    <span>
-                        Dengan membuat akun, berarti Anda setuju dengan Syarat & Ketentuan dan Kebijakan Privasi kami.
-                    </span>
-                </label>
+                <div class="flex items-start justify-between mb-8 text-sm text-[#475569]">
+                    <label class="inline-flex items-start space-x-2 w-1/2">
+                        <input class="mt-1" type="checkbox" checked />
+                        <span>Setuju dengan <span class="text-blue-600">Syarat & Ketentuan</span> dan <span class="text-blue-600">Kebijakan Privasi</span> kami.
+                        </span>
+                    </label>
+
+                    <div class="w-1/2 text-right">
+                        <a href="{{ route('passReset') }}" class="text-blue-600 hover:underline">Lupa Password..?</a>
+                    </div>
+                </div>
                 <button id="submit-btn" type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                    >
-                    <span id="btn-text">Masuk</span> <!-- Text of the button -->
-                    <div id="loading-spinner"
-                        class=" w-5 h-5 border-4 border-t-4 border-white rounded-full animate-spin absolute left-1/2 transform -translate-x-1/2">
-                    </div> <!-- Spinner -->
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center">
+                    <span id="btn-spinner" class="hidden mr-2">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                    <span id="btn-text">Masuk</span>
                 </button>
             </form>
-       
-       
+            <script>
+                function showLoading() {
+                    const btn = document.getElementById('submit-btn');
+                    const text = document.getElementById('btn-text');
+                    const spinner = document.getElementById('btn-spinner');
+
+                    text.textContent = 'Memproses...';
+                    spinner.classList.remove('hidden');
+
+                    // Nonaktifkan tombol untuk cegah submit dobel
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                }
+            </script>
+
             <p class="text-center text-[#64748b] text-sm mt-10">
                 Belum memiliki akun?
                 <a class="text-blue-600 font-semibold hover:underline" href="/register">
@@ -110,7 +133,7 @@
             }
         }
     </script>
-   
+
 </body>
 
 </html>

@@ -56,4 +56,8 @@ class AuthController extends Controller
   public function index(){
     return redirect('/login');
   }
+
+  public function passReset(){
+    return view('auth.resetpass.index');
+  }
 }

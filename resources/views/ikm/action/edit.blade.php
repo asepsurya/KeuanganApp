@@ -18,7 +18,85 @@
         border: none;
     }
 </style>
-<h2 class="py-5 text-lg font-semibold text-gray-800 dark:text-white">Detail Data</h2>
+<style>
+    .floating-buttons {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 9999;
+        margin-right: 280px;
+        transition: margin-right 0.3s ease;
+    }
+
+    /* Untuk HP & tablet kecil */
+    @media (max-width: 768px) {
+        .floating-buttons {
+            margin-right: 0;
+            margin-bottom: 50px;
+        }
+
+     
+    }
+
+    /* Untuk tablet besar & laptop kecil sampai 1030px */
+    @media (max-width: 1030px) {
+        .floating-buttons {
+            margin-right: 0;
+        }
+    }
+
+    /* Untuk layar menengah ke atas sampai 1502px */
+    @media (max-width: 1502px) {
+        .floating-buttons {
+            margin-right: 0;
+        }
+    }
+
+    /* Tombol bulat floating */
+    .btn-icon {
+        background-color: #2563eb;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-icon:hover {
+        background-color: #1e40af;
+    }
+</style>
+<script>
+    document.getElementById('rightSidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('rigtcontent');
+            const floatingButtons = document.querySelector('.floating-buttons');
+
+            // Kalau sidebar sedang tampil (display !== 'none')
+            if (window.getComputedStyle(sidebar).display !== 'none') {
+                // Sembunyikan sidebar
+                sidebar.style.display = 'none';
+                // Geser floating button ke 0
+                floatingButtons.style.marginRight = '0';
+            } else {
+                // Tampilkan sidebar
+                sidebar.style.display = 'block';
+                // Geser floating button ke 280px
+                floatingButtons.style.marginRight = '280px';
+            }
+        });
+</script>
+
+<h2 class="mb-3 text-lg font-semibold text-gray-800 dark:text-white">Detail Data</h2>
 <div class="bg-lightwhite dark:bg-white/5 rounded-2xl p-6">
     <div class="flex items-start justify-between gap-4 mb-[2px]">
         <h2 class="text-lg font-semibold">{{ $ikm->nama }}</h2>
@@ -53,51 +131,53 @@
                             </button>
                         </div>
                         <div class="p-5">
-                           
-                                <div class="text-sm text-black dark:text-white">
-                                    <center>
-                                        <img id="preview"
-                                            src="{{ $ikm->foto ? asset('storage/' . $ikm->foto) : asset('assets/images/byewind-avatar.png') }}"
-                                            class="py-4 flex-none rounded-md object-cover " alt="avatar" width="300">
-                                    </center>
-                                    <form id="studentForm" action="{{ route('ikm.update.foto') }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="text" value="{{ $ikm->id }}" name="id" hidden>
-                                        <input type="text" name="oldImage" value="{{ $ikm->foto }}" hidden>
-                                        <input type="hidden" name="croppedFoto" id="croppedFoto"> <!-- Cropped Base64 image -->
 
-                                        <div
-                                            class="my-4 py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Ubah
-                                                Foto</label>
-                                            <input type="file" id="image-input" accept="image/*" class="form-input">
+                            <div class="text-sm text-black dark:text-white">
+                                <center>
+                                    <img id="preview"
+                                        src="{{ $ikm->foto ? asset('storage/' . $ikm->foto) : asset('assets/images/byewind-avatar.png') }}"
+                                        class="py-4 flex-none rounded-md object-cover " alt="avatar" width="300">
+                                </center>
+                                <form id="studentForm" action="{{ route('ikm.update.foto') }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="text" value="{{ $ikm->id }}" name="id" hidden>
+                                    <input type="text" name="oldImage" value="{{ $ikm->foto }}" hidden>
+                                    <input type="hidden" name="croppedFoto" id="croppedFoto">
+                                    <!-- Cropped Base64 image -->
+
+                                    <div
+                                        class="my-4 py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+                                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Ubah
+                                            Foto</label>
+                                        <input type="file" id="image-input" accept="image/*" class="form-input">
+                                    </div>
+
+
+                                    <div id="loading-indicator"
+                                        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 9999; text-align: center; line-height: 100vh;">
+                                        <span class="spinner-border text-primary" role="status"
+                                            style="width: 3rem; height: 3rem;"></span>
+                                        <p>Uploading...</p>
+                                    </div>
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 mt-2">
+                                        <div>
+                                            <button type="button"
+                                                class="w-full px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition "
+                                                id="crop-btn" style="display: none;"><span class="ti ti-crop"></span>
+                                                Crop</button>
+                                        </div>
+                                        <div>
+                                            <button type="submit"
+                                                class="w-full px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition "
+                                                id="submit-btn" disabled><span class="ti ti-device-floppy"></span>
+                                                Simpan Perubahan</button>
                                         </div>
 
+                                    </div>
+                                </form>
+                            </div>
 
-                                        <div id="loading-indicator"
-                                            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 9999; text-align: center; line-height: 100vh;">
-                                            <span class="spinner-border text-primary" role="status"
-                                                style="width: 3rem; height: 3rem;"></span>
-                                            <p>Uploading...</p>
-                                        </div>
-                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 mt-2">
-                                            <div>
-                                                <button type="button"
-                                                    class="w-full px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition "
-                                                    id="crop-btn" style="display: none;"><span
-                                                        class="ti ti-crop"></span> Crop</button>
-                                            </div>
-                                            <div>
-                                                <button type="submit"
-                                                    class="w-full px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition "
-                                                    id="submit-btn" disabled><span class="ti ti-device-floppy"></span>
-                                                    Simpan Perubahan</button>
-                                            </div>
-
-                                        </div>
-                                    </form>
-                                </div>
-                            
 
                         </div>
                     </div>
@@ -112,7 +192,8 @@
                     d="M11.8465 2.26238C10.4873 1.6875 9 1.6875 9 1.6875C7.51265 1.6875 6.15347 2.26238 6.15347 2.26238C4.84109 2.81747 3.82928 3.82928 3.82928 3.82928C2.81748 4.84109 2.26238 6.15347 2.26238 6.15347C1.6875 7.51265 1.6875 9 1.6875 9C1.6875 10.4873 2.26238 11.8465 2.26238 11.8465C2.81747 13.1589 3.82928 14.1707 3.82928 14.1707C3.90704 14.2485 3.98657 14.3235 4.06715 14.3959C4.09662 14.4287 4.1301 14.4583 4.16709 14.4837C5.11036 15.2964 6.15347 15.7376 6.15347 15.7376C7.51265 16.3125 9 16.3125 9 16.3125C10.4873 16.3125 11.8465 15.7376 11.8465 15.7376C12.6786 15.3857 13.3899 14.8501 13.799 14.5053C13.8585 14.4704 13.9102 14.4253 13.9523 14.373C14.0928 14.2486 14.1707 14.1707 14.1707 14.1707C15.1825 13.1589 15.7376 11.8465 15.7376 11.8465C16.3125 10.4873 16.3125 9 16.3125 9C16.3125 7.51265 15.7376 6.15347 15.7376 6.15347C15.1825 4.84109 14.1707 3.82928 14.1707 3.82928C13.1589 2.81747 11.8465 2.26238 11.8465 2.26238ZM6.59172 14.7015C6.04988 14.4723 5.56846 14.151 5.21752 13.882C5.81067 12.9896 6.64596 12.4769 6.64596 12.4769C7.7291 11.8121 9 11.8125 9 11.8125C10.2709 11.8125 11.354 12.4769 11.354 12.4769C12.036 12.8955 12.5166 13.4997 12.7791 13.8899C12.0784 14.418 11.4083 14.7015 11.4083 14.7015C10.2592 15.1875 9 15.1875 9 15.1875C7.74079 15.1875 6.59172 14.7015 6.59172 14.7015ZM6.05746 11.5181C6.05746 11.5181 6.39649 11.3101 6.93432 11.1023C6.82429 11.0195 6.71668 10.9271 6.61351 10.824C6.61351 10.824 5.625 9.83547 5.625 8.4375C5.625 8.4375 5.625 7.03953 6.61351 6.05101C6.61351 6.05101 7.60203 5.0625 9 5.0625C9 5.0625 10.398 5.0625 11.3865 6.05101C11.3865 6.05101 12.375 7.03953 12.375 8.4375C12.375 8.4375 12.375 9.83547 11.3865 10.824C11.3865 10.824 11.2708 10.9397 11.0625 11.092C11.3547 11.2016 11.654 11.341 11.9425 11.5181C11.9425 11.5181 12.8853 12.0968 13.6153 13.1114C13.9039 12.7751 14.3886 12.148 14.7015 11.4083C14.7015 11.4083 15.1875 10.2592 15.1875 9C15.1875 9 15.1875 7.74079 14.7015 6.59172C14.7015 6.59172 14.2319 5.48143 13.3752 4.62478C13.3752 4.62478 12.5186 3.76813 11.4083 3.29851C11.4083 3.29851 10.2592 2.8125 9 2.8125C9 2.8125 7.74078 2.8125 6.59172 3.29851C6.59172 3.29851 5.48143 3.76813 4.62478 4.62478C4.62478 4.62478 3.76813 5.48143 3.29851 6.59172C3.29851 6.59172 2.8125 7.74078 2.8125 9C2.8125 9 2.8125 10.2592 3.29851 11.4083C3.29851 11.4083 3.68218 12.3154 4.38853 13.1224C4.73326 12.6405 5.2946 11.9864 6.05746 11.5181ZM10.591 10.0285C9.93198 10.6875 9 10.6875 9 10.6875C8.06802 10.6875 7.40901 10.0285 7.40901 10.0285C6.75 9.36948 6.75 8.4375 6.75 8.4375C6.75 7.50552 7.40901 6.84651 7.40901 6.84651C8.06802 6.1875 9 6.1875 9 6.1875C9.93198 6.1875 10.591 6.84651 10.591 6.84651C11.25 7.50552 11.25 8.4375 11.25 8.4375C11.25 9.36948 10.591 10.0285 10.591 10.0285Z"
                     fill="currentcolor"></path>
             </svg>
-            <p>{{ $ikm->jenis_kelamin == "L" ? 'Laki - Laki' : 'Perempuan' }}</p>
+            <p>{{ $ikm->jenis_kelamin == 'L' ? 'Laki - Laki' : ($ikm->jenis_kelamin == 'P' ? 'Perempuan' : 'belum
+                disetel') }}</p>
         </div>
         <div class="flex items-center gap-1 text-xs text-black/40 dark:text-white/40">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,33 +234,45 @@
             <p class="text-sm text-red-500 mt-1">Masih ada {{ $emptyFields }} data yang belum diisi.</p>
             @endif
         </div>
-       
+
     </div>
 </div>
 
 <form action="{{ route('ikm.update.action') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="px-2 py-1 mb-4 mt-3 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-    <h2 class="text-lg font-semibold text-gray-800 dark:text-white"></h2>
-    
-    <div class="flex flex-col sm:flex-row gap-3">
-        <button
-            type="submit"
-            class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150"
-        > Simpan 
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white"></h2>
+       <div class="floating-buttons flex flex-col items-center space-y-2">
+  
+        
+        <!-- Tombol Simpan -->
+        <button type="submit" title="Simpan" class="btn-icon">
+            <i class="fas fa-save"></i>
         </button>
+        
+        @if(auth()->user()->role == 'admin')
+            <!-- Tombol Hapus -->
+            <button type="button" title="Hapus" class="btn-icon" onclick="confirmDelete('{{ route('ikm.delete', $id) }}')">
+                <i class="fas fa-trash"></i>
+            </button>
+        @endif
+        </div>
 
-        <button
-            type="button"
-            onclick="confirmDelete('{{ route('ikm.delete', $id) }}')"
-            class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150"
-        >
-            Hapus
-        </button>
+        {{-- <div class="flex flex-col sm:flex-row gap-3">
+            <button type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
+                Simpan
+            </button>
+
+            <button type="button" onclick="confirmDelete('{{ route('ikm.delete', $id) }}')"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150">
+                Hapus
+            </button>
+        </div> --}}
+
     </div>
-</div>
-<script>
-function confirmDelete(url) {
+    <script>
+        function confirmDelete(url) {
     Swal.fire({
         title: 'Yakin ingin menghapus?',
         text: 'Tindakan ini tidak dapat dibatalkan!',
@@ -198,7 +291,7 @@ function confirmDelete(url) {
         }
     });
 }
-</script>
+    </script>
 
 
     @if ($errors->any())
@@ -216,7 +309,7 @@ function confirmDelete(url) {
 
     <div class="grid grid-cols-1 2xl:grid-cols-2 gap-2">
         <input type="text" name="id" value="{{ $ikm->id }}" hidden>
-        <div>
+        <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
             <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                 <label class="block mb-1 text-xs text-black/40 dark:text-white/40">NIK</label>
                 <input type="text" name="nik" placeholder="NIK" class="form-input" maxlength="16"
@@ -302,9 +395,9 @@ function confirmDelete(url) {
                 </select>
             </div>
 
-            
+
         </div>
-        <div>
+        <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
             <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                 <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Agama</label>
                 <select id="agama" name="agama" class="form-select w-full">

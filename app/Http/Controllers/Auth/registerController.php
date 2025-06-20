@@ -23,6 +23,7 @@ class RegisterController extends Controller
   public function registerAction(Request $request)
   {
     $validator = Validator::make($request->all(), [
+      "nik"=>'required',
       "name" => "required|string|max:255",
       "phone" => "required|string|max:15|unique:users,phone",
       "email" => "required|email|unique:users,email",
