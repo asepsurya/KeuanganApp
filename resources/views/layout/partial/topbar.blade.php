@@ -136,7 +136,7 @@
                     <li>
                         <a href="javaScript:;" class="flex items-center">
                             <x-icon name="gear" class="text-gray-600" />
-                            Settings
+                            Ubah Password
                         </a>
                     </li>
                 

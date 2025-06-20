@@ -21,8 +21,8 @@ Route::get('/', [AuthController::class, 'index'])->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/reset-password', [AuthController::class, 'passReset'])->name('passReset')->middleware('guest');
-
-
+Route::post('/reset-password/action', [AuthController::class, 'passResetAction'])->name('passResetAction')->middleware('guest');
+Route::get('/refresh-captcha', [AuthController::class, 'refreshCaptcha'])->name('refreshCaptcha');
 
 Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
 Route::post('/mail/resend/', [RegisterController::class, 'resend'])->name('resend')->middleware('guest');
