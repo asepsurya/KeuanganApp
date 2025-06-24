@@ -167,7 +167,7 @@ class TransaksiController extends Controller
             'telp' => 'required|string',
             'kepada' => 'required|string',
             'keterangan' => 'required|string',
-            'email_company' => 'required|email',
+            'email_company' => 'required',
         ]);
     
         if ($validator->fails()) {

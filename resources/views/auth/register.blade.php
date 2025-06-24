@@ -75,26 +75,7 @@
                 @csrf
                 <form action="{{ route('register') }}" method="POST">
                     @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <label class="block relative">
-                            <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <div class="relative">
-                                <div class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
-                                    <i class="fas fa-id-card"></i>
-                                </div>
-
-                                <input id="nik" name="nik"
-                                    class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('nik') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                                    placeholder="Nomor NIK" type="text" value="{{ old('nik') }}" maxlength="16"
-                                    inputmode="numeric" pattern="[0-9]*"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,16);" />
-
-                              
-                            </div>
-                        </label>
-                        <label class="block relative">
+               <label class="block relative">
                             <span class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -103,8 +84,6 @@
                                 placeholder="Nama Lengkap Anda" type="text" value="{{ old('name') }}" />
 
                         </label>
-                        
-                    </div>
 
                     <div class="relative">
                         <div class="flex text-[#64748b] absolute inset-y-0 left-4 items-center">

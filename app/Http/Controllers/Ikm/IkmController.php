@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Ikm;
 
 use App\Models\ikm;
 use App\Models\User;
+use App\Models\Mitra;
+use App\Models\Produk;
+use App\Models\Keuangan;
 use App\Models\Province;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -103,7 +107,11 @@ class IkmController extends Controller
     $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
     $provinsi = Province::all();
     $ikm = ikm::where("id", $id)->first(); // Pakai first() langsung
-
+    $mitra = Mitra::where('auth',$id)->get();
+    $produk = Produk::where('auth',$id)->get();
+    $transaksi = Transaksi::where('auth',$id)->with('mitra')->get();
+    $keuangan = Keuangan::where('auth',$id)->paginate(10);
+    $Ikmlogs = Activity::where(['causer_id'=>$id, 'log_name' => 'ikm'])->latest()->take(10)->get();
     if (!$ikm) {
       abort(404); // Data tidak ditemukan
     }
@@ -130,7 +138,7 @@ class IkmController extends Controller
       "provinsi" => $provinsi,
       "percentage" => $percentage,
       'emptyFields' => $emptyFields
-    ],compact("id","logs"));
+    ],compact("id","logs","mitra","produk","transaksi","keuangan","Ikmlogs"));
   }
 
     public function updateFoto(Request $request)

@@ -10,7 +10,7 @@
     <meta name="author" content="Webonzer" />
 
     <!-- Site Tiltle -->
-    <title> @yield('title')</title>
+    <title>{{ config('app.name') }} |  @yield('title')</title>
 
     <!-- Site favicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}" />
@@ -76,14 +76,12 @@
                  </div>
                 
                 <!-- Start Footer -->
-                {{-- <footer class="p-7 bg-white dark:bg-black flex flex-wrap items-center justify-center sm:justify-between gap-3">
-                    <p class="text-xs text-black/40 dark:text-white/40">&copy; 2023 Snow</p>
+                <footer class="p-7 bg-white dark:bg-black flex flex-wrap items-center justify-center sm:justify-between gap-3">
+                    <p class="text-xs text-black/40 dark:text-white/40">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
                     <ul class="flex items-center text-black/40 dark:text-white/40 text-xs">
-                        <li><a href="javascirpt:;" class="px-2 py-1 hover:text-black dark:hover:text-white transition-all duration-300">About</a></li>
-                        <li><a href="javascirpt:;" class="px-2 py-1 hover:text-black dark:hover:text-white transition-all duration-300">Support</a></li>
-                        <li><a href="javascirpt:;" class="px-2 py-1 hover:text-black dark:hover:text-white transition-all duration-300">Contact Us</a></li>
+                        <li><img src="{{ asset('assets/BI_Logo.png') }}" alt="" width="120"></li>
                     </ul>
-                </footer> --}}
+                </footer>
                 <!-- End Footer -->
             </div>
             <!-- End Content -->

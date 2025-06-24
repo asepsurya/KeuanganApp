@@ -267,7 +267,7 @@
             </tr>
         </table>
         <p class="text-[11px] leading-[13px] ">
-            <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $note->keterangan ?? $perusahaan->keterangan_pembayaran ?? '' }}
+            <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $note->keterangan ?? $perusahaan->keterangan_pembayaran ?? 'Pembayaran dilakukan melalui transfer ke no. Rekeneing xxxxxxxx atas nama xxxxxxxxx setelah diterima informasi penjualan.' }}
             </textarea>
             <style>
                 textarea {
