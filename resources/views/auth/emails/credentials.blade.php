@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Reset Akun Anda</title>
+    <title>{{ config('app.name') }} | Reset Akun Anda</title>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
 
@@ -20,8 +20,6 @@
 
         <tr>
             <td>
-            
-
                 <p style="font-size: 15px; color: #555555; line-height: 1.6;">
                     Kami menerima permintaan untuk mereset kata sandi akun Anda di <strong>{{ config('app.name') }}</strong>.
                     Berikut adalah informasi login terbaru Anda:

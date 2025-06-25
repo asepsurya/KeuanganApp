@@ -9,7 +9,7 @@
     <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         <tr>
             <td align="center" style="padding-bottom: 20px;">
-                <h2 style="color: #333333; margin: 0;">Selamat Datang di <span style="color:#2563EB;">KeuanganApp</span></h2>
+                <h2 style="color: #333333; margin: 0;">Selamat Datang di <span style="color:#2563EB;">{{ config('app.name') }}</span></h2>
             </td>
         </tr>
 
@@ -20,7 +20,7 @@
                 </p>
 
                 <p style="font-size: 14px; color: #666666; margin-bottom: 24px;">
-                    Terima kasih telah melakukan pendaftaran di <strong>KeuanganApp</strong>.  
+                    Terima kasih telah melakukan pendaftaran di <strong>{{ config('app.name') }}</strong>.  
                     Untuk menyelesaikan proses registrasi dan mengaktifkan akun Anda, silakan klik tombol di bawah ini:
                 </p>
 
@@ -47,7 +47,7 @@
                 </p>
 
                 <p style="font-size: 12px; color: #aaaaaa; text-align: center; margin-top: 20px;">
-                    &copy; {{ date('Y') }} KeuanganApp. Seluruh hak cipta dilindungi undang-undang.
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. Seluruh hak cipta dilindungi undang-undang.
                 </p>
             </td>
         </tr>

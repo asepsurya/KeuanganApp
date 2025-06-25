@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Artisan;
+use App\Models\App;
 use App\Models\ikm;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -53,6 +55,14 @@ class RegisterController extends Controller
       'nama'=>$request->name,
       'telp'=>$request->phone,
     ]);
+
+    App::create([
+      'key'=>'default_rekening',
+      'value'=>'',
+      'auth'=> $user->id
+    ]);
+
+     Artisan::call('optimize:clear');
     // contoh token
     Mail::to($request->email)->send(new AccountActivationMail($user, $token));
     return redirect()->route('successRegister', ['token' => $token])->with("success", "Pendaftaran Berhasil, Silahkan Lanjutkan ke Tahap Selanjutnya");

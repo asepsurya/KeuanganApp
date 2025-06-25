@@ -15,6 +15,6 @@ class HistoryController extends Controller
         return view('keuangan.rekeningHistory',[
             'activeMenu' => 'rekening',
             'active' => 'rekening',
-        ],compact('histories','logs'));
+        ],compact('histories','logs','id_rekening'));
     }
 }

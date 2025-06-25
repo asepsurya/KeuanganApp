@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'checkrole' => CheckUserRole::class,
             'checkPerusahaan' => \App\Http\Middleware\CheckPerusahaanAndVerified::class,
+            'check.auth.perusahaan' => \App\Http\Middleware\CekPerusahaanMiddleware::class,
             'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
         ]);
     })

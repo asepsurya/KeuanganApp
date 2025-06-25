@@ -1,4 +1,34 @@
-<nav class="sidebar fixed top-0 bottom-0 left-0 z-40 bg-white dark:bg-gray-900 w-[212px] border-r border-black/10 dark:border-white/10 transition-all duration-300" >
+<style>
+      .sidebar {
+  z-index: auto; /* default */
+}
+      .rigtcontent {
+  z-index: 0; /* default */
+}
+
+@media (min-width: 360px) and (max-width: 767px) {
+  .sidebar {
+    z-index: 40;
+  }
+  .right-sidebar {
+    z-index: 50;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    z-index: 0;
+  }
+  .rigtcontent {
+    z-index: 0;
+  }
+}
+
+
+
+</style>
+<nav class="sidebar fixed top-0 bottom-0 left-0  bg-white dark:bg-gray-900 w-[212px] border-r border-black/10 dark:border-white/10 transition-all duration-300" >
   <!-- sidebar content -->
     <div class="bg-white dark:bg-black h-full">
         <!-- Start Logo -->

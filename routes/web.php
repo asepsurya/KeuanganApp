@@ -49,7 +49,7 @@ Route::middleware(['auth','checkPerusahaan'])->group(function () {
     Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/keuangan', [DashboardAdminController::class, 'dashboardKeuangan'])->name('dashboard.keuangan');
     Route::get('/dashboard/peta pemasaran', [DashboardAdminController::class, 'peta_pemasaran'])->name('dashboard.peta');
-
+    Route::post('/change-password', [AuthController::class, 'passChange'])->name('passChange');
     // ------------------------------------------------
     // Route Mitra
     // ------------------------------------------------
@@ -91,6 +91,9 @@ Route::middleware(['auth','checkPerusahaan'])->group(function () {
     Route::post('/keuangan/add', [KeuanganController::class, 'keuanganAdd'])->name('keuangan.add');
     Route::post('/keuangan/update', [KeuanganController::class, 'keuanganUpdate'])->name('keuangan.update');
     Route::get('/keuangan/delete/{id}', [KeuanganController::class, 'keuanganDelete'])->name('keuangan.delete');
+    Route::get('/keuangan/export/pdf', [KeuanganController::class, 'keuanganPDF'])->name('keuangan.pdf');
+    Route::get('/history/cetak-pdf/{id_rekening}', [KeuanganController::class, 'cetakHistoryPDF'])->name('history.cetak-pdf');
+
     // ------------------------------------------------
     // Route Akun dan Rekening
     // ------------------------------------------------
@@ -136,7 +139,7 @@ Route::middleware(['auth','checkPerusahaan'])->group(function () {
     // ------------------------------------------------
     // Route Perusahaan
     // ------------------------------------------------
-    Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->name('perusahaan.index');
+    Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->middleware('check.auth.perusahaan')->name('perusahaan.index');
     Route::post('/create/perusahaan', [PerusahaanController::class, 'create'])->name('perusahaan.create');
     Route::get('/setelan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
     

@@ -126,4 +126,21 @@ class AuthController extends Controller
 
       return back()->with('success', 'Password baru sudah dikirim ke email Anda.');
   }
+
+  public function passChange(request $request){
+    $request->validate([
+        'id' => 'required|exists:users,id',
+        'password' => 'required|min:8',
+    ]);
+
+    $user = User::where('id', $request->id)->first();
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    Auth::logout(); // keluar dari session
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('login')->with('success', 'Password berhasil diubah. Silakan login kembali dengan password baru.');
+  }
 }

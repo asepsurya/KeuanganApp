@@ -8,7 +8,9 @@ use App\Models\Akun;
 use App\Models\Keuangan;
 use App\Models\Rekening;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\HistoryRekening;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Flasher\Laravel\Facade\Flasher;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
@@ -207,7 +209,7 @@ class KeuanganController extends Controller
                         'saldo' => $rekeningBaru->jumlah,
                     ]);
                     // Tambahkan data default rekening ke tabel App (key-value)
-                    App::where('key', 'default_rekening')->update([
+                    App::where(['key' => 'default_rekening','auth'=> auth()->user()->id])->update([
                         'value' => $rekeningid
                     ]);
                     
@@ -236,10 +238,10 @@ class KeuanganController extends Controller
                     'saldo' => $rekeningBaru->jumlah,
                 ]);
                 // Tambahkan data default rekening ke tabel App (key-value)
-                App::create([
-                    'key' => 'default_rekening',
+                App::where(['key' => 'default_rekening','auth'=> auth()->user()->id])->update([
                     'value' => $rekeningBaru->kode_rekening,
                 ]);
+                  Artisan::call('optimize:clear');
             }
         } else {
             $data['id_rekening'] = $request->id_rekening;
@@ -509,7 +511,45 @@ class KeuanganController extends Controller
     }
 
 
-    public function kelenderIndex(){
+    public function keuanganPDF(Request $request)
+{
+    // Base query
+    $keuangan = Keuangan::where('auth', auth()->user()->id);
+
+    // Filter jika from & to ada
+    if ($request->filled('from') && $request->filled('to')) {
+        try {
+            $from = \Carbon\Carbon::createFromFormat('d/m/Y', $request->from)->startOfDay();
+            $to = \Carbon\Carbon::createFromFormat('d/m/Y', $request->to)->endOfDay();
+
+            $keuangan->whereBetween('tanggal', [$from, $to]);
+            $periode = "{$request->from} s.d. {$request->to}";
+        } catch (\Exception $e) {
+            // Jika gagal parsing, tetap semua data
+            $periode = 'Semua Data';
+        }
+    } else {
+        $periode = 'Semua Data';
+    }
+
+    // Ambil data keuangan
+    $data = [
+        'keuangan' => $keuangan->with('akun')->orderBy('tanggal', 'asc')->get(),
+        'periode' => $periode
+    ];
+
+    // Buat dan kirim PDF
+    $pdf = Pdf::loadView('keuangan.pdf', $data)->setPaper('a4', 'portrait');
+
+    $periode = $request->filled('from') && $request->filled('to')
+    ? str_replace('/', '-', $request->from) . '_sd_' . str_replace('/', '-', $request->to)
+    : 'semua-periode';
+
+    $filename = "laporan-keuangan-{$periode}.pdf";
+
+    return $pdf->download($filename);
+}
+ public function kelenderIndex(){
         $data = Keuangan::where('auth',auth()->user()->id)->get();
          $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
         return view('keuangan.bulan',[
@@ -517,4 +557,30 @@ class KeuanganController extends Controller
             'active' => 'keuangan',
         ],compact('logs','data'));
     }
+
+ public function cetakHistoryPDF($id_rekening)
+{
+    $histories = HistoryRekening::where('id_rekening', $id_rekening)
+        ->orderBy('tanggal', 'desc')
+        ->get();
+
+    $rekening = Rekening::where('kode_rekening',$id_rekening)->first();
+
+    if (!$rekening) {
+        abort(404, 'Rekening tidak ditemukan');
+    }
+
+    $pdf = Pdf::loadView('keuangan.pdfHistory', [
+        'histories' => $histories,
+        'name' => $rekening
+    ])->setPaper('a4', 'portrait');
+
+    $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $rekening->nama_rekening); // sanitasi nama file
+
+    $filename = "CetakHistory-keuangan-dari-{$safeName}.pdf";
+
+    return $pdf->download($filename);
+}
+
+
 }

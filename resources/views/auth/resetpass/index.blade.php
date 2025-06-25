@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>Aktivasi Email</title>
+    <title>{{ config('app.name') }}  | Reset Akun</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
+     <!-- Site favicon -->
+    <link rel="shortcut icon" href="{{asset('assets/fav.png')}}" />
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <!-- Google Font -->

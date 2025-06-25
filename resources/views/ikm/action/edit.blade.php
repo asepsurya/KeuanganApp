@@ -116,8 +116,9 @@
         });
     </script>
     <div class="flex border-b overflow-x-auto no-scrollbar">
-        <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(0)">Detail IKM</button>
-        @if (auth()->user()->role == 'admin')
+         @if (auth()->user()->role == 'admin')
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(0)">Detail IKM</button>
+       
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(1)">Data Mitra</button>
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(2)">Data Produk</button>
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(3)">Riwayat
@@ -775,7 +776,7 @@
                                 <td class="py-4 pl-6 flex items-start gap-3">
                                     <div class="flex flex-col">
                                         <span class="font-semibold leading-tight">
-                                            <a href="#" @click.prevent="openDetail = true" class="hover:underline">
+                                            <a href="#"  class="hover:underline">
                                                 {{ $item->akun->nama_akun }}
                                             </a>
 

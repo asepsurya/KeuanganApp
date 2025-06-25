@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Data Mitra')
+@section('title', 'Transaksi')
 
 @section('css')
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('assets/css/simple-datatables.css') }}" />

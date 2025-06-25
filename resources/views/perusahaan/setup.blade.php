@@ -11,7 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- CSS Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+     <!-- Site favicon -->
+    <link rel="shortcut icon" href="{{asset('assets/fav.png')}}" />
     <!-- jQuery (wajib untuk Select2) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -87,15 +88,12 @@
         <section class="hidden bg-[#f0f5ff] items-center justify-center relative md:flex md:w-1/2">
             <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module">
             </script>
-            <dotlottie-player src="https://lottie.host/f1ec6b22-384b-46b2-b95e-a0d071ad6d8a/5f2Twos7f8.lottie"
+            <dotlottie-player src="https://lottie.host/4d4bc1fb-5aef-4126-be78-a362daaecde4/UonYqk3Qcr.lottie"
                 background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay></dotlottie-player>
         </section>
         <section class="w-full p-8 md:w-1/2 md:p-16">
             <div class="flex space-x-2 mb-10 items-center">
-                <img alt="WowDash logo icon with blue background and white W letter" class="w-10 h-10" height="40"
-                    src="https://storage.googleapis.com/a1aa/image/891a7e97-6121-4aef-40de-7fe839698707.jpg"
-                    width="40" />
-                <span class="font-semibold text-xl text-[#0f172a]">WowDash</span>
+                <img src="{{ asset('assets/app_logo.png') }}" alt="App Logo" class="rounded" width="150">
             </div>
             <h1 class="mb-2 text-[#0f172a] text-3xl font-semibold leading-tight">
                 Sedikit Lagi Hampir Siap..!!

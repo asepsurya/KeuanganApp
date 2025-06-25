@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('css')
 
-@section('title', 'Form Tambah Mitra')
+@section('title', 'Detail Transaksi')
 @section('container')
     <style>
         /* Membatasi tinggi dropdown dan menambah overflow auto untuk scroll jika terlalu panjang */

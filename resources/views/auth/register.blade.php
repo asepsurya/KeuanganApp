@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>Register</title>
+    <title>{{ config('app.name') }} | Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet" />
+     <!-- Site favicon -->
+    <link rel="shortcut icon" href="{{asset('assets/fav.png')}}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
@@ -47,10 +49,7 @@
         </section>
         <section class="w-full p-8 md:w-1/2 md:p-16  bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover bg-center">
             <div class="flex space-x-2 mb-10 items-center">
-                <img alt="WowDash logo icon with blue background and white W letter" class="w-10 h-10" height="40"
-                    src="https://storage.googleapis.com/a1aa/image/891a7e97-6121-4aef-40de-7fe839698707.jpg"
-                    width="40" />
-                <span class="font-semibold text-xl text-[#0f172a]">WowDash</span>
+                 <img src="{{ asset('assets/app_logo.png') }}" alt="App Logo" class="rounded" width="150">
             </div>
             <h1 class="mb-2 text-[#0f172a] text-3xl font-semibold leading-tight">
                 Daftarkan Akun Anda
