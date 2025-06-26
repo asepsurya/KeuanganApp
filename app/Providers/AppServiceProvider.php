@@ -6,6 +6,7 @@ use App\Models\App;
 use App\Models\User;
 use App\Policies\AdminPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+         if (config('app.env') === 'production') { URL::forceScheme('https'); }
 
         Gate::policy(User::class, AdminPolicy::class);
          // App Settings

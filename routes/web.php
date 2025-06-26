@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Nota\NotaController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Mitra\MitraController;
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\registerController;
 use App\Http\Controllers\Produk\ProdukController;
 use App\Http\Controllers\Region\RegionController;
 use App\Http\Controllers\Keuangan\HistoryController;
@@ -24,15 +24,15 @@ Route::get('/reset-password', [AuthController::class, 'passReset'])->name('passR
 Route::post('/reset-password/action', [AuthController::class, 'passResetAction'])->name('passResetAction')->middleware('guest');
 Route::get('/refresh-captcha', [AuthController::class, 'refreshCaptcha'])->name('refreshCaptcha');
 
-Route::get('/register', [RegisterController::class, 'register'])->name('register')->middleware('guest');
-Route::post('/mail/resend/', [RegisterController::class, 'resend'])->name('resend')->middleware('guest');
+Route::get('/register', [registerController::class, 'register'])->name('register')->middleware('guest');
+Route::post('/mail/resend/', [registerController::class, 'resend'])->name('resend')->middleware('guest');
 
-Route::get('/account/activate/{token}', [RegisterController::class, 'activate'])->name('activate')->middleware('guest');
-Route::get('/register/success/{token}', [RegisterController::class, 'successRegister'])->name('successRegister');
+Route::get('/account/activate/{token}', [registerController::class, 'activate'])->name('activate')->middleware('guest');
+Route::get('/register/success/{token}', [registerController::class, 'successRegister'])->name('successRegister');
 
-Route::post('/check-email', [RegisterController::class, 'checkEmail'])->name('check.email');
-Route::post('/register/auth', [RegisterController::class, 'registerAction'])->name('register.add')->middleware('guest');
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+Route::post('/check-email', [registerController::class, 'checkEmail'])->name('check.email');
+Route::post('/register/auth', [registerController::class, 'registerAction'])->name('register.add')->middleware('guest');
+Route::post('/logout', [logoutController::class, 'logout'])->name('logout');
 
 
 // ------------------------------------------------
