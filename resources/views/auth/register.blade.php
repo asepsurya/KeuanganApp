@@ -187,6 +187,8 @@
                         <span id="btn-text">Mendaftar</span>
                     </button>
                 </form>
+
+           
                   <script>
             function showLoading() {
                 const btn = document.getElementById('submit-btn');
@@ -207,6 +209,14 @@
                         Masuk
                     </a>
                 </p>
+                      <!-- Footer -->
+            <footer class="mt-auto p-7 flex flex-wrap items-center justify-center sm:justify-between gap-3 ">
+                <p class="text-xs text-black">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
+                <ul class="flex items-center text-black/40 text-xs gap-5">
+                    {{-- <li><img src="{{ asset('assets/app_logo.png') }}" alt="App Logo" class="rounded" width="110"></li> --}}
+                    <li><img src="{{ asset('assets/BI_Logo.png') }}" alt="BI Logo" width="120"></li>
+                </ul>
+            </footer>
         </section>
     </main>
     <script>

@@ -22,22 +22,8 @@
 
 <body class="bg-white min-h-screen">
     <main class="flex flex-col md:flex-row min-h-screen overflow-hidden bg-cover bg-center bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none">
-        
-        <!-- Left Illustration Section -->
-        <section class="hidden md:flex md:w-1/2 items-center justify-center">
-            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-            <dotlottie-player 
-                src="https://lottie.host/0f71f699-ce36-42a1-8b74-39cf077671ef/yiFLAZmNen.lottie"
-                background="transparent" 
-                speed="1" 
-                style="width: 100%; height: auto;" 
-                loop 
-                autoplay>
-            </dotlottie-player>
-        </section>
-
-        <!-- Right Form Section -->
-        <section class="flex flex-col min-h-screen w-full md:w-1/2 p-8 md:p-16 bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover bg-center pt-[130px]">
+          <!-- Right Form Section -->
+        <section class="flex flex-col  min-h-screen w-full md:w-1/2 p-8 md:p-16 bg-[url('{{ asset('assets/bg2.png') }}')] md:bg-none bg-cover bg-center pt-[130px]">
             <div class="flex-grow">
                 <!-- Logo -->
                 <div class="mb-10">
@@ -46,7 +32,7 @@
 
                 <!-- Heading -->
                 <h1 class="text-[#0f172a] text-3xl font-semibold mb-2">Masuk ke Akun Anda</h1>
-                <p class="text-[#334155] mb-8 text-base">Selamat datang kembali! Silakan masukkan detail Anda.</p>
+                <p class="text-[#334155] mb-8 text-base">Selamat datang! Silakan masukkan detail Anda.</p>
 
                 <!-- Error Alert -->
                 @if ($errors->any())
@@ -65,6 +51,7 @@
                     @csrf
 
                     <!-- Email -->
+                   
                     <label class="relative block">
                         <span class="absolute inset-y-0 left-4 flex items-center text-[#64748b]">
                             <i class="fas fa-user"></i>
@@ -123,6 +110,20 @@
                 </ul>
             </footer>
         </section>
+        <!-- Left Illustration Section -->
+        <section class="hidden md:flex md:w-1/2 items-center justify-center">
+            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+            <dotlottie-player 
+                src="https://lottie.host/fe44e5b8-3c61-43ec-824d-7902326385d5/9slXZGbndP.lottie"
+                background="transparent" 
+                speed="1" 
+                style="width: 100%; height: auto;" 
+                loop 
+                autoplay>
+            </dotlottie-player>
+        </section>
+
+      
     </main>
 
     <!-- Scripts -->
