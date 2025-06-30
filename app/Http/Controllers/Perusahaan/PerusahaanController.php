@@ -37,8 +37,7 @@ class PerusahaanController extends Controller
         "id_desa" => $request->id_desa,
         "auth" => auth()->user()->id,
       ]);
-      toastr()->success("Data has been saved successfully!");
-      return redirect("/dashboard");
+     return redirect()->route('dashboard.keuangan')->with('success', 'Berhasil Login, Selamat Datang');
     }
   }
 

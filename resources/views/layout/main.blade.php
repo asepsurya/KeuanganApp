@@ -44,7 +44,21 @@
                 margin-bottom: 100px;
             }
         }
+     
     </style>
+       @if(auth()->user()->role =="gold")
+       <style>
+            #sidebar{
+                display: none;
+                visibility: hidden;
+            }
+            @media (min-width: 1024px) {
+                .main-container .main-content {
+                    margin-left: 0;
+                }
+            }
+       </style>
+       @endif
 </head>
 
 <body x-data="main" class="antialiased relative font-inter bg-white dark:bg-black text-black dark:text-white text-sm font-normal overflow-x-hidden vertical" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.rightsidebar ? 'right-sidebar' : '', $store.app.menu, $store.app.layout]">
@@ -60,29 +74,38 @@
     <!-- Start Main Content -->
     <div class="main-container navbar-sticky flex" :class="[$store.app.navbar]">
         <!-- Start Sidebar -->
-        @include('layout.partial.sidebar')
+          @if(auth()->user()->role !="gold")
+            @include('layout.partial.sidebar')
+         @endif
         <!-- End sidebar -->
 
         <!-- Start Content Area -->
         <div class="main-content flex-1">
             <!-- Start Topbar -->
-           @include('layout.partial.topbar')
+             @if(auth()->user()->role !="gold")
+             @include('layout.partial.topbar')
+                
+            @else
+                    @include('layout.partial.topbarUser')
+            @endif
             <!-- End Topbar -->
 
             <!-- Start Content -->
             <div class="h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden">
-                 <div class="@if(request::is('setelan')) p-0 @else p-3 @endif sm:p-7 min-h-[calc(100vh-145px)]" id="container">
+                 <div class="p-7 min-h-[calc(100vh-145px)]" id="container" >
                     @yield('container')
                  </div>
                 
                 <!-- Start Footer -->
-                <footer class="p-7 bg-white dark:bg-black flex flex-wrap items-center justify-center sm:justify-between gap-3">
+                <div class="hidden sm:block">
+                <footer class=" p-7 bg-white dark:bg-black flex flex-wrap items-center justify-center sm:justify-between gap-3">
                     <p class="text-xs text-black/40 dark:text-white/40">&copy; {{ date('Y') }} {{ config('app.name') }}</p>
                     <ul class="flex items-center text-black/40 dark:text-white/40 text-xs gap-5">
-                        <li> <img src="{{ asset('assets/app_logo.png') }}" alt="App Logo" class="rounded pe-5" width="110"></li>
                         <li><img src="{{ asset('assets/BI_Logo.png') }}" alt="" width="120"></li>
+                        <li> <img src="{{ asset('assets/app_logo.png') }}" alt="App Logo" class="rounded pe-5" width="110"></li>
                     </ul>
                 </footer>
+                </div>
                 <!-- End Footer -->
             </div>
             <!-- End Content -->

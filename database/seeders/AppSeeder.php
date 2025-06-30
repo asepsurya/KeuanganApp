@@ -14,16 +14,20 @@ class AppSeeder extends Seeder
      */
     public function run(): void
     {
-       App::updateOrCreate(
-            ['key' => 'default_rekening'],
-            ['value' => '', 'auth' => '1']
-        );
+          App::updateOrCreate(
+                ['key' => 'default_rekening', 'auth' => '1'],
+                ['value' => '']
+            );
 
-        App::updateOrCreate(
-            ['key' => 'id_perusahaan'],
-            ['value' => 1, 'auth' => '1']
-        );
+            App::updateOrCreate(
+                ['key' => 'default_rekening', 'auth' => '2'],
+                ['value' => '']
+            );
 
+            App::updateOrCreate(
+                ['key' => 'default_rekening', 'auth' => '3'],
+                ['value' => '']
+            );
 
 
         Perusahaan::updateOrCreate(

@@ -44,8 +44,12 @@ class AuthController extends Controller
     if (Auth::attempt($credentials)) {
       // Login berhasil
       $request->session()->regenerate();
-      
-      return redirect()->intended("dashboard")->with("success", "Berhasil Login, Selamat Datang");
+      $user = Auth::user();
+      if ($user->hasRole('admin') || $user->hasRole('superadmin')) {
+        // Jika role adalah admin atau superadmin, arahkan ke dashboard keuangan
+        return redirect()->route('dashboard')->with('success', 'Berhasil Login, Selamat Datang');
+      }
+      return redirect()->route('dashboard.keuangan')->with('success', 'Berhasil Login, Selamat Datang');
     }
 
     // Login gagal
