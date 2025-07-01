@@ -63,6 +63,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
         Route::get('/mitra/create', [MitraController::class, 'create'])->name('mitra.add');
         Route::get('/mitra/delete/{id}', [MitraController::class, 'mitraDelete'])->name('mitra.delete');
         Route::post('/mitra/create/action', [MitraController::class, 'createAction'])->name('mitra.create');
+        Route::post('/resolve-maps-link', [MitraController::class, 'resolve']);
         // ------------------------------------------------
         // Route Produk
         // ------------------------------------------------
@@ -89,6 +90,8 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
         Route::post('/transaksi/cetak/invoice/notes', [TransaksiController::class, 'notes'])->name('transaksi.notes');
 
         Route::get('/transaksi/dok/konsinyasi/{id}', [TransaksiController::class, 'konsinyasidok'])->name('transaksi.konsinyasi.dok');
+        Route::post('/update-penawaran', [TransaksiController::class, 'updateKodeTransaksi'])->name('updateKodeTransaksi');
+        Route::post('/hapus-produk-transaksi', [TransaksiController::class, 'hapusProduk'])->name('transaksi.hapus-produk');
 
         // ------------------------------------------------
         // Route Nota

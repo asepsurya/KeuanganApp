@@ -116,15 +116,7 @@
                         </svg>
                     </div>
                     <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
-                            viewBox="0 0 24 24">
-                            <rect x="3" y="7" width="18" height="10" rx="2" stroke="currentColor"
-                                stroke-width="1.5" fill="none" />
-                            <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.5"
-                                fill="none" />
-                            <path d="M7 12h.01M17 12h.01" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" />
-                        </svg>
+                         <x-icon name="grafik" class="text-gray-600" />
                         <span class="pl-1">Keuangan</span>
                     </div>
                 </a>
@@ -139,6 +131,33 @@
             </li>
 
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Administrasi</span></h2>
+            
+            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['add_produk', 'produk', 'category']) ? 'true' : 'false' }} }">
+                <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }"
+                    @click="open = !open">
+                    <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300"
+                        :class="{ '!rotate-90': open }">
+                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M0.659675 9.35355C0.446775 9.15829 0.446775 8.84171 0.659675 8.64645L4.25 5.35355C4.4629 5.15829 4.4629 4.84171 4.25 4.64645L0.659675 1.35355C0.446776 1.15829 0.446776 0.841709 0.659675 0.646446C0.872575 0.451184 1.21775 0.451185 1.43065 0.646446L5.02098 3.93934C5.65967 4.52513 5.65968 5.47487 5.02098 6.06066L1.43065 9.35355C1.21775 9.54882 0.872574 9.54882 0.659675 9.35355Z"
+                                fill="currentcolor"></path>
+                        </svg>
+                    </div>
+                    <div class="flex items-center">
+                        <x-icon name="forms" class="text-gray-600" />
+                        <span class="pl-1">Data Produk</span>
+                    </div>
+                </a>
+                <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
+                    <li><a href="{{ route('index.create.produk') }}"
+                            class="{{ $active === 'add_produk' ? 'active' : '' }}">Tambah Data</a></li>
+                    <li><a href="{{ route('index.produk') }}"
+                            class="{{ $active === 'produk' ? 'active' : '' }}">Data Produk</a></li>
+                    <li><a href="{{ route('produk.category') }}"
+                            class="{{ $active === 'category' ? 'active' : '' }}">Kategori</a></li>
+                </ul>
+            </li>
 
             {{-- Data Mitra --}}
             <li class="menu nav-item">
@@ -169,33 +188,6 @@
                         <span class="pl-1 text-black dark:text-white">Nota dan Kwitansi</span>
                     </div>
                 </a>
-            </li>
-
-            <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['add_produk', 'produk', 'category']) ? 'true' : 'false' }} }">
-                <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }"
-                    @click="open = !open">
-                    <div class="text-black/50 dark:text-white/20 w-4 h-4 flex items-center justify-center transition-transform duration-300"
-                        :class="{ '!rotate-90': open }">
-                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M0.659675 9.35355C0.446775 9.15829 0.446775 8.84171 0.659675 8.64645L4.25 5.35355C4.4629 5.15829 4.4629 4.84171 4.25 4.64645L0.659675 1.35355C0.446776 1.15829 0.446776 0.841709 0.659675 0.646446C0.872575 0.451184 1.21775 0.451185 1.43065 0.646446L5.02098 3.93934C5.65967 4.52513 5.65968 5.47487 5.02098 6.06066L1.43065 9.35355C1.21775 9.54882 0.872574 9.54882 0.659675 9.35355Z"
-                                fill="currentcolor"></path>
-                        </svg>
-                    </div>
-                    <div class="flex items-center">
-                        <x-icon name="forms" class="text-gray-600" />
-                        <span class="pl-1">Data Produk</span>
-                    </div>
-                </a>
-                <ul x-show="open" x-collapse class="sub-menu flex flex-col gap-1 text-black dark:text-white/80">
-                    <li><a href="{{ route('index.create.produk') }}"
-                            class="{{ $active === 'add_produk' ? 'active' : '' }}">Tambah Data</a></li>
-                    <li><a href="{{ route('index.produk') }}"
-                            class="{{ $active === 'produk' ? 'active' : '' }}">Data Produk</a></li>
-                    <li><a href="{{ route('produk.category') }}"
-                            class="{{ $active === 'category' ? 'active' : '' }}">Kategori</a></li>
-                </ul>
             </li>
 
          
@@ -232,8 +224,8 @@
             <li class="menu nav-item">
                 <a class="nav-link group" href="{{ route('perusahaan.setting') }}">
                     <div class="flex pl-5 items-center">
-                       <x-icon name="tools" class="text-gray-600" />
-                        <span class="pl-1 text-black dark:text-white">Setelan Aplikasi</span>
+                       <x-icon name="usaha" class="text-gray-600" />
+                        <span class="pl-1 text-black dark:text-white">Perusahaan Saya</span>
                     </div>
                 </a>
             </li>

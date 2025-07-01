@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Spatie\Activitylog\Models\Activity;
 
 class MitraController extends Controller
@@ -124,6 +125,8 @@ class MitraController extends Controller
                             'kode_produk' => $kode,
                             'harga' => (int) str_replace('.', '', $request->harga[$index]),
                         ]);
+
+                        
                     }
                 }
             }
@@ -166,5 +169,44 @@ class MitraController extends Controller
 
         return redirect()->route('index.mitra')->with("success", "Data mitra dan penawaran berhasil dihapus!");        
         
+    }
+    public function resolve(request $request)
+    {
+            $url = $request->input('url');
+
+        try {
+            // Kalau link diawali dengan maps.app.goo.gl → follow redirect
+            if (str_contains($url, 'maps.app.goo.gl')) {
+                $response = Http::withOptions(['allow_redirects' => true])->get($url);
+                $finalUrl = $response->effectiveUri();
+            } else {
+                // Kalau bukan shortlink, langsung pakai URL-nya
+                $finalUrl = $url;
+            }
+
+            // Coba ambil koordinat dari !3dLAT!4dLNG
+            if (preg_match('/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/', $finalUrl, $matches)) {
+                return response()->json([
+                    'latitude' => $matches[1],
+                    'longitude' => $matches[2],
+                    'full_url' => (string) $finalUrl
+                ]);
+            }
+
+            // Atau dari @LAT,LNG
+            if (preg_match('/@(-?\d+\.\d+),(-?\d+\.\d+)/', $finalUrl, $matches)) {
+                return response()->json([
+                    'latitude' => $matches[1],
+                    'longitude' => $matches[2],
+                    'full_url' => (string) $finalUrl
+                ]);
+            }
+
+            return response()->json(['error' => 'Koordinat tidak ditemukan di URL.'], 404);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal resolve link: ' . $e->getMessage()], 500);
+        }
+
     }
 }

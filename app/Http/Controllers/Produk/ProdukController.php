@@ -104,6 +104,7 @@ class ProdukController extends Controller
             'auth' => auth()->user()->id,
             'status' => $request->status,
             'kategori' => $request->kategori,
+            'satuan' => $request->satuan,
             'gambar' => $gambarPath,
         ]);
         activity('ikm')->performedOn($produk)->causedBy(auth()->user())->log('Menambahkan Produk Baru '.$request->nama_produk);

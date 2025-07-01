@@ -262,14 +262,7 @@
 
 <nav class="w-full fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  md:hidden" >
     <div class="flex justify-between">
-        <!-- Dashboard -->
-        <a href="{{ route('dashboard') }}"
-           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'dashboard' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
-            <x-icon name="dashboard" class="w-5 h-5 mb-1" />
-            <span class="text-[10px]">Dashboard</span>
-        </a>
-
-
+        
         <!-- Keuangan -->
         <a href="{{ route('index.keuangan') }}"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'keuangan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
@@ -280,14 +273,34 @@
             </svg>
             <span class="text-[10px]">Keuangan</span>
         </a>
-        <!-- Keuangan -->
-        <a href="{{ route('index.keuangan') }}"
+
+        <!-- Dashboard -->
+        <a href="{{ route('dashboard.keuangan') }}"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'keuangan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
+            <x-icon name="dashboard" class="w-5 h-5 mb-1" />
+            <span class="text-[10px]">Grafik</span>
+        </a>
+        <!-- Dashboard -->
+        <a href="/akun"
+           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'akun' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
+             <!-- Ikon Kiri -->
+            <x-icon name="forms" class="text-gray-600 w-6 h-6 mr-2" />
+            <span class="text-[10px]">Akun</span>
+        </a>
+        <!-- Dashboard -->
+        <a href="/rekening"
+           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'rekening' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
+             <x-icon name="layer" class="text-gray-600 w-6 h-6 mr-2" />
+            <span class="text-[10px]">Rekening</span>
+        </a>
+
+
+        <!-- Keuangan -->
+        <a href="/setelan"
+           class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'setelan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
             <!-- Ikon User (Heroicons) -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M10 12a4 4 0 10-4-4 4 4 0 004 4zm0 2a6 6 0 00-6-6 6 6 0 00-6 6v2a6 6 0 0012 0v-2a6 6 0 00-6-6z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-[10px]">Profile Saya</span>
+               <x-icon name="user-1" class="text-gray-600 w-6 h-6 mr-2" />
+            <span class="text-[10px]">Usaha Saya</span>
         </a>
 
     </div>

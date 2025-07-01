@@ -107,11 +107,11 @@
             if (window.location.pathname.startsWith("/people/update/")) {
                 // Pilih semua elemen yang mengandung class `sm:p-7`
                 const elements = document.querySelectorAll(".sm\\:p-7");
-                const elements2 = document.querySelectorAll(".p-3");
+                const elements2 = document.querySelectorAll(".p-7");
 
                 // Hapus class `sm:p-7` dari elemen tersebut
                 elements.forEach(el => el.classList.remove("sm:p-7"));
-                elements2.forEach(el => el.classList.remove("p-3"));
+                elements2.forEach(el => el.classList.remove("p-7"));
             }
         });
     </script>

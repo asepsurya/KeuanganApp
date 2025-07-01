@@ -33,7 +33,7 @@
                     <tr class="text-gray-400">
                         <th class="text-left pl-6 py-3 font-normal w-1/2">Product</th>
                         <th class="text-left font-normal w-1/6">Created at</th>
-                        <th class="text-left font-normal w-1/6">Status</th>
+                        {{-- <th class="text-left font-normal w-1/6">Status</th> --}}
                         <th class="text-left font-normal w-1/6 pr-6">Amount</th>
                         <th class="w-6"></th>
                     </tr>
@@ -63,7 +63,7 @@
                                     <!-- Detail mobile -->
                                     <div class="lg:hidden mt-2 text-xs text-gray-500 space-y-1">
                                         <div><strong>Created at:</strong> {{ $item->created_at->format('d M Y') }}</div>
-                                        <div><strong>Status:</strong>{{ $item->status }}({{ $item->stok }} pcs)</div>
+                                        {{-- <div><strong>Status:</strong>{{ $item->status }}({{ $item->stok }} pcs)</div> --}}
                                         <div><strong>Amount:</strong> Rp{{ number_format($item->harga, 0, ',', '.') }}</div>
                                     </div>
                                 </div>
@@ -71,9 +71,9 @@
 
                             <!-- Kolom desktop (disembunyikan di mobile) -->
                             <td class="py-4  font-normal mobile lg:table-cell">{{ $item->kode_produk }}</td>
-                            <td class="py-4 mobile lg:table-cell">
+                            {{-- <td class="py-4 mobile lg:table-cell">
                                 <span class="inline-block rounded px-2 py-0.5 text-xs font-semibold">{{ $item->status }} ({{ $item->stok }} pcs)</span>
-                            </td>
+                            </td> --}}
                             <td class="py-4 font-semibold mobile lg:table-cell">Rp
                                 {{ number_format($item->harga, 0, ',', '.') }}</td>
 

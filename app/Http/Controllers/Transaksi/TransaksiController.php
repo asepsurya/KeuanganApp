@@ -10,6 +10,7 @@ use App\Models\Penawaran;
 use App\Models\Transaksi;
 use App\Models\Itemdokumen;
 use Illuminate\Http\Request;
+use App\Models\TransaksiProduct;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Validator;
@@ -61,31 +62,52 @@ class TransaksiController extends Controller
             'log_name' => 'ikm'
         ])->latest()->take(10)->get();
         $penawaran = Penawaran::where('kode_mitra', $id_mitra)->with('produk')->get();
+        $product = TransaksiProduct::where('kode_mitra', $id_mitra)->with('produk')->get();
 
         return view('transaksi.detail', [
             'activeMenu' => 'transaksi',
             'active' => 'transaksi',
-        ], compact('mitra', 'logs', 'penawaran','transaksi'));
+        ], compact('mitra', 'logs', 'penawaran','transaksi','product'));
     }
 
     public function transaksiCreate(request $request){
-        $request->validate([
+       $request->validate([
             'kode_mitra' => 'required|exists:mitras,kode_mitra',
-            ]);
+        ]);
 
-            $transaksi = new Transaksi();
-            $transaksi->kode_transaksi = $request->kode_transaksi;
-            $transaksi->kode_mitra = $request->kode_mitra;
-            $transaksi->tanggal_transaksi = now();
-            $transaksi->auth = auth()->user()->id;
-            $transaksi->save();
+        // Buat transaksi baru
+        $transaksi = new Transaksi();
+        $transaksi->kode_transaksi     = $request->kode_transaksi;
+        $transaksi->kode_mitra         = $request->kode_mitra;
+        $transaksi->tanggal_transaksi  = now();
+        $transaksi->auth               = auth()->user()->id;
+        $transaksi->save();
 
-            activity('ikm')
-                ->causedBy(auth()->user())
-                ->performedOn($transaksi)
-                ->log('Membuat transaksi baru');
-        
-            return redirect()->route('transaksi.index')->with("success", "Data has been saved successfully!");
+        // Ambil semua penawaran untuk mitra terkait
+        $penawarans = Penawaran::where('kode_mitra', $request->kode_mitra)->get();
+
+        if ($penawarans->count() > 0) {
+            foreach ($penawarans as $item) {
+                TransaksiProduct::create([
+                    'kode_produk'     => $item->kode_produk,
+                    'kode_transaksi'  => $transaksi->kode_transaksi,
+                    'kode_mitra'      => $request->kode_mitra,
+                    'barang_keluar'   => 0,
+                    'barang_terjual'  => 0,
+                    'barang_retur'    => 0,
+                    'total'           => 0,
+                ]);
+            }
+        }
+
+        // Catat aktivitas
+        activity('ikm')
+            ->causedBy(auth()->user())
+            ->performedOn($transaksi)
+            ->log('Membuat transaksi baru');
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('transaksi.index')->with('success', 'Data berhasil disimpan!');
     }
 
     public function transaksiUpdate(Request $request)
@@ -112,18 +134,33 @@ class TransaksiController extends Controller
         $transaksi->status_bayar = $request->status_bayar;
         $transaksi->auth = auth()->user()->id;
 
-        foreach ($request->kode_produk as $index => $kode_produk) {
-            $penawaran = Penawaran::where('kode_mitra', $kode_mitra)
-            ->where('kode_produk', $kode_produk)
-            ->first();
+        // foreach ($request->kode_produk as $index => $kode_produk) {
+        //     $penawaran = Penawaran::where('kode_mitra', $kode_mitra)
+        //     ->where('kode_produk', $kode_produk)
+        //     ->first();
 
-            if ($penawaran) {
-            $penawaran->barang_keluar = $request->barang_keluar[$index] ?? $penawaran->barang_keluar;
-            $penawaran->barang_terjual = $request->barang_terjual[$index] ?? $penawaran->barang_terjual;
-            $penawaran->barang_retur = $request->barang_retur[$index] ?? $penawaran->barang_retur;
-            $penawaran->total = str_replace(['.', ','], '', $request->harga[$index] ?? $penawaran->total); // Remove dots and commas before saving
-            $penawaran->update();
-            }
+        //     if ($penawaran) {
+        //     $penawaran->barang_keluar = $request->barang_keluar[$index] ?? $penawaran->barang_keluar;
+        //     $penawaran->barang_terjual = $request->barang_terjual[$index] ?? $penawaran->barang_terjual;
+        //     $penawaran->barang_retur = $request->barang_retur[$index] ?? $penawaran->barang_retur;
+        //     $penawaran->total = str_replace(['.', ','], '', $request->harga[$index] ?? $penawaran->total); // Remove dots and commas before saving
+        //     $penawaran->update();
+        //     }
+        // }
+        foreach ($request->kode_produk as $index => $kode_produk) {
+            TransaksiProduct::updateOrCreate(
+                [
+                    'kode_produk'    => $kode_produk,
+                    'kode_transaksi' => $transaksi->kode_transaksi,
+                    'kode_mitra'     => $kode_mitra,
+                ],
+                [
+                    'barang_keluar'  => $request->barang_keluar[$index] ?? 0,
+                    'barang_terjual' => $request->barang_terjual[$index] ?? 0,
+                    'barang_retur'   => $request->barang_retur[$index] ?? 0,
+                    'total'          => str_replace(['.', ','], '', $request->harga[$index] ?? 0),
+                ]
+            );
         }
 
         $transaksi->update();
@@ -244,5 +281,58 @@ class TransaksiController extends Controller
         return back()->with("success", "Data has been updated successfully!");
 
     }
+
+    public function updateKodeTransaksi(request $request)
+    {
+        $kodeTransaksi = $request->kode_transaksi;
+        $kodeProduks   = $request->kode_produk;
+        $kodeMitra     = $request->kode_mitra;
+
+        if (!$kodeProduks || empty($kodeProduks)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada produk terpilih.']);
+        }
+
+        $produkSudahAda = [];
+
+        foreach ($kodeProduks as $kodeProduk) {
+            $exists = TransaksiProduct::where('kode_transaksi', $kodeTransaksi)
+                ->where('kode_produk', $kodeProduk)
+                ->exists();
+
+            if ($exists) {
+                $produkSudahAda[] = $kodeProduk;
+            } else {
+                TransaksiProduct::create([
+                    'kode_produk'    => $kodeProduk,
+                    'kode_transaksi' => $kodeTransaksi,
+                    'kode_mitra'     => $kodeMitra,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success'        => true,
+            'produk_sudah_ada' => $produkSudahAda
+        ]);
+    }
+
+    public function hapusProduk(Request $request)
+    {
+        $request->validate([
+            'kode_transaksi' => 'required',
+            'kode_produk' => 'required'
+        ]);
+
+        $deleted = TransaksiProduct::where('kode_transaksi', $request->kode_transaksi)
+                    ->where('kode_produk', $request->kode_produk)
+                    ->delete();
+
+        if ($deleted) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Data tidak ditemukan atau sudah dihapus.']);
+        }
+    }
+        
 
 }

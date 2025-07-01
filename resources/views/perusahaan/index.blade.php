@@ -141,6 +141,7 @@
         </button>
     </div>
     <div class="flex">
+        @if(auth()->user()->role != "gold")
         <!-- Sidebar Tab -->
         <div class="hidden md:block p-4 w-[30%] h-screen">
             <ul class="space-y-2">
@@ -167,7 +168,7 @@
                 </li>
             </ul>
         </div>
-
+        @endif
         <!-- Content Area -->
         <div id="mycontent" class=" w-full pl-6 p-5 border-l border-gray-200 dark:border-white/10">
             <div id="tab-profil" class="tab-content">
@@ -713,7 +714,7 @@
             </div>
         </div>
     </div>
-
+    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('platinum'))
     <!-- Bottom Navigation Menu - Mobile Only -->
     <nav
         class="  fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black  border-t border-gray-200 dark:border-white/10  shadow md:hidden">
@@ -754,6 +755,21 @@
 
         </div>
     </nav>
+    @endif
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cek apakah URL cocok dengan pola `/people/update/*`
+            if (window.location.pathname.startsWith("/setelan")) {
+                // Pilih semua elemen yang mengandung class `sm:p-7`
+                const elements = document.querySelectorAll(".sm\\:p-7");
+                const elements2 = document.querySelectorAll(".p-7");
+
+                // Hapus class `sm:p-7` dari elemen tersebut
+                elements.forEach(el => el.classList.remove("sm:p-7"));
+                elements2.forEach(el => el.classList.remove("p-7"));
+            }
+        });
+    </script>
     <script>
         function addLegalitas() {
             legalitasCount++;

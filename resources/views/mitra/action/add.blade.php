@@ -492,7 +492,7 @@
             });
         }
     </script>
-    <script>
+    {{-- <script>
         document.getElementById('gmaps-link').addEventListener('input', function() {
             const url = this.value;
 
@@ -524,8 +524,37 @@
                 // alert("Link Google Maps tidak valid atau tidak mengandung koordinat.");
             }
         });
+    </script> --}}
+
+    <script>
+document.getElementById('gmaps-link').addEventListener('input', function () {
+    const url = this.value;
+
+    // Kalau link kosong, skip
+    if (!url) return;
+
+    fetch('/resolve-maps-link', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ url: url })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.latitude && data.longitude) {
+            document.getElementById('latitude').value = data.latitude;
+            document.getElementById('longitude').value = data.longitude;
+        } else {
+            console.warn(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Gagal resolve:', error);
+    });
+});
+
     </script>
-
-
 
 @endsection
