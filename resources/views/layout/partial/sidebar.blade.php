@@ -34,18 +34,18 @@
         <!-- Start Logo -->
    <div class="flex items-center p-4">
     <!-- Logo Bulat -->
-    
-       
+
+
     <div
     class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-white dark:bg-transparent border border-gray-200 dark:border-white/20 flex items-center justify-center">
-    
+
     <!-- Logo normal (light mode) -->
-    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}" 
+    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}"
          alt="logo"
          class="w-full h-full object-contain block dark:hidden" />
 
     <!-- Logo dark mode -->
-    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}" 
+    <img src="{{ $perusahaan_sidebar->logo ? asset('storage/' . $perusahaan_sidebar->logo) : asset('assets/default_logo.png') }}"
          alt="logo"
          class="w-full h-full object-contain hidden dark:block" />
 </div>
@@ -131,7 +131,7 @@
             </li>
 
             <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Administrasi</span></h2>
-            
+
             <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['add_produk', 'produk', 'category']) ? 'true' : 'false' }} }">
                 <a href="javascript:;" class="nav-link group text-black dark:text-white" :class="{ 'active': open }"
                     @click="open = !open">
@@ -190,10 +190,10 @@
                 </a>
             </li>
 
-         
+
 
             {{-- Data IKM --}}
-            @if (auth()->check() && auth()->user()->role === 'admin')
+            @if (auth()->check() && auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin')
                <h2 class="pl-3 my-2 text-black/60 dark:text-white/40 text-sm"><span>Master Data</span></h2>
                 <li class="menu nav-item" x-data="{ open: {{ in_array($active ?? '', ['ikm', 'ikm_create', 'ikm_update']) ? 'true' : 'false' }} }">
                     <a href="javascript:;" class="nav-link group text-black dark:text-white"
@@ -269,7 +269,7 @@
         </a>
 
         <!-- Pengguna -->
-        <a href="{{ route('perusahaan.setting') }}" 
+        <a href="{{ route('perusahaan.setting') }}"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'setelan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
            <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
             <path d="M226.76,69a8,8,0,0,0-12.84-2.88l-40.3,37.19-17.23-3.7-3.7-17.23,37.19-40.3A8,8,0,0,0,187,29.24,72,72,0,0,0,88,96,72.34,72.34,0,0,0,94,124.94L33.79,177c-.15.12-.29.26-.43.39a32,32,0,0,0,45.26,45.26c.13-.13.27-.28.39-.42L131.06,162A72,72,0,0,0,232,96,71.56,71.56,0,0,0,226.76,69ZM160,152a56.14,56.14,0,0,1-27.07-7,8,8,0,0,0-9.92,1.77L67.11,211.51a16,16,0,0,1-22.62-22.62L109.18,133a8,8,0,0,0,1.77-9.93,56,56,0,0,1,58.36-82.31l-31.2,33.81a8,8,0,0,0-1.94,7.1L141.83,108a8,8,0,0,0,6.14,6.14l26.35,5.66a8,8,0,0,0,7.1-1.94l33.81-31.2A56.06,56.06,0,0,1,160,152Z"></path>

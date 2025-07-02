@@ -169,7 +169,7 @@ class TransaksiController extends Controller
             ->causedBy(auth()->user())
             ->performedOn($transaksi)
             ->log('Memperbarui transaksi');
-            
+
         return redirect()->route('transaksi.detail', ['id' => $transaksi->id])->with("success", "Data has been updated successfully!");
     }
 
@@ -206,15 +206,15 @@ class TransaksiController extends Controller
             'keterangan' => 'required|string',
             'email_company' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()
                              ->withErrors($validator)
                              ->withInput();
         }
-    
+
         $validated = $validator->validated();
-    
+
         // Step 2: Create or update the document
         $dokumen = Dokumen::updateOrCreate(
             ['kode_transaksi' => $validated['kode_transaksi']],
@@ -234,22 +234,22 @@ class TransaksiController extends Controller
                 'type' => $request->type ?? '',
             ]
         );
-    
+
         // Step 3: Create or update the item rows
         foreach ($validated['nama_barang'] as $index => $namaBarang) {
             if (empty($namaBarang)) {
                 return redirect()->back()->withErrors("Nama barang tidak boleh kosong.");
             }
-    
+
             $itemId = $request->id_item[$index] ?? null;
-    
+
             if ($itemId === null) {
                 $item = Itemdokumen::where('nama_barang', $namaBarang)
                                    ->where('kode_transaksi', $validated['kode_transaksi'])
                                    ->first();
                 $itemId = $item?->id;
             }
-    
+
             Itemdokumen::updateOrCreate(
                 ['kode_transaksi' => $validated['kode_transaksi'], 'id' => $itemId],
                 [
@@ -262,7 +262,7 @@ class TransaksiController extends Controller
                 ]
             );
         }
-        
+
        return back()->with("success", "Data has been updated successfully!");
     }
 
@@ -333,6 +333,12 @@ class TransaksiController extends Controller
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan atau sudah dihapus.']);
         }
     }
-        
+
+    public function hapusTransksi($id){
+        Transaksi::where('kode_transaksi',$id)->delete();
+        TransaksiProduct::where('kode_transaksi',$id)->delete();
+        return redirect()->route('transaksi.index')->with("success", "Data has been deleted successfully!");
+    }
+
 
 }

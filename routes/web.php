@@ -92,6 +92,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
         Route::get('/transaksi/dok/konsinyasi/{id}', [TransaksiController::class, 'konsinyasidok'])->name('transaksi.konsinyasi.dok');
         Route::post('/update-penawaran', [TransaksiController::class, 'updateKodeTransaksi'])->name('updateKodeTransaksi');
         Route::post('/hapus-produk-transaksi', [TransaksiController::class, 'hapusProduk'])->name('transaksi.hapus-produk');
+        Route::get('/transaksi/destory/{id}', [TransaksiController::class, 'hapusTransksi'])->name('hapusTransksi');
 
         // ------------------------------------------------
         // Route Nota
@@ -106,10 +107,10 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
         Route::get('/transaksi/delete/{id}', [TransaksiController::class, 'itemDelete'])->name('transaksi.item.delete');
         Route::get('/nota', [NotaController::class, 'nota'])->name('nota.index');
     });
-    
+
     Route::middleware(['role:superadmin|admin|platinum|gold'])->get('/dashboard/keuangan', [DashboardAdminController::class, 'dashboardKeuangan'])->name('dashboard.keuangan');
- 
-   
+
+
     // ------------------------------------------------
     // Route IKM
     // ------------------------------------------------
@@ -150,7 +151,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
     Route::get('/create/perusahaan/auth', [PerusahaanController::class, 'index'])->middleware('check.auth.perusahaan')->name('perusahaan.index');
     Route::post('/create/perusahaan', [PerusahaanController::class, 'create'])->name('perusahaan.create');
     Route::get('/setelan', [PerusahaanController::class, 'PerusahaanSetting'])->name('perusahaan.setting');
-    
+
     Route::post('/perusahaan/upload-logo', [PerusahaanController::class, 'uploadLogo'])->name('perusahaan.update.logo');
     Route::post('/perusahaan/update-profil', [PerusahaanController::class, 'updateProfil'])->name('perusahaan.update.profil');
     Route::post('/perusahaan/update-legalitas', [PerusahaanController::class, 'updateLegalitas'])->name('perusahaan.update.legalitas');
@@ -160,7 +161,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
     // ------------------------------------------------
     // Route Exsport PDF
     // ------------------------------------------------
-    
+
 });
 
 

@@ -95,37 +95,37 @@
     <div class="px-2 py-1 mb-4 flex items-center justify-between">
         <h2 class="text-lg font-semibold">Transaksi Mitra / Toko</h2>
         <div class="flex flex-col sm:flex-row gap-3">
-            <button type="submit"
-                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
-                Tambah Transaksi Baru
+            <button type="button"
+                onclick="confirmDelete('{{ route('hapusTransksi', $transaksi->kode_transaksi) }}')"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150">
+                Hapus Transaksi ini?
             </button>
-        </div>
-        <script>
+           <script>
             function confirmDelete(url) {
                 Swal.fire({
                     title: 'Yakin ingin menghapus?',
-                    text: 'Tindakan ini tidak dapat dibatalkan!',
+                    text: 'Tindakan ini akan menghapus seluruh data transaksi, termasuk semua produk yang terkait. Proses ini tidak dapat dibatalkan!',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Ya, hapus!',
                     cancelButtonText: 'Batal',
+                    reverseButtons: true,
                     customClass: {
-                        confirmButton: 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg mx-2 focus:outline-none',
-                        cancelButton: 'bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg mx-2 focus:outline-none'
+                        confirmButton: 'bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded',
+                        cancelButton: 'bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded'
                     },
-                    buttonsStyling: false // penting agar customClass dipakai
+                    buttonsStyling: false
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = url;
                     }
                 });
             }
-        </script>
+           </script>
+        </div>
     </div>
 
-    <form action="{{ route('transaksi.update') }}" method="POST">
 
-        @csrf
         <div class="border border-black/10 dark:border-white/10 p-6 rounded-lg mb-6 shadow-sm bg-white dark:bg-white/5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div>
@@ -133,7 +133,7 @@
                         <label class="block mb-1 text-xs font-semibold text-gray-600 dark:text-gray-300">
                             Tanggal Transaksi
                         </label>
-                        <input type="date"
+                        <input type="date" id="tanggal_transaksi"
                             class="form-input w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 transition"
                             name="tanggal_transaksi" value="{{ $mitra->tanggal_transaksi ?? date('Y-m-d') }}" required
                             style="appearance: none; -webkit-appearance: none; background:  url('data:image/svg+xml;utf8,<svg fill=\'%236B7280\' height=\'20\' viewBox=\'0 0 20 20\' width=\'20\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7.293 9.293a1 1 0 011.414 0L10 10.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414z\'/></svg>') no-repeat right 0.75rem center/1.5em 1.5em; padding-right: 2.5rem;" />
@@ -394,708 +394,875 @@
 
                 </div>
                 <div class="overflow-x-auto hidden md:block">
-                    <table id="productTable"
-                        class="min-w-full border bg-white border-gray-300 rounded-lg shadow-sm dark:bg-transparent">
-                        <thead class="bg-gray-100 dark:bg-transparent">
-                            <tr>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-10 text-center">
-                                </th>
+                    <form action="{{ route('transaksi.update') }}" method="POST" id="form-transaksi">
+                        @csrf
+                        {{-- ------------------------------------------- --}}
+                        {{-- -----------Data -------------------------- --}}
+                        <div class="hidden">
+                            <input type="date" id="tanggal_transaksi_new"
+                            class="form-input w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 transition"
+                            name="tanggal_transaksi"  required />
+                            <script>
+                                $(document).ready(function () {
+                                    $('#tanggal_transaksi_new').val($('#tanggal_transaksi').val());
+                                    $('#tanggal_transaksi').on('change input', function () {
+                                        $('#tanggal_transaksi_new').val($(this).val());
+                                    });
+                                });
+                            </script>
+                            <input type="text"
+                            class="form-input w-full rounded-md border-gray-300  text-gray-800 font-bold text-lg"
+                            name="nomor_transaksi" value="{{ $transaksi->kode_transaksi }}" readonly />
+                            <input type="text"
+                            class="form-input w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 transition"
+                            name="kode_mitra" value="{{ $mitra->kode_mitra }}" readonly />
+                            {{-- ------------------------------------------- --}}
+                            {{-- -----------Data -------------------------- --}}
+                        </div>
+                        <table id="productTable"
+                            class="min-w-full border bg-white border-gray-300 rounded-lg shadow-sm dark:bg-transparent">
+                            <thead class="bg-gray-100 dark:bg-transparent">
+                                <tr>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-10 text-center">
+                                    </th>
 
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-10 text-center">
-                                    #</th>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-1/3">
-                                    Nama Produk</th>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
-                                    Barang Keluar</th>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
-                                    Barang Terjual</th>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
-                                    Barang Retur</th>
-                                <th
-                                    class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
-                                    Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $totalSemua = 0;
-                                $no = 1;
-                            @endphp
-                            @forelse ($product->where('kode_transaksi',$transaksi->kode_transaksi) as $index => $row)
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-10 text-center">
+                                        #</th>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 w-1/3">
+                                        Nama Produk</th>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
+                                        Barang Keluar</th>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
+                                        Barang Terjual</th>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
+                                        Barang Retur</th>
+                                    <th
+                                        class="border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 text-center">
+                                        Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 @php
-                                    $barang_keluar = (int) ($row->barang_keluar ?? 0);
-                                    $barang_terjual = (int) ($row->barang_terjual ?? 0);
-                                    $barang_retur = (int) ($row->barang_retur ?? 0);
-                                    $harga = (int) ($row->penawaran->harga ?? 0);
-                                    $total_barang_keluar = $barang_terjual + $barang_retur;
-                                    $total = $barang_keluar * $harga;
-                                    $totalSemua += $total;
+                                    $totalSemua = 0;
+                                    $no = 1;
                                 @endphp
-                                <tr class="hover:bg-gray-50 dark:hover:bg-black">
-                                    <td class="border border-gray-300 px-3 py-2 text-center" width="1%">
-                                        <button type="button"
-                                            onclick="hapusItem('{{ $transaksi->kode_transaksi }}','{{ $row->produk->kode_produk }}')"
-                                            style="color:red;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                    <td class="border border-gray-300 px-3 py-2 text-center">{{ $no++ }}</td>
-                                    <td class="border border-gray-300 px-3 py-2">
-                                        <button type="button"
-                                            class="form-input w-full bg-gray-50 dark:bg-gray-800 border-gray-300 rounded-md text-left cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900"
-                                            onclick="showProductDetail('{{ $row->produk->kode_produk }}')"
-                                            style="padding: 0.5rem 0.75rem;">
-                                            {{ $row->produk->nama_produk ?? '-' }}
-                                        </button>
-                                        <input type="hidden" name="kode_produk[]"
-                                            value="{{ $row->produk->kode_produk }}">
+                                @forelse ($product->where('kode_transaksi',$transaksi->kode_transaksi) as $index => $row)
+                                    @php
+                                        $barang_keluar = (int) ($row->barang_keluar ?? 0);
+                                        $barang_terjual = (int) ($row->barang_terjual ?? 0);
+                                        $barang_retur = (int) ($row->barang_retur ?? 0);
+                                        $harga = (int) ($row->penawaran->harga ?? 0);
+                                        $total_barang_keluar = $barang_terjual + $barang_retur;
+                                        $total = $barang_keluar * $harga;
+                                        $totalSemua += $total;
+                                    @endphp
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-black">
+                                        <td class="border border-gray-300 px-3 py-2 text-center" width="1%">
+                                            <button type="button"
+                                                onclick="hapusItem('{{ $transaksi->kode_transaksi }}','{{ $row->produk->kode_produk }}')"
+                                                style="color:red;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">{{ $no++ }}</td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            <button type="button"
+                                                class="form-input w-full bg-gray-50 dark:bg-gray-800 border-gray-300 rounded-md text-left cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900"
+                                                onclick="showProductDetail('{{ $row->produk->kode_produk }}')"
+                                                style="padding: 0.5rem 0.75rem;">
+                                                {{ $row->produk->nama_produk ?? '-' }}
+                                            </button>
+                                            <input type="hidden" name="kode_produk[]"
+                                                value="{{ $row->produk->kode_produk }}">
 
-                                        <!-- Modal for product detail -->
-                                        <div id="modal-detail-{{ $row->produk->kode_produk }}"
-                                            class="fixed inset-0 z-[99999] flex items-center justify-center hidden"
-                                            style="z-index: 999999">
-                                            <!-- Overlay -->
-                                            <div class="absolute inset-0 bg-black/30"></div>
-                                            <!-- Modal content -->
-                                            <div
-                                                class="relative bg-white  dark:bg-black border-b border-black/10 dark:border-white/10 items-center justify-between px-5 py-3 rounded-lg shadow-lg max-w-lg w-full p-6 z-10">
-                                                <button type="button"
-                                                    class="absolute top-2 right-2 text-gray-500 hover:text-red-600"
-                                                    onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">
-                                                    &times;
-                                                </button>
-                                                <h3 class="text-lg font-bold mb-3">Detail Produk Penawran</h3>
-                                                <div class="">
-                                                    <div>
-                                                        <table
-                                                            class="table-auto border-collapse border border-gray-300 w-full text-sm">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td
-                                                                        class="border border-gray-300 px-3 py-2 font-semibold">
-                                                                        Kode Produk</td>
-                                                                    <td class="border border-gray-300 px-3 py-2">
-                                                                        {{ $row->produk->kode_produk }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td
-                                                                        class="border border-gray-300 px-3 py-2 font-semibold">
-                                                                        Nama Produk</td>
-                                                                    <td class="border border-gray-300 px-3 py-2">
-                                                                        {{ $row->produk->nama_produk ?? '-' }}</td>
-                                                                </tr>
+                                            <!-- Modal for product detail -->
+                                            <div id="modal-detail-{{ $row->produk->kode_produk }}"
+                                                class="fixed inset-0 z-[99999] flex items-center justify-center hidden"
+                                                style="z-index: 999999">
+                                                <!-- Overlay -->
+                                                <div class="absolute inset-0 bg-black/30"></div>
+                                                <!-- Modal content -->
+                                                <div
+                                                    class="relative bg-white  dark:bg-black border-b border-black/10 dark:border-white/10 items-center justify-between px-5 py-3 rounded-lg shadow-lg max-w-lg w-full p-6 z-10">
+                                                    <button type="button"
+                                                        class="absolute top-2 right-2 text-gray-500 hover:text-red-600"
+                                                        onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">
+                                                        &times;
+                                                    </button>
+                                                    <h3 class="text-lg font-bold mb-3">Detail Produk Penawran</h3>
+                                                    <div class="">
+                                                        <div>
+                                                            <table
+                                                                class="table-auto border-collapse border border-gray-300 w-full text-sm">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td
+                                                                            class="border border-gray-300 px-3 py-2 font-semibold">
+                                                                            Kode Produk</td>
+                                                                        <td class="border border-gray-300 px-3 py-2">
+                                                                            {{ $row->produk->kode_produk }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td
+                                                                            class="border border-gray-300 px-3 py-2 font-semibold">
+                                                                            Nama Produk</td>
+                                                                        <td class="border border-gray-300 px-3 py-2">
+                                                                            {{ $row->produk->nama_produk ?? '-' }}</td>
+                                                                    </tr>
 
-                                                                <tr>
-                                                                    <td
-                                                                        class="border border-gray-300 px-3 py-2 font-semibold">
-                                                                        Harga Hasil Penawaran</td>
-                                                                    <td class="border border-gray-300 px-3 py-2">Rp.
-                                                                        {{ number_format($row->penawaran->harga ?? 0, 0, ',', '.') }}
-                                                                    </td>
-                                                                </tr>
-                                                                <!-- Tambahkan detail lain sesuai kebutuhan -->
-                                                            </tbody>
-                                                        </table>
+                                                                    <tr>
+                                                                        <td
+                                                                            class="border border-gray-300 px-3 py-2 font-semibold">
+                                                                            Harga Hasil Penawaran</td>
+                                                                        <td class="border border-gray-300 px-3 py-2">Rp.
+                                                                            {{ number_format($row->penawaran->harga ?? 0, 0, ',', '.') }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <!-- Tambahkan detail lain sesuai kebutuhan -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
                                                     </div>
-
+                                                    <button type="button"
+                                                        class="mt-3 w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium  bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150  right-2 text-white hover:text-red-600"
+                                                        onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">
+                                                        Oke
+                                                    </button>
                                                 </div>
-                                                <button type="button"
-                                                    class="mt-3 w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium  bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150  right-2 text-white hover:text-red-600"
-                                                    onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">
-                                                    Oke
-                                                </button>
                                             </div>
-                                        </div>
 
-                                        <script>
-                                            function showProductDetail(kode) {
-                                                document.getElementById('modal-detail-' + kode).classList.remove('hidden');
-                                            }
+                                            <script>
+                                                function showProductDetail(kode) {
+                                                    document.getElementById('modal-detail-' + kode).classList.remove('hidden');
+                                                }
 
-                                            function closeProductDetail(kode) {
-                                                document.getElementById('modal-detail-' + kode).classList.add('hidden');
-                                            }
-                                        </script>
+                                                function closeProductDetail(kode) {
+                                                    document.getElementById('modal-detail-' + kode).classList.add('hidden');
+                                                }
+                                            </script>
 
-                                    </td>
-                                    <td class="border border-gray-300 px-3 py-2 text-center">
-                                        <input type="number" name="barang_keluar[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-keluar-input"
-                                            value="{{ $barang_keluar }}" data-index="{{ $index }}"
-                                            data-harga="{{ $harga }}">
-                                    </td>
-                                    <td class="border border-gray-300 px-3 py-2 text-center">
-                                        <input type="number" name="barang_terjual[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-terjual-input"
-                                            value="{{ $barang_terjual }}" data-index="{{ $index }}">
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">
+                                            <input type="number" name="barang_keluar[]"
+                                                class="form-input w-20 text-center border-gray-300 rounded-md barang-keluar-input"
+                                                value="{{ $barang_keluar }}" data-index="{{ $index }}"
+                                                data-harga="{{ $harga }}">
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">
+                                            <input type="number" name="barang_terjual[]"
+                                                class="form-input w-20 text-center border-gray-300 rounded-md barang-terjual-input"
+                                                value="{{ $barang_terjual }}" data-index="{{ $index }}">
 
-                                    </td>
-                                    <td class="border border-gray-300 px-3 py-2 text-center">
-                                        <input type="number" name="barang_retur[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-retur-input"
-                                            value="{{ $barang_retur }}" data-index="{{ $index }}">
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">
+                                            <input type="number" name="barang_retur[]"
+                                                class="form-input w-20 text-center border-gray-300 rounded-md barang-retur-input"
+                                                value="{{ $barang_retur }}" data-index="{{ $index }}">
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 text-center">
+                                            <div class="flex items-center justify-center">
+                                                <span class="mr-1">Rp.</span>
+                                                <input type="text" name="harga[]"
+                                                    value="{{ number_format($total, 0, ',', '.') }}"
+                                                    class="form-input harga-input w-24 text-right border-gray-300 rounded-md total-harga-input"
+                                                    data-index="{{ $index }}" readonly>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr id="noDataRow">
+                                        <td colspan="6" class="border border-gray-300 px-3 py-2 text-center text-gray-500">
+                                            Belum ada
+                                            produk yang ditawarkan.</td>
+                                    </tr>
+                                @endforelse
+
+                                <!-- Ongkir -->
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">
+                                        Ongkir
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2 text-center">
                                         <div class="flex items-center justify-center">
                                             <span class="mr-1">Rp.</span>
-                                            <input type="text" name="harga[]"
-                                                value="{{ number_format($total, 0, ',', '.') }}"
-                                                class="form-input harga-input w-24 text-right border-gray-300 rounded-md total-harga-input"
-                                                data-index="{{ $index }}" readonly>
+                                            <input type="text" name="ongkir" id="ongkir-input"
+                                                class="form-input w-24 text-right border-gray-300 rounded-md"
+                                                value="{{ $transaksi->ongkir ?? '0' }}">
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr id="noDataRow">
-                                    <td colspan="6" class="border border-gray-300 px-3 py-2 text-center text-gray-500">
-                                        Belum ada
-                                        produk yang ditawarkan.</td>
+                                <!-- Total -->
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Total</td>
+                                    <td class="border border-gray-300 px-3 py-2 text-center">
+                                        <div class="flex items-center justify-center">
+                                            <span class="mr-1">Rp.</span>
+                                            <input type="text" name="total" id="total-input"
+                                                class="form-input w-24 text-right border-gray-300 rounded-md"
+                                                value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}"
+                                                readonly>
+                                        </div>
+                                    </td>
                                 </tr>
-                            @endforelse
-
-                            <!-- Ongkir -->
+                                <!-- Discount -->
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Discount</td>
+                                    <td class="border border-gray-300 px-3 py-2 text-center">
+                                        <div class="flex items-center justify-center">
+                                            <span class="mr-1">Rp.</span>
+                                            <input type="text" name="discount" id="discount-input"
+                                                class="form-input w-24 text-right border-gray-300 rounded-md"
+                                                value="{{ number_format($transaksi->diskon, 0, ',', '.') }}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Grand Total -->
+                                <tr>
+                                    <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                    <td class="border border-gray-300 px-3 py-2 font-bold text-right">Grand Total</td>
+                                    <td class="border border-gray-300 px-3 py-2 text-center font-bold">
+                                        <div class="flex items-center justify-center">
+                                            <span class="mr-1">Rp.</span>
+                                            <input type="text" name="grand_total" id="grand-total-input"
+                                                class="form-input w-24 text-right border-gray-300 rounded-md font-bold"
+                                                value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}"
+                                                readonly>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
                             <tr>
                                 <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Status Bayar</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <select name="status_bayar" id="status-bayar-input"
+                                        class="form-input w-full text-center border-gray-300 rounded-md">
+                                        <option value="Belum Bayar"
+                                            {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Belum Bayar' ? 'selected' : '' }}>
+                                            Belum Bayar</option>
+                                        <option value="Sudah Bayar"
+                                            {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Sudah Bayar' ? 'selected' : '' }}>
+                                            Sudah Bayar</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+                                <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Tanggal Bayar</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <input type="date" name="tanggal_bayar" id="tanggal-bayar-input"
+                                        class="form-input w-full text-center border-gray-300 rounded-md"
+                                        value="{{ old('tanggal_bayar', $transaksi->tanggal_pembayaran ?? '') }}">
+                                </td>
+                            </tr>
+                        </table>
+                        <script>
+                            function formatRupiah(angka) {
+                                return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            }
+
+                            function parseRupiah(str) {
+                                return parseInt((str || '0').replace(/\./g, '').replace(/[^0-9]/g, '')) || 0;
+                            }
+
+                            function updateTotals() {
+                                let total = 0;
+                                document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
+                                    const index = input.dataset.index;
+                                    const harga = parseInt(input.dataset.harga) || 0;
+                                    const jumlahKeluar = parseInt(input.value) || 0;
+
+                                    const barangTerjualInput = document.querySelector('.barang-terjual-input[data-index="' + index +
+                                        '"]');
+                                    const barangReturInput = document.querySelector('.barang-retur-input[data-index="' + index + '"]');
+                                    const totalInput = document.querySelector('.total-harga-input[data-index="' + index + '"]');
+
+                                    let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
+
+
+                                    if (barangTerjual > jumlahKeluar) {
+                                        barangTerjual = jumlahKeluar;
+                                        if (barangTerjualInput) {
+                                            barangTerjualInput.value = barangTerjual;
+                                        }
+                                    }
+
+                                    // Hitung total per baris berdasarkan kondisi
+                                    let totalRow = 0;
+                                    if (barangTerjual > 0) {
+                                        totalRow = barangTerjual * harga; // Jika barang terjual ada, hitung berdasarkan terjual
+                                    } else {
+                                        totalRow = jumlahKeluar * harga; // Jika tidak ada, hitung berdasarkan keluar
+                                    }
+
+                                    if (totalInput) {
+                                        totalInput.value = formatRupiah(totalRow);
+                                    }
+
+                                    // Tambah ke total keseluruhan
+                                    total += totalRow;
+                                });
+
+                                // Update total keseluruhan
+                                const totalInput = document.getElementById('total-input');
+                                if (totalInput) {
+                                    totalInput.value = formatRupiah(total);
+                                }
+
+                                // Ambil ongkir & diskon
+                                const ongkir = parseRupiah(document.getElementById('ongkir-input')?.value);
+                                const discount = parseRupiah(document.getElementById('discount-input')?.value);
+                                const grandTotal = total + ongkir - discount;
+
+                                // Update grand total
+                                const grandTotalInput = document.getElementById('grand-total-input');
+                                if (grandTotalInput) {
+                                    grandTotalInput.value = formatRupiah(grandTotal);
+                                }
+                            }
+                            document.addEventListener('input', function(e) {
+                                if (e.target.classList.contains('barang-terjual-input')) {
+                                    const input = e.target;
+                                    const index = input.dataset.index;
+
+                                    const barangKeluarInput = document.querySelector(`.barang-keluar-input[data-index="${index}"]`);
+                                    const barangReturInput = document.querySelector(`.barang-retur-input[data-index="${index}"]`);
+                                    const harga = parseInt(barangKeluarInput.dataset.harga) || 0;
+
+                                    const jumlahKeluar = parseInt(barangKeluarInput.value) || 0;
+                                    let barangTerjual = parseInt(input.value) || 0;
+
+                                    // Batasi barang terjual maksimal ke barang keluar
+                                    if (barangTerjual > jumlahKeluar) {
+                                        barangTerjual = jumlahKeluar;
+                                        input.value = barangTerjual;
+                                    }
+
+                                    // Hitung barang retur
+                                    const barangRetur = jumlahKeluar - barangTerjual;
+                                    barangReturInput.value = barangRetur;
+
+                                    // Hitung total per baris
+                                    const totalInput = document.querySelector(`.total-harga-input[data-index="${index}"]`);
+                                    const totalRow = barangTerjual * harga;
+                                    totalInput.value = formatRupiah(totalRow);
+
+                                    // Update total & grand total
+                                    updateTotals();
+                                }
+                            });
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // Format harga awal saat halaman dimuat
+                                document.querySelectorAll('.total-harga-input').forEach(function(input) {
+                                    input.value = formatRupiah(parseRupiah(input.value));
+                                });
+
+                                // Event listener barang keluar
+                                document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
+                                    input.addEventListener('input', function() {
+                                        updateTotals();
+                                    });
+                                });
+
+                                // Event listener barang terjual
+                                document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
+                                    input.addEventListener('input', function () {
+                                        const index = this.dataset.index;
+
+
+
+                                        const barangKeluar = parseInt(barangKeluarInput?.value) || 0;
+                                        let barangTerjual = parseInt(this.value) || 0;
+
+                                        // Batasi barang terjual tidak boleh lebih dari barang keluar
+                                        if (barangTerjual > barangKeluar) {
+                                            barangTerjual = barangKeluar;
+                                            this.value = barangTerjual;
+                                        }
+
+                                        // Hitung dan isi barang retur
+                                        if (barangReturInput) {
+                                            barangReturInput.value = barangKeluar - barangTerjual;
+                                        }
+
+                                        // Update total keseluruhan
+                                        updateTotals();
+                                    });
+                                });
+
+                                // Event listener ongkir
+                                const ongkirInput = document.getElementById('ongkir-input');
+                                if (ongkirInput) {
+                                    ongkirInput.addEventListener('input', function() {
+                                        this.value = formatRupiah(parseRupiah(this.value));
+                                        updateTotals();
+                                    });
+                                }
+
+                                // Event listener diskon
+                                const discountInput = document.getElementById('discount-input');
+                                if (discountInput) {
+                                    discountInput.addEventListener('input', function() {
+                                        this.value = formatRupiah(parseRupiah(this.value));
+                                        updateTotals();
+                                    });
+                                }
+
+                                // Jalankan update totals pertama kali saat halaman selesai dimuat
+                                updateTotals();
+                            });
+                        </script>
+                    </form>
+                </div>
+                <form action="{{ route('transaksi.update') }}" method="POST" id="form-transaksi-mobile">
+                    @csrf
+                        <div class="md:hidden space-y-2">
+                            <div class="hidden">
+                                <input type="date" id="tanggal_transaksi_new"
+                                class="form-input w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 transition"
+                                name="tanggal_transaksi"  required />
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#tanggal_transaksi_new').val($('#tanggal_transaksi').val());
+                                        $('#tanggal_transaksi').on('change input', function () {
+                                            $('#tanggal_transaksi_new').val($(this).val());
+                                        });
+                                    });
+                                </script>
+                                <input type="text"
+                                class="form-input w-full rounded-md border-gray-300  text-gray-800 font-bold text-lg"
+                                name="nomor_transaksi" value="{{ $transaksi->kode_transaksi }}" readonly />
+                                <input type="text"
+                                class="form-input w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 transition"
+                                name="kode_mitra" value="{{ $mitra->kode_mitra }}" readonly />
+                                {{-- ------------------------------------------- --}}
+                                {{-- -----------Data -------------------------- --}}
+                            </div>
+                            @php $totalSemua_mobile = 0; @endphp
+
+                            @forelse ($product->where('kode_transaksi', $transaksi->kode_transaksi) as $myindex => $row)
+
+                                <!-- Modal Detail Produk -->
+                                @php
+                                    $barang_keluar_mobile = (int) ($row->barang_keluar ?? 0);
+                                    $barang_terjual_mobile = (int) ($row->barang_terjual ?? 0);
+                                    $barang_retur_mobile = (int) ($row->barang_retur ?? 0);
+                                    $harga_mobile = (int) ($row->penawaran->harga ?? 0);
+                                    $total_barang_keluar_mobile = $barang_terjual_mobile + $barang_retur_mobile;
+                                    $total_mobile = $barang_keluar_mobile * $harga_mobile;
+                                    $totalSemua_mobile += $total_mobile;
+                                @endphp
+
+                                <!-- Item Produk Mobile -->
+                                <div class="flex items-center justify-between border rounded-lg p-3 bg-white shadow-sm">
+                                    <!-- Kiri: Hapus + Nama Produk -->
+                                    <div class="flex items-center gap-3">
+                                        <!-- Tombol Hapus -->
+                                        <button type="button"
+                                            onclick="hapusItem('{{ $transaksi->kode_transaksi }}','{{ $row->produk->kode_produk }}')"
+                                            class="text-red-600 hover:text-red-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6
+                                                    m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
+                                            </svg>
+                                        </button>
+
+                                        <!-- Nama Produk -->
+                                        <button type="button"
+                                            onclick="showProductDetail2('{{ $row->produk->kode_produk }}')"
+                                            class="text-sm font-semibold text-gray-800 hover:text-blue-600">
+                                            {{ $row->produk->nama_produk }}
+                                        </button>
+                                    </div>
+
+                                    <!-- Kanan: Harga -->
+                                    <p class="text-sm text-gray-700 font-medium totalku"  data-index="{{ $myindex }}">
+                                        Rp.{{ number_format($total_mobile ?? 0, 0, ',', '.') }}
+                                    </p>
+                                </div>
+
+
+
+                                <div id="modal-detail2-{{ $row->produk->kode_produk }}"
+                                    class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/40 flex items-center justify-center">
+
+                                    <div class="relative bg-white w-11/12 max-w-sm mx-auto rounded-lg shadow-lg p-5 z-10 space-y-3 animate-fadeIn">
+                                        <!-- Header Modal -->
+                                        <div class="flex justify-between items-center mb-3">
+                                            <h3 class="text-lg font-bold">Detail Produk</h3>
+                                            <button type="button"
+                                                class="text-gray-500 hover:text-red-600 text-2xl leading-none"
+                                                onclick="closeProductDetail2('{{ $row->produk->kode_produk }}')">
+                                                &times;
+                                            </button>
+                                        </div>
+
+                                        <!-- Tabel Detail -->
+                                        <table class="w-full text-sm border border-gray-300">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Kode</td>
+                                                    <td class="border px-2 py-1">{{ $row->produk->kode_produk }}</td>
+                                                    <input type="hidden" name="kode_produk[]"
+                                                    value="{{ $row->produk->kode_produk }}">
+                                                </tr>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Nama</td>
+                                                    <td class="border px-2 py-1">{{ $row->produk->nama_produk }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Barang Keluar <span class="text-red-600">*</span></td>
+                                                    <td class="border px-2 py-1">
+                                                        <input type="number" name="barang_keluar[]"
+                                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-keluar-input-mobile"
+                                                            value="{{ $barang_keluar_mobile }}"
+                                                            data-harga="{{ $harga_mobile }}"
+                                                            data-index="{{ $myindex }}"
+                                                            min="0">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Barang Terjual <span class="text-red-600">*</span></td>
+                                                    <td class="border px-2 py-1">
+                                                        <input type="number" name="barang_terjual[]"
+                                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-terjual-input-mobile"
+                                                            value="{{ $barang_terjual_mobile }}"
+                                                            data-index="{{ $myindex }}"
+                                                            min="0">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Barang Retur <span class="text-red-600">*</span></td>
+                                                    <td class="border px-2 py-1">
+                                                        <input type="number" name="barang_retur[]"
+                                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-retur-input-mobile"
+                                                            value="{{ $barang_retur_mobile }}"
+                                                            data-index="{{ $myindex }}"
+                                                            min="0">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border px-2 py-1 font-medium">Total</td>
+                                                    <td class="border px-2 py-1">Rp.
+                                                        <input type="text" name="harga[]"
+                                                            value="{{ number_format($total_mobile, 0, ',', '.') }}"
+                                                            class="form-input harga-input w-24 text-right border-gray-300 rounded-md total-harga-input-mobile"
+                                                            data-index="{{ $myindex }}"
+                                                            readonly>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <small><span class="text-red-600">*</span> : Form yang bisa di isi</small>
+                                        <!-- Tombol Tutup -->
+                                        <button type="button"
+                                            class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                                            onclick="closeProductDetail2('{{ $row->produk->kode_produk }}')">
+                                            Simpan
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- JS Modal Handler -->
+                                <script>
+                                    function showProductDetail2(kode) {
+                                        const modal = document.getElementById('modal-detail2-' + kode);
+                                        modal.classList.remove('hidden');
+                                        modal.classList.add('flex');
+                                    }
+
+                                    function closeProductDetail2(kode) {
+                                        const modal = document.getElementById('modal-detail2-' + kode);
+                                        modal.classList.remove('flex');
+                                        modal.classList.add('hidden');
+                                    }
+                                </script>
+                            @empty
+                                <!-- Tidak Ada Produk -->
+                                <div class="border border-gray-300 px-3 py-2 text-center text-gray-500 rounded-md bg-white">
+                                    Belum ada produk yang ditawarkan.
+                                </div>
+                            @endforelse
+                        </div>
+
+                    </div>
+
+                    <div class="md:hidden">
+
+                        <table class="w-full mt-6 border-collapse border border-gray-300">
+                            <!-- Ongkir -->
+                            <tr>
+
                                 <td class="border border-gray-300 px-3 py-2 font-semibold text-right">
                                     Ongkir
                                 </td>
                                 <td class="border border-gray-300 px-3 py-2 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="mr-1">Rp.</span>
-                                        <input type="text" name="ongkir" id="ongkir-input"
-                                            class="form-input w-24 text-right border-gray-300 rounded-md"
-                                            value="{{ $transaksi->ongkir ?? '0' }}">
+                                        <input type="text" name="ongkir" id="ongkir-input-mobile" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ $transaksi->ongkir ?? '0' }}">
                                     </div>
                                 </td>
                             </tr>
                             <!-- Total -->
                             <tr>
-                                <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+
                                 <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Total</td>
                                 <td class="border border-gray-300 px-3 py-2 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="mr-1">Rp.</span>
-                                        <input type="text" name="total" id="total-input"
-                                            class="form-input w-24 text-right border-gray-300 rounded-md"
-                                            value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}"
-                                            readonly>
+                                        <input type="text" name="total" id="total-input-mobile" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}" readonly>
                                     </div>
                                 </td>
                             </tr>
                             <!-- Discount -->
                             <tr>
-                                <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+
                                 <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Discount</td>
                                 <td class="border border-gray-300 px-3 py-2 text-center">
                                     <div class="flex items-center justify-center">
                                         <span class="mr-1">Rp.</span>
-                                        <input type="text" name="discount" id="discount-input"
-                                            class="form-input w-24 text-right border-gray-300 rounded-md"
-                                            value="{{ number_format($transaksi->diskon, 0, ',', '.') }}">
+                                        <input type="text" name="discount" id="discount-input-mobile" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ number_format($transaksi->diskon, 0, ',', '.') }}">
                                     </div>
                                 </td>
                             </tr>
                             <!-- Grand Total -->
                             <tr>
-                                <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
+
                                 <td class="border border-gray-300 px-3 py-2 font-bold text-right">Grand Total</td>
                                 <td class="border border-gray-300 px-3 py-2 text-center font-bold">
                                     <div class="flex items-center justify-center">
                                         <span class="mr-1">Rp.</span>
-                                        <input type="text" name="grand_total" id="grand-total-input"
-                                            class="form-input w-24 text-right border-gray-300 rounded-md font-bold"
-                                            value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}"
-                                            readonly>
+                                        <input type="text" name="grand_total" id="grand-total-input-mobile" class="form-input w-24 text-right border-gray-300 rounded-md font-bold" value="{{ $transaksi->total ?? number_format($totalSemua_mobile, 0, ',', '.') }}" readonly>
                                     </div>
                                 </td>
                             </tr>
-                        </tbody>
-                        <tr>
-                            <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
-                            <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Status Bayar</td>
-                            <td class="border border-gray-300 px-3 py-2 text-center">
-                                <select name="status_bayar" id="status-bayar-input"
-                                    class="form-input w-full text-center border-gray-300 rounded-md">
-                                    <option value="Belum Bayar"
-                                        {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Belum Bayar' ? 'selected' : '' }}>
-                                        Belum Bayar</option>
-                                    <option value="Sudah Bayar"
-                                        {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Sudah Bayar' ? 'selected' : '' }}>
-                                        Sudah Bayar</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="border border-gray-300 px-3 py-2" colspan="5"></td>
-                            <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Tanggal Bayar</td>
-                            <td class="border border-gray-300 px-3 py-2 text-center">
-                                <input type="date" name="tanggal_bayar" id="tanggal-bayar-input"
-                                    class="form-input w-full text-center border-gray-300 rounded-md"
-                                    value="{{ old('tanggal_bayar', $transaksi->tanggal_pembayaran ?? '') }}">
-                            </td>
-                        </tr>
-                    </table>
-                    <script>
-                        function formatRupiah(angka) {
-                            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                        }
+                            <tr>
+                                <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Status Bayar</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <select name="status_bayar" id="status-bayar-input-mobile" class="form-input w-full text-center border-gray-300 rounded-md">
+                                        <option value="Belum Bayar" {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Belum Bayar' ? 'selected' : '' }}>
+                                            Belum Bayar</option>
+                                        <option value="Sudah Bayar" {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Sudah Bayar' ? 'selected' : '' }}>
+                                            Sudah Bayar</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Tanggal Bayar</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <input type="date" name="tanggal_bayar" id="tanggal-bayar-input-mobile" class="form-input w-full text-center border-gray-300 rounded-md" value="{{ old('tanggal_bayar', $transaksi->tanggal_pembayaran ?? '') }}">
+                                </td>
+                            </tr>
+                        </table>
 
-                        function parseRupiah(str) {
-                            return parseInt((str || '0').replace(/\./g, '').replace(/[^0-9]/g, '')) || 0;
-                        }
-
-                        function updateTotals() {
-                            let total = 0;
-                            document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
-                                const index = input.dataset.index;
-                                const harga = parseInt(input.dataset.harga) || 0;
-                                const jumlahKeluar = parseInt(input.value) || 0;
-
-                                const barangTerjualInput = document.querySelector('.barang-terjual-input[data-index="' + index +
-                                    '"]');
-                                const barangReturInput = document.querySelector('.barang-retur-input[data-index="' + index + '"]');
-                                const totalInput = document.querySelector('.total-harga-input[data-index="' + index + '"]');
-
-                                let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
-
-                                // Batasi barang terjual maksimal ke barang keluar
-                                // if (barangTerjual > jumlahKeluar) {
-                                //     barangTerjual = jumlahKeluar;
-                                //     if (barangTerjualInput) {
-                                //         barangTerjualInput.value = barangTerjual;
-                                //     }
-                                // }
-
-                                // // Hitung barang retur
-                                // const barangRetur = jumlahKeluar - barangTerjual;
-
-                                // if (barangReturInput) {
-                                //     barangReturInput.value = barangRetur;
-                                // }
-
-                                // Hitung total per baris berdasarkan kondisi
-                                let totalRow = 0;
-                                if (barangTerjual > 0) {
-                                    totalRow = barangTerjual * harga; // Jika barang terjual ada, hitung berdasarkan terjual
-                                } else {
-                                    totalRow = jumlahKeluar * harga; // Jika tidak ada, hitung berdasarkan keluar
-                                }
-
-                                if (totalInput) {
-                                    totalInput.value = formatRupiah(totalRow);
-                                }
-
-                                // Tambah ke total keseluruhan
-                                total += totalRow;
-                            });
-
-                            // Update total keseluruhan
-                            const totalInput = document.getElementById('total-input');
-                            if (totalInput) {
-                                totalInput.value = formatRupiah(total);
-                            }
-
-                            // Ambil ongkir & diskon
-                            const ongkir = parseRupiah(document.getElementById('ongkir-input')?.value);
-                            const discount = parseRupiah(document.getElementById('discount-input')?.value);
-                            const grandTotal = total + ongkir - discount;
-
-                            // Update grand total
-                            const grandTotalInput = document.getElementById('grand-total-input');
-                            if (grandTotalInput) {
-                                grandTotalInput.value = formatRupiah(grandTotal);
-                            }
-                        }
-                        document.addEventListener('input', function(e) {
-                            if (e.target.classList.contains('barang-terjual-input')) {
-                                const input = e.target;
-                                const index = input.dataset.index;
-
-                                const barangKeluarInput = document.querySelector(`.barang-keluar-input[data-index="${index}"]`);
-                                const barangReturInput = document.querySelector(`.barang-retur-input[data-index="${index}"]`);
-                                const harga = parseInt(barangKeluarInput.dataset.harga) || 0;
-
-                                const jumlahKeluar = parseInt(barangKeluarInput.value) || 0;
-                                let barangTerjual = parseInt(input.value) || 0;
-
-                                // Batasi barang terjual maksimal ke barang keluar
-                                if (barangTerjual > jumlahKeluar) {
-                                    barangTerjual = jumlahKeluar;
-                                    input.value = barangTerjual;
-                                }
-
-                                // Hitung barang retur
-                                const barangRetur = jumlahKeluar - barangTerjual;
-                                barangReturInput.value = barangRetur;
-
-                                // Hitung total per baris
-                                const totalInput = document.querySelector(`.total-harga-input[data-index="${index}"]`);
-                                const totalRow = barangTerjual * harga;
-                                totalInput.value = formatRupiah(totalRow);
-
-                                // Update total & grand total
-                                updateTotals();
-                            }
-                        });
-
-                        document.addEventListener('DOMContentLoaded', function() {
-                            // Format harga awal saat halaman dimuat
-                            document.querySelectorAll('.total-harga-input').forEach(function(input) {
-                                input.value = formatRupiah(parseRupiah(input.value));
-                            });
-
-                            // Event listener barang keluar
-                            document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
-                                input.addEventListener('input', function() {
-                                    updateTotals();
-                                });
-                            });
-
-                            // Event listener barang terjual
-                            document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
-                                input.addEventListener('input', function() {
-                                    const index = this.dataset.index;
-                                    const barangKeluar = parseInt(document.querySelector(
-                                        '.barang-keluar-input[data-index="' + index + '"]')?.value) || 0;
-
-                                    // Batasi barang terjual maksimal sesuai barang keluar
-                                    if (parseInt(this.value) > barangKeluar) {
-                                        this.value = barangKeluar;
-                                    }
-
-                                    updateTotals();
-                                });
-                            });
-
-                            // Event listener ongkir
-                            const ongkirInput = document.getElementById('ongkir-input');
-                            if (ongkirInput) {
-                                ongkirInput.addEventListener('input', function() {
-                                    this.value = formatRupiah(parseRupiah(this.value));
-                                    updateTotals();
-                                });
-                            }
-
-                            // Event listener diskon
-                            const discountInput = document.getElementById('discount-input');
-                            if (discountInput) {
-                                discountInput.addEventListener('input', function() {
-                                    this.value = formatRupiah(parseRupiah(this.value));
-                                    updateTotals();
-                                });
-                            }
-
-                            // Jalankan update totals pertama kali saat halaman selesai dimuat
-                            updateTotals();
-                        });
-                    </script>
-                </div>
-                <div class=" md:hidden space-y-2">
-
-                    @foreach ($product->where('kode_transaksi', $transaksi->kode_transaksi) as $index2 => $row)
-                        <div class="flex items-center justify-between border rounded-lg p-3 bg-white shadow-sm ">
-
-                            <!-- Nama Produk klik buka modal -->
-                            <button type="button" onclick="showProductDetail('{{ $row->produk->kode_produk }}')"
-                                class="text-left text-sm font-semibold text-gray-800 hover:text-blue-600">
-                                {{ $row->produk->nama_produk }}
-                            </button>
-
-                            <!-- Tombol Hapus -->
-                            <button type="button"
-                                onclick="hapusItem('{{ $transaksi->kode_transaksi }}','{{ $row->produk->kode_produk }}')"
-                                class="text-red-600 hover:text-red-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z" />
-                                </svg>
-                            </button>
-
-                        </div>
-
-                        <!-- Modal Detail Produk -->
-                        <div id="modal-detail2-{{ $row->produk->kode_produk }}"
-                            class="fixed inset-0 z-40 hidden overflow-y-auto bg-black/40 flex items-center justify-center">
-                            @php
-                                    $barang_keluar2 = (int) ($row->barang_keluar ?? 0);
-                                    $barang_terjual2 = (int) ($row->barang_terjual ?? 0);
-                                    $barang_retur2 = (int) ($row->barang_retur ?? 0);
-                                    $harga2 = (int) ($row->penawaran->harga ?? 0);
-                                    $total_barang_keluar2 = $barang_terjual2 + $barang_retur2;
-                                    $total2 = $barang_keluar2 * $harga2;
-                                    $totalSemua += $total2;
-                                @endphp
-                            <!-- Modal Content -->
-                            <div
-                                class="relative bg-white w-11/12 max-w-sm mx-auto rounded-lg shadow-lg p-5 z-10 space-y-3 animate-fadeIn">
-                                <div class="flex justify-between items-center mb-3">
-                                    <h3 class="text-lg font-bold">Detail Produk</h3>
-                                    <button type="button" class="text-gray-500 hover:text-red-600 text-2xl leading-none"
-                                        onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">&times;</button>
-                                </div>
-
-                                <table class="w-full text-sm border border-gray-300 ">
-                                    <tbody>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Kode</td>
-                                            <td class="border px-2 py-1">{{ $row->produk->kode_produk }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Nama</td>
-                                            <td class="border px-2 py-1">{{ $row->produk->nama_produk }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Barang Keluar</td>
-                                            <td class="border px-2 py-1">
-                                                <input type="number" name="barang_keluar[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-keluar-input"
-                                            value="{{ $barang_keluar2 }}" 
-                                            data-harga="{{ $harga2 }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Barang Terjual</td>
-                                            <td class="border px-2 py-1">
-                                                <input type="number" name="barang_terjual[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-terjual-input"
-                                            value="{{ $barang_terjual2 }}" data-index="{{ $index2 }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Barang Retur</td>
-                                            <td class="border px-2 py-1">
-                                                  <input type="number" name="barang_retur[]"
-                                            class="form-input w-20 text-center border-gray-300 rounded-md barang-retur-input"
-                                            value="{{ $barang_retur2 }}" data-index="{{ $index2 }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border px-2 py-1 font-medium">Total</td>
-                                            <td class="border px-2 py-1">Rp.
-                                                <input type="text" name="harga[]"
-                                                value="{{ number_format($total2, 0, ',', '.') }}"
-                                                class="form-input harga-input w-24 text-right border-gray-300 rounded-md total-harga-input2"
-                                                readonly ></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <button type="button"
-                                    class="w-full mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-                                    onclick="closeProductDetail('{{ $row->produk->kode_produk }}')">
-                                    Tutup
-                                </button>
-                            </div>
-                        </div>
                         <script>
-                            function showProductDetail(kode) {
-                                const modal = document.getElementById('modal-detail2-' + kode);
-                                modal.classList.remove('hidden');
-                                modal.classList.add('flex');
+                            // Format angka ke format Rupiah (mis: 15000 → 15.000)
+                            function formatRupiah(angka) {
+                                return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                             }
 
-                            function closeProductDetail(kode) {
-                                const modal = document.getElementById('modal-detail2-' + kode);
-                                modal.classList.remove('flex');
-                                modal.classList.add('hidden');
-                            }
-                        </script>
-                    @endforeach
-                    
-                </div>
-               
-            </div>
-            <div class="md:hidden">
-               
-                <table class="w-full mt-6 border-collapse border border-gray-300">
-                   
-                <!-- Ongkir -->
-                <tr>
-
-                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">
-                        Ongkir
-                    </td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <div class="flex items-center justify-center">
-                            <span class="mr-1">Rp.</span>
-                            <input type="text" name="ongkir" id="ongkir-input2" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ $transaksi->ongkir ?? '0' }}">
-                        </div>
-                    </td>
-                </tr>
-                <!-- Total -->
-                <tr>
-
-                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Total</td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <div class="flex items-center justify-center">
-                            <span class="mr-1">Rp.</span>
-                            <input type="text" name="total" id="total-input2" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}" readonly>
-                        </div>
-                    </td>
-                </tr>
-                <!-- Discount -->
-                <tr>
-
-                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Discount</td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <div class="flex items-center justify-center">
-                            <span class="mr-1">Rp.</span>
-                            <input type="text" name="discount" id="discount-input2" class="form-input w-24 text-right border-gray-300 rounded-md" value="{{ number_format($transaksi->diskon, 0, ',', '.') }}">
-                        </div>
-                    </td>
-                </tr>
-                <!-- Grand Total -->
-                <tr>
-
-                    <td class="border border-gray-300 px-3 py-2 font-bold text-right">Grand Total</td>
-                    <td class="border border-gray-300 px-3 py-2 text-center font-bold">
-                        <div class="flex items-center justify-center">
-                            <span class="mr-1">Rp.</span>
-                            <input type="text" name="grand_total" id="grand-total-input2" class="form-input w-24 text-right border-gray-300 rounded-md font-bold" value="{{ $transaksi->total ?? number_format($totalSemua, 0, ',', '.') }}" readonly>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Status Bayar</td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <select name="status_bayar" id="status-bayar-input2" class="form-input w-full text-center border-gray-300 rounded-md">
-                            <option value="Belum Bayar" {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Belum Bayar' ? 'selected' : '' }}>
-                                Belum Bayar</option>
-                            <option value="Sudah Bayar" {{ old('status_bayar', $transaksi->status_bayar ?? '') == 'Sudah Bayar' ? 'selected' : '' }}>
-                                Sudah Bayar</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="border border-gray-300 px-3 py-2 font-semibold text-right">Tanggal Bayar</td>
-                    <td class="border border-gray-300 px-3 py-2 text-center">
-                        <input type="date" name="tanggal_bayar" id="tanggal-bayar-input2" class="form-input w-full text-center border-gray-300 rounded-md" value="{{ old('tanggal_bayar', $transaksi->tanggal_pembayaran ?? '') }}">
-                    </td>
-                </tr>
-                </table>
-                
-                    <script>
-                        function updateTotals2() {
-                            let total = 0;
-                            document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
-                                const index = input.dataset.index;
-                                const harga = parseInt(input.dataset.harga) || 0;
-                                const jumlahKeluar = parseInt(input.value) || 0;
-
-                                const barangTerjualInput = document.querySelector('.barang-terjual-input[data-index="' + index + '"]');
-                                const barangReturInput = document.querySelector('.barang-retur-input[data-index="' + index + '"]');
-                                const totalInput = document.querySelector('.total-harga-input[data-index="' + index + '"]');
-                              
-
-                                let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
-
-                                if (barangTerjual > jumlahKeluar) {
-                                    barangTerjual = jumlahKeluar;
-                                    barangTerjualInput.value = barangTerjual;
-                                }
-
-                                const barangRetur = jumlahKeluar - barangTerjual;
-                                if (barangReturInput) {
-                                    barangReturInput.value = barangRetur;
-                                }
-
-                                let totalRow = barangTerjual > 0 ? barangTerjual * harga : jumlahKeluar * harga;
-                                if (totalInput) {
-                                    totalInput.value = formatRupiah(totalRow);
-                                }
-
-                                total += totalRow;
-                            });
-
-                            // Update total
-                            const totalInput2 = document.getElementById('total-input2');
-                            if (totalInput2) {
-                                totalInput2.value = formatRupiah(total);
+                            // Ubah format Rupiah ke angka (mis: "15.000" → 15000)
+                            function parseRupiah(str) {
+                                return parseInt((str || '0').replace(/\./g, '').replace(/[^0-9]/g, '')) || 0;
                             }
 
-                            // Ongkir & Discount
-                            const ongkir = parseRupiah(document.getElementById('ongkir-input2')?.value);
-                            const discount = parseRupiah(document.getElementById('discount-input2')?.value);
-                            const grandTotal = total + ongkir - discount;
+                            // Update semua total (subtotal per produk, total, grand total)
+                            function updateTotals2() {
+                                let total = 0;
 
-                            // Update grand total
-                            const grandTotalInput2 = document.getElementById('grand-total-input2');
-                            if (grandTotalInput2) {
-                                grandTotalInput2.value = formatRupiah(grandTotal);
-                            }
-                        }
-                        document.addEventListener('DOMContentLoaded', function() {
-                            // Format harga awal saat halaman dimuat
-                            document.querySelectorAll('.total-harga-input').forEach(function(input) {
-                                input.value = formatRupiah(parseRupiah(input.value));
-                            });
+                                document.querySelectorAll('.barang-keluar-input-mobile').forEach(function(input) {
+                                    const index = input.dataset.index;
+                                    const harga = parseInt(input.dataset.harga) || 0;
+                                    const jumlahKeluar = parseInt(input.value) || 0;
 
-                            // Barang keluar
-                            document.querySelectorAll('.barang-keluar-input').forEach(function(input) {
-                                input.addEventListener('input', function() {
-                                    updateTotals2();
-                                });
-                            });
+                                    // Ambil input terjual & retur berdasarkan index
+                                    const barangTerjualInput = document.querySelector(`.barang-terjual-input-mobile[data-index="${index}"]`);
+                                    const barangReturInput   = document.querySelector(`.barang-retur-input-mobile[data-index="${index}"]`);
+                                    const totalInput         = document.querySelector(`.total-harga-input-mobile[data-index="${index}"]`);
+                                    const totalInputku         = document.querySelector(`.totalku[data-index="${index}"]`);
 
-                            // Barang terjual
-                            document.querySelectorAll('.barang-terjual-input').forEach(function(input) {
-                                input.addEventListener('input', function() {
-                                    const index = this.dataset.index;
-                                    const barangKeluar = parseInt(document.querySelector('.barang-keluar-input[data-index="' + index + '"]')?.value) || 0;
-                                    if (parseInt(this.value) > barangKeluar) {
-                                        this.value = barangKeluar;
+                                    let barangTerjual = parseInt(barangTerjualInput?.value) || 0;
+
+                                    // Batasi terjual tidak lebih dari keluar
+                                    if (barangTerjual > jumlahKeluar) {
+                                        barangTerjual = jumlahKeluar;
+                                        barangTerjualInput.value = barangTerjual;
                                     }
-                                    updateTotals2();
+
+                                    // Hitung total per produk
+                                    const totalRow = (barangTerjual > 0 ? barangTerjual : jumlahKeluar) * harga;
+                                    if (totalInput) totalInput.value = formatRupiah(totalRow);
+
+                                    if (totalInputku) {
+                                        totalInputku.textContent = "Rp. " + formatRupiah(totalRow);
+                                    }
+
+                                    total += totalRow;
                                 });
+
+                                // Tampilkan total semua produk
+                                const totalInput2 = document.getElementById('total-input-mobile');
+                                if (totalInput2) totalInput2.value = formatRupiah(total);
+
+                                // Tambahkan ongkir & diskon
+                                const ongkir   = parseRupiah(document.getElementById('ongkir-input-mobile')?.value);
+                                const discount = parseRupiah(document.getElementById('discount-input-mobile')?.value);
+                                const grandTotal = total + ongkir - discount;
+
+                                const grandTotalInput2 = document.getElementById('grand-total-input-mobile');
+                                if (grandTotalInput2) grandTotalInput2.value = formatRupiah(grandTotal);
+                            }
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // Format ulang total awal di semua input .total-harga-input-mobile
+                                document.querySelectorAll('.total-harga-input-mobile').forEach(function(input) {
+                                    input.value = formatRupiah(parseRupiah(input.value));
+                                });
+
+                                // Event input: barang keluar
+                                document.querySelectorAll('.barang-keluar-input-mobile').forEach(function(input) {
+                                    input.addEventListener('input', updateTotals2);
+                                });
+
+                                // Event input: barang terjual
+                                document.querySelectorAll('.barang-terjual-input-mobile').forEach(function(input) {
+                                    input.addEventListener('input', function () {
+                                        const index = this.dataset.index;
+
+                                        const barangKeluarInput = document.querySelector(`.barang-keluar-input-mobile[data-index="${index}"]`);
+                                        const barangReturInput  = document.querySelector(`.barang-retur-input-mobile[data-index="${index}"]`);
+
+                                        const barangKeluar = parseInt(barangKeluarInput?.value) || 0;
+                                        let barangTerjual = parseInt(this.value) || 0;
+
+                                        // Batasi terjual tidak melebihi keluar
+                                        if (barangTerjual > barangKeluar) {
+                                            barangTerjual = barangKeluar;
+                                            this.value = barangTerjual;
+                                        }
+
+                                        // Update barang retur secara otomatis
+                                        if (barangReturInput) {
+                                            barangReturInput.value = barangKeluar - barangTerjual;
+                                        }
+
+                                        updateTotals2();
+                                    });
+                                });
+
+                                // Event input: ongkir
+                                const ongkirInput2 = document.getElementById('ongkir-input-mobile');
+                                if (ongkirInput2) {
+                                    ongkirInput2.addEventListener('input', function() {
+                                        this.value = formatRupiah(parseRupiah(this.value));
+                                        updateTotals2();
+                                    });
+                                }
+
+                                // Event input: diskon
+                                const discountInput2 = document.getElementById('discount-input-mobile');
+                                if (discountInput2) {
+                                    discountInput2.addEventListener('input', function() {
+                                        this.value = formatRupiah(parseRupiah(this.value));
+                                        updateTotals2();
+                                    });
+                                }
+
+                                // Jalankan saat halaman dimuat pertama kali
+                                updateTotals2();
                             });
+                        </script>
 
-                            // Ongkir input2
-                            const ongkirInput2 = document.getElementById('ongkir-input2');
-                            if (ongkirInput2) {
-                                ongkirInput2.addEventListener('input', function() {
-                                    this.value = formatRupiah(parseRupiah(this.value));
-                                    updateTotals2();
-                                });
-                            }
+                    </div>
+                 </form>
 
-                            // Discount input2
-                            const discountInput2 = document.getElementById('discount-input2');
-                            if (discountInput2) {
-                                discountInput2.addEventListener('input', function() {
-                                    this.value = formatRupiah(parseRupiah(this.value));
-                                    updateTotals2();
-                                });
-                            }
-
-                            // Jalankan pertama kali
-                            updateTotals2();
-                        });
-
-
-                    </script>
-            </div>
-            
+        </div>
+        <!-- Tombol Simpan -->
+        <div class="md:hidden mt-6 flex justify-end">
+            <button type="button"
+                onclick="document.getElementById('form-transaksi-mobile').submit();"
+                class="w-full inline-flex items-center gap-2 px-5 py-2 bg-green-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-full shadow transition duration-150">
+                <i class="fas fa-save"></i> Simpan Data
+            </button>
         </div>
 
-        <div class="flex flex-wrap gap-3 mt-6 justify-between">
-            <button type="submit"
-                class="inline-flex items-center px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150">
+        <!-- Dropdown Aksi -->
+        <div class="md:hidden mt-4">
+
+            <select id="action-selector"
+                class="block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200 bg-white">
+                <option selected disabled>-- Cetak Nota --</option>
+
+                @php
+                    $bolehKonsinyasi = $product->where('barang_terjual', '>', 0)->count() > 0 ||
+                                        $product->where('barang_keluar', '>', 0)->count() > 0;
+                    $bolehInvoice = $product->where('barang_terjual', '>', 0)->count() > 0;
+                    $bolehKwitansi = $transaksi->status_bayar === 'Sudah Bayar';
+                @endphp
+
+                <option value="konsinyasi" @if(!$bolehKonsinyasi) disabled @endif>📝 Buat Nota Konsinyasi</option>
+                <option value="invoice" @if(!$bolehInvoice) disabled @endif>📄 Buat Invoice</option>
+                <option value="kwitansi" @if(!$bolehKwitansi) disabled @endif>🧾 Buat Kwitansi</option>
+            </select>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const select = document.getElementById('action-selector');
+                    const kode = @json($transaksi->kode_transaksi);
+
+                    select?.addEventListener('change', function () {
+                        const value = this.value;
+                        let url = '';
+
+                        switch (value) {
+                            case 'konsinyasi':
+                                url = `{{ route('transaksi.konsinyasi', ['id' => '__KODE__', 'type' => 'konsinyasi']) }}`.replace('__KODE__', kode);
+                                break;
+                            case 'invoice':
+                                url = `{{ route('transaksi.kwitansi', ['id' => '__KODE__', 'type' => 'invoice']) }}`.replace('__KODE__', kode);
+                                break;
+                            case 'kwitansi':
+                                url = `{{ route('transaksi.invoce', ['id' => '__KODE__', 'type' => 'kwitansi']) }}`.replace('__KODE__', kode);
+                                break;
+                        }
+
+                        if (url) {
+                            window.open(url, '_blank');
+                        }
+
+                        this.selectedIndex = 0;
+                    });
+                });
+            </script>
+
+        </div>
+
+        <div class="flex flex-wrap gap-3 mt-6 justify-between ">
+
+            <button type="button"
+                onclick="document.getElementById('form-transaksi').submit();"
+                class="hidden md:block inline-flex items-center px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150">
                 Simpan Data
             </button>
 
 
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap gap-3 hidden md:block">
                 <a href="{{ route('transaksi.konsinyasi', ['id' => $transaksi->kode_transaksi, 'type' => 'konsinyasi']) }}"
                     target="_BLANK"
                     class="inline-flex items-center px-5 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow transition duration-150"
@@ -1222,7 +1389,8 @@
                 updateButtons();
             });
         </script>
-    </form>
+
+
 
     <script>
         function updateKodeTransaksi(kodeTransaksi, kodeMitra) {

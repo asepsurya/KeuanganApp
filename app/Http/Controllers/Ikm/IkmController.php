@@ -27,7 +27,7 @@ class IkmController extends Controller
                 <img class="w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-black" src="' . $foto . '" alt="Foto">
                 <span>' . e($item->nama) . '</span>
             </a>',
-            
+
             '<div class="">'. ($item->jenis_kelamin === 'L' ? '<span class="text-blue-500">Laki-laki</span>' :
             ($item->jenis_kelamin === 'P' ? '<span class="text-pink-500">Perempuan</span>' :
             '<span class="text-gray-500">Tidak Diketahui</span></div>')) . '</div>',
@@ -41,7 +41,7 @@ class IkmController extends Controller
         // Hitung jumlah berdasarkan jenis kelamin
      $jumlah = ikm::select('jenis_kelamin', DB::raw('count(*) as total'))->whereIn('jenis_kelamin', ['L', 'P'])
         ->groupBy('jenis_kelamin')
-        ->pluck('total', 'jenis_kelamin'); 
+        ->pluck('total', 'jenis_kelamin');
 
       return view("ikm.index",[
         "activeMenu" => "ikm",
@@ -84,7 +84,7 @@ class IkmController extends Controller
       "sosmed" => "nullable|string|max:100",
       "website" => "nullable|url|max:255",
       "email" => "required|email|max:255",
-     
+
     ]);
 
 
@@ -99,7 +99,7 @@ class IkmController extends Controller
       'email' => $validatedData['email'], // Gunakan NIK sebagai email default jika tidak ada
       'password' => $validatedData['telp'],
     ]);
-    
+
     return redirect()->route("index.ikm")->with("success", "Data has been saved successfully!");
   }
   public function update($id)
@@ -118,7 +118,7 @@ class IkmController extends Controller
 
     // Ambil semua field sebagai array
     $data = $ikm->toArray();
-
+    unset($data['sosmed'], $data['website']);
     // Hitung presentase kelengkapan data
     $totalFields = count($data);
     $emptyFields = collect($data)
@@ -176,8 +176,8 @@ class IkmController extends Controller
             // Log the activity
             if($ikm){
                 activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Memperbarui Foto Profil Pengguna');
-            }       
-            
+            }
+
             return redirect()->back()->with("success", "Profile photo updated successfully.");
 
         } catch (\Exception $e) {
@@ -209,7 +209,7 @@ class IkmController extends Controller
             "sosmed" => "nullable|string|max:100",
             "website" => "nullable|url|max:255",
             "email" => "nullable|email|max:255",
-        
+
         ]);
 
         // Update data di database
@@ -222,8 +222,8 @@ class IkmController extends Controller
             // Log the activity
             if($ikm){
                 activity('ikm')->performedOn($ikm)->causedBy(auth()->user())->log('Memperbarui Data Pengguna');
-            }  
-      
+            }
+
          return redirect()->route('ikm.update',$request->id)->with("success", "Profile photo updated successfully.");
      }
 
@@ -240,7 +240,7 @@ class IkmController extends Controller
             if ($ikm->foto) {
                 Storage::disk('public')->delete($ikm->foto);
             }
-            
+
             $ikm->delete();
 
             // Hapus user terkait

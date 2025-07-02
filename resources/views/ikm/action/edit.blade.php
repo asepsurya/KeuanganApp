@@ -116,9 +116,9 @@
         });
     </script>
     <div class="flex border-b overflow-x-auto no-scrollbar">
-         @if (auth()->user()->role == 'admin')
+         @if (auth()->user()->role == 'admin' | auth()->user()->role == 'superadmin' )
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(0)">Detail IKM</button>
-       
+
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(1)">Data Mitra</button>
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(2)">Data Produk</button>
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(3)">Riwayat
@@ -187,7 +187,7 @@
                                 style="width: {{ $percentage }}%;">
                                 {{ $percentage }}%
                             </div>
-                        </div> 
+                        </div>
                         @if ($emptyFields > 0)
                             <p class="text-sm text-black/40 dark:text-white/40 mt-1">Masih ada {{ $emptyFields }} data yang belum diisi.</p>
                         @endif
@@ -514,13 +514,13 @@
                             value="{{ old('telp', $ikm->telp ?? '') }}" />
                     </div>
 
-                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5" hidden>
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Sosial Media</label>
                         <input type="text" name="sosmed" placeholder="Sosial Media" class="form-input"
                             value="{{ old('sosmed', $ikm->sosmed ?? '') }}" />
                     </div>
 
-                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5" hidden>
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Website</label>
                         <input type="text" name="website" placeholder="Website" class="form-input"
                             value="{{ old('website', $ikm->website ?? '') }}" />
