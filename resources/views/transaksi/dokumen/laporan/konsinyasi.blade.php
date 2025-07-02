@@ -131,11 +131,11 @@
                     $ongkir = $transaksi->ongkir;
                     $diskon = $transaksi->diskon;
                 @endphp
-            
+               
                 {{-- Loop Produk --}}
-                @foreach ($transaksi->penawaran as $index => $item)
+                @foreach ($transaksi->ProdukTransaksi as $index => $item)
                     @php
-                        $total = $item->barang_keluar * $item->harga;
+                        $total = $item->barang_keluar * $item->penawaran->harga;
                         $grandTotal += $total;
                     @endphp
                     <tr class="group text-xs border-b border-black">
@@ -144,7 +144,7 @@
                         <td class="border-collapse border-black px-1 text-center font-normal">{{ $item->barang_keluar }}</td>
                         <td class="border-collapse border-black px-1 text-center font-normal">Pcs</td>
                         <td class="border-collapse border-black px-1   text-right font-normal">Rp.</td>
-                        <td class="border-collapse border-black px-1 text-right font-normal">{{ number_format($item->harga, 2, ',', '.') }}</td>
+                        <td class="border-collapse border-black px-1 text-right font-normal">{{ number_format($item->penawaran->harga, 2, ',', '.') }}</td>
                         <td class="border-collapse border-black px-1  text-right font-normal">Rp.</td>
                         <td class="border-collapse border-black px-1 text-right font-normal">{{ number_format($total, 2, ',', '.') }}</td>
                     </tr>
@@ -156,7 +156,7 @@
                     <td colspan="2" class="border-collapse border-black px-1 font-normal">Ongkos Kirim</td>
                     <td class="border-collapse border-black px-1 text-right font-normal">Paket</td>
                     <td colspan="3" class="border-collapse border-black px-1 text-right font-normal">Rp.</td>
-                    <td colspan="4" class="border-collapse border-black px-1 text-right font-normal">{{ number_format($ongkir, 2, ',', '.') }}</td>
+                    <td colspan="4" class="border-collapse border-black px-1 text-right font-normal">{{ number_format($t, 2, ',', '.') }}</td>
                 </tr>
                 @endif
                 {{-- Diskon --}}
