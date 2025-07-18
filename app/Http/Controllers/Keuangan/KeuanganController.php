@@ -7,6 +7,7 @@ use App\Models\App;
 use App\Models\Akun;
 use App\Models\Keuangan;
 use App\Models\Rekening;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\HistoryRekening;
@@ -279,7 +280,7 @@ class KeuanganController extends Controller
             ->performedOn($keuangan)
             ->causedBy(auth()->user())
             ->log('Menambahkan data keuangan baru');
-
+         UserActivity::create(['user_id'=> auth()->id()]);
          return redirect()->back()->with("success", "Berhasil menyimpan data");
     }
 

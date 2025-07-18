@@ -9,7 +9,9 @@ use App\Models\Produk;
 use App\Models\Keuangan;
 use App\Models\Province;
 use App\Models\Transaksi;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -22,22 +24,33 @@ class IkmController extends Controller
     $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
     $ikm = ikm::all()->sortByDesc("created_at")->map(function ($item) {
         $foto = $item->foto ? asset('storage/' . $item->foto) : asset('assets/images/byewind-avatar.png');
-       return [
+        return [
              '<a href="' . route("ikm.update", $item->id) . '" class="flex items-center space-x-2 text-blue-600 hover:underline">
                 <img class="w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-black" src="' . $foto . '" alt="Foto">
                 <span>' . e($item->nama) . '</span>
             </a>',
-
-            '<div class="">'. ($item->jenis_kelamin === 'L' ? '<span class="text-blue-500">Laki-laki</span>' :
-            ($item->jenis_kelamin === 'P' ? '<span class="text-pink-500">Perempuan</span>' :
-            '<span class="text-gray-500">Tidak Diketahui</span></div>')) . '</div>',
-
-           '<div class="mobile">' . ($item->kota?->name ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
-            '<div class="mobile">' .($item->telp ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</div>',
+            '<div ><a href="https://wa.me/' . preg_replace('/[^0-9]/', '', (substr($item->telp, 0, 1) === '0' ? '+62' . substr($item->telp, 1) : $item->telp)) . '" target="_blank" class="inline-flex items-center  py-1 rounded-full  hover:bg-green-600">' .($item->telp ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</a></div>',
             '<div class="mobile">' . ($item->email ?? '<span class="text-gray-500">Tidak Diketahui</span>') .'</div>',
+            '<div>
+                <a href="https://wa.me/' . preg_replace('/[^0-9]/', '', (substr($item->telp, 0, 1) === '0' ? '+62' . substr($item->telp, 1) : $item->telp)) . '" 
+                    target="_blank" 
+                    class="inline-flex items-center justify-center w-8 h-8 border border-green-600 text-green-600 rounded-full hover:bg-green-600 transition"
+                    title="Chat WhatsApp">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 24 24">
+                            <path d="M20.52 3.48A11.92 11.92 0 0 0 12 .03C5.4.03.2 5.23.2 11.83a11.92 11.92 0 0 0 1.64 6.01L.03 24l6.27-1.64a11.84 11.84 0 0 0 6.01 1.64h.05c6.6 0 11.8-5.2 11.8-11.8 0-3.15-1.22-6.12-3.64-8.55Zm-8.67 17.9h-.04a9.9 9.9 0 0 1-5.04-1.39l-.36-.21-3.72.97.99-3.63-.23-.37a9.89 9.89 0 0 1-1.52-5.32C2.93 6.26 7.3 1.9 12.02 1.9c2.64 0 5.11 1.03 6.98 2.9a9.86 9.86 0 0 1-6.15 16.58ZM17 14.93c-.28-.14-1.65-.81-1.91-.9-.26-.1-.45-.14-.63.14-.19.28-.72.9-.88 1.09-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37a8.4 8.4 0 0 1-1.55-1.93c-.16-.28-.02-.43.12-.56.13-.13.28-.32.43-.48.14-.16.19-.28.29-.46.1-.18.05-.35-.02-.49-.08-.14-.63-1.52-.86-2.08-.23-.55-.46-.48-.63-.49h-.54c-.18 0-.46.07-.7.35-.24.28-.93.91-.93 2.22 0 1.3.95 2.55 1.09 2.73.13.18 1.87 2.85 4.53 4a15.1 15.1 0 0 0 1.45.53c.61.19 1.16.17 1.6.1.49-.07 1.65-.67 1.89-1.31.23-.64.23-1.2.16-1.32-.06-.12-.25-.19-.53-.32Z"/>
+                        </svg>
+                </a>
+            </div>',
+
         ];
 
       })->values();
+      $totalUser = User::count();
+      $aktif = UserActivity::where('created_at', '>=', now()->subDays(30))
+                  ->distinct('user_id')
+                  ->count('user_id');
+
+      $tidakAktif = $totalUser - $aktif;
         // Hitung jumlah berdasarkan jenis kelamin
      $jumlah = ikm::select('jenis_kelamin', DB::raw('count(*) as total'))->whereIn('jenis_kelamin', ['L', 'P'])
         ->groupBy('jenis_kelamin')
@@ -46,7 +59,40 @@ class IkmController extends Controller
       return view("ikm.index",[
         "activeMenu" => "ikm",
         "active" => "ikm",
-      ],compact("ikm", "jumlah","logs"));
+      ],compact("ikm", "jumlah","logs",'aktif', 'tidakAktif', 'totalUser'));
+  }
+  public function getAktifData(Request $request)
+  {
+    
+      $periode = $request->periode ?? 'bulanan'; // default ke bulanan
+      $days = match($periode) {
+          'harian'   => 1,
+          'mingguan' => 7,
+          'bulanan'  => 30,
+          default    => 7,
+      };
+
+      $aktif = User::with('ikm')->get()->sortByDesc("created_at")->values()->map(function ($item) use ($days) {
+          $activityCount = UserActivity::where('user_id', $item->id)
+              ->where('created_at', '>=', Carbon::now()->subDays($days))
+              ->count();
+
+          $percentage = min(100, ($activityCount / $days) * 100);
+
+          $progressBar = '
+              <div class="w-60 bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div class="bg-green-600 h-3 rounded-full" style="width: ' . $percentage . '%;"></div>
+              </div>
+              <div class="text-xs  mt-1">' . number_format($percentage, 0) . '%</div>
+          ';
+
+          return [
+              $item->ikm->nama ?? '-',
+              $progressBar,
+          ];
+      })->values();
+
+      return response()->json($aktif);
   }
 
   public function create()

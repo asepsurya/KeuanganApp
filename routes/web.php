@@ -121,6 +121,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
     Route::get('/people/update/{id}', [IkmController::class, 'update'])->name('ikm.update');
     Route::post('/people/update/action', [IkmController::class, 'updateIkm'])->name('ikm.update.action');
     Route::post('/people/update/foto', [IkmController::class, 'updateFoto'])->name('ikm.update.foto');
+    Route::post('/keaktifan', [IkmController::class, 'getAktifData'])->name('getAktifData');
     // ------------------------------------------------
     // Route Keuangan
     // ------------------------------------------------
