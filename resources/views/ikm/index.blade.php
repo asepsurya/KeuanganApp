@@ -181,7 +181,7 @@
 <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
+{{-- <script>
 document.addEventListener('alpine:init', () => {
     const ctx = document.getElementById('userPieChart').getContext('2d');
 
@@ -216,11 +216,11 @@ document.addEventListener('alpine:init', () => {
         }
     });
 });
-</script>
+</script> --}}
 
 <script>
+    let pieChartInstance = null; // <-- simpan di luar Alpine jika global
     document.addEventListener("alpine:init", () => {
-
     Alpine.data('dataPengguna', () => ({
         init() {
             this.loadData();
@@ -232,7 +232,7 @@ document.addEventListener('alpine:init', () => {
             });
             new simpleDatatables.DataTable("#myTable", {
                 data: {
-                    headings: ["No", "Nama", "No. Telepon", "Email",""],
+                    headings: ["No", "Nama", "No. Telepon", "Email","","Tingkatan Pengguna"],
                     data: numberedData
                 },
                 sortable: false,
@@ -250,51 +250,96 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
-   
-    Alpine.data('dataKeaktifan', () => ({
+ 
+
+   Alpine.data('dataKeaktifan', () => ({
     table: null,
-    periodeAktif: 'bulanan', // default aktif
+    periodeAktif: 'bulanan',
+    pieChartInstance: null,
+
     init() {
-        this.loadData('bulanan'); // default
-    },
+        this.loadData('bulanan'); // load data dan render pie chart default bulanan
+      },
 
     loadData(periode) {
-        this.periodeAktif = periode; // set aktif tombolnya
+        this.periodeAktif = periode;
+        fetch(`/keaktifan?periode=${periode}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ periode: periode })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // ===================== TABEL =====================
+            if (this.table) this.table.destroy();
 
-        fetch(`/keaktifan?periode=${periode}`,{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ periode: periode })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (this.table) this.table.destroy();
-
-                const numberedData = data.map((row, index) => {
-                    return [index + 1, ...row];
-                });
-
-                this.table = new simpleDatatables.DataTable("#TableKeaktifan", {
-                    data: {
-                        headings: ["No", "Nama", "Statistik Keaktifan"],
-                        data: numberedData
-                    },
-                    sortable: false,
-                    searchable: true,
-                    perPage: 10,
-                    perPageSelect: [10, 20, 50, 100],
-                    firstLast: false,
-                    labels: { perPage: '{select}' },
-                    layout: { top: '{select}{search}', bottom: '{info}{pager}' }
-                });
+            const numberedData = data.data.map((row, index) => {
+                return [index + 1, ...row];
             });
+
+            this.table = new simpleDatatables.DataTable("#TableKeaktifan", {
+                data: {
+                    headings: ["No", "Nama", "Statistik Keaktifan"],
+                    data: numberedData
+                },
+                sortable: false,
+                searchable: true,
+                perPage: 10,
+                perPageSelect: [10, 20, 50, 100],
+                firstLast: false,
+                labels: { perPage: '{select}' },
+                layout: { top: '{select}{search}', bottom: '{info}{pager}' }
+            });
+
+            // ===================== PIE CHART =====================
+            const ctx = document.getElementById('userPieChart').getContext('2d');
+            const totalUser = data.total_user;
+            const aktif = data.user_aktif;
+            const tidakAktif = data.tidakaktif;
+
+            const chartData = {
+                labels: ['Aktif', 'Tidak Aktif'],
+                datasets: [{
+                    label: 'Keaktifan User',
+                    data: [aktif, tidakAktif],
+                    backgroundColor: ['#16A34A', '#E5E7EB'],
+                    borderWidth: 1
+                }]
+            };
+
+            const chartOptions = {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                const percentage = (value / totalUser * 100).toFixed(1);
+                                return `${context.label}: ${value} user (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            };
+
+            if (pieChartInstance) {
+                pieChartInstance.destroy();
+            }
+
+            pieChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: chartData,
+                options: chartOptions
+            });
+        });
     }
 }));
-
-
 });
 
 // Icon SVG Text (biar gak ulang nulis)

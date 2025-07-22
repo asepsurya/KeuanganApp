@@ -41,16 +41,19 @@ class IkmController extends Controller
                         </svg>
                 </a>
             </div>',
-
+            '<form action="' . route('ikm.updateRole', $item->id) . '" method="POST">
+              ' . csrf_field() . '
+              <select name="role" onchange="this.form.submit()" id="role"
+                  class="form-select py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;">
+                  <option value="admin" ' . ($item->user->role == "admin" ? "selected" : "") . '>Admin</option>
+                  <option value="platinum" ' . ($item->user->role == "platinum" ? "selected" : "") . '>Platinum</option>
+                  <option value="gold" ' . ($item->user->role == "gold" ? "selected" : "") . '>Gold</option>
+              </select>
+          </form>'
         ];
 
       })->values();
-      $totalUser = User::count();
-      $aktif = UserActivity::where('created_at', '>=', now()->subDays(30))
-                  ->distinct('user_id')
-                  ->count('user_id');
 
-      $tidakAktif = $totalUser - $aktif;
         // Hitung jumlah berdasarkan jenis kelamin
      $jumlah = ikm::select('jenis_kelamin', DB::raw('count(*) as total'))->whereIn('jenis_kelamin', ['L', 'P'])
         ->groupBy('jenis_kelamin')
@@ -59,40 +62,74 @@ class IkmController extends Controller
       return view("ikm.index",[
         "activeMenu" => "ikm",
         "active" => "ikm",
-      ],compact("ikm", "jumlah","logs",'aktif', 'tidakAktif', 'totalUser'));
+      ],compact("ikm", "jumlah","logs"));
+  }
+  public function updateRole(Request $request, $id)
+  {
+      $request->validate([
+          'role' => 'required|in:admin,platinum,gold'
+      ]);
+      $user = User::findOrFail($id);
+      // Hapus role lama dan assign yang baru
+      $user->syncRoles([$request->role]);
+      $user->update(['role' => $request->role]);
+      return redirect()->back()->with('success', 'Role berhasil diperbarui.');
   }
   public function getAktifData(Request $request)
   {
     
-      $periode = $request->periode ?? 'bulanan'; // default ke bulanan
-      $days = match($periode) {
-          'harian'   => 1,
-          'mingguan' => 7,
-          'bulanan'  => 30,
-          default    => 7,
-      };
+          // 1. Tentukan periode & durasi hari
+        $periode = $request->periode ?? 'bulanan';
+        $days = match($periode) {
+            'harian'   => 1,
+            'mingguan' => 7,
+            'bulanan'  => 30,
+            default    => 7,
+        };
 
-      $aktif = User::with('ikm')->get()->sortByDesc("created_at")->values()->map(function ($item) use ($days) {
-          $activityCount = UserActivity::where('user_id', $item->id)
-              ->where('created_at', '>=', Carbon::now()->subDays($days))
-              ->count();
+        // 2. Ambil semua user & hitung aktivitas
+        $users = User::with('ikm')->get();
+        $startDate = Carbon::now()->subDays($days);
 
-          $percentage = min(100, ($activityCount / $days) * 100);
+        // 3. Hitung total user aktif (unik) berdasarkan aktivitas
+        $aktifUserIds = UserActivity::where('created_at', '>=', $startDate)
+            ->distinct('user_id')
+            ->pluck('user_id');
 
-          $progressBar = '
-              <div class="w-60 bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <div class="bg-green-600 h-3 rounded-full" style="width: ' . $percentage . '%;"></div>
-              </div>
-              <div class="text-xs  mt-1">' . number_format($percentage, 0) . '%</div>
-          ';
+        $totalUser = $users->count();
+        $userAktifCount = $aktifUserIds->count();
+        $tidakAktif = $totalUser - $userAktifCount;
 
-          return [
-              $item->ikm->nama ?? '-',
-              $progressBar,
-          ];
-      })->values();
+        // 4. Format data untuk datatables
+        $data = $users->sortByDesc("created_at")->values()->map(function ($user) use ($days, $startDate) {
+            $activityCount = UserActivity::where('user_id', $user->id)
+                ->where('created_at', '>=', $startDate)
+                ->count();
 
-      return response()->json($aktif);
+            $percentage = min(100, ($activityCount / $days) * 100);
+
+            $progressBar = '
+                <div class="w-60 bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div class="bg-green-600 h-3 rounded-full" style="width: ' . $percentage . '%;"></div>
+                </div>
+                <div class="text-xs mt-1">' . number_format($percentage, 0) . '%</div>
+            ';
+
+            return [
+                $user->ikm->nama ?? '-',
+                $progressBar,
+            ];
+        });
+
+        // 5. Return response JSON
+        return response()->json([
+            'total_user'    => $totalUser,
+            'user_aktif'    => $userAktifCount,
+            'tidakaktif'    => $tidakAktif,
+            'data'          => $data,
+            'periode'      => $periode,
+        ]);
+    
   }
 
   public function create()

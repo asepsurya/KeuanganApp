@@ -92,7 +92,7 @@
 
             <!-- Start Content -->
             <div class="h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden">
-                 <div class="p-7 min-h-[calc(100vh-145px)]" id="container" >
+                 <div class="p-2 min-h-[calc(100vh-145px)]" id="container" >
                     @yield('container')
                  </div>
                 
