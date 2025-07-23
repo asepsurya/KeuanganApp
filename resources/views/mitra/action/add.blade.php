@@ -47,34 +47,107 @@
         .select2-container--default .select2-selection--single{
             border:none;
         }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            display: none !important;
+        }
+        /* Teks di dalam input select2 (yang terpilih) */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            font-weight: bold;
+        }
+
+        /* Ukuran tampilan select2 (input yang terlihat) */
+        .select2-container--default .select2-selection--single {
+            width: 200px !important; /* ganti sesuai kebutuhan */
+        }
+
+        /* Ukuran dropdown saat terbuka */
+        .select2-container--default .select2-dropdown {
+            width: 200px !important; /* samakan dengan di atas agar konsisten */
+        }
+    
+
         @media (min-width: 1024px) {
             .lg\:grid-cols-2 {
                 /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
                 grid-template-columns: 1fr 1.5fr;
             }
         }
+       
+        @media (max-width: 640px) { /* misal max-width 640px untuk mobile */
+            .select2 {
+                width: 90% !important; /* paksa lebar 50% di mobile */
+            }
+        }
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            display: block;
+            padding-left: 0px;
+            padding-right: 0px;
+            overflow: auto;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     </style>
     <form action="{{ route('update.mitra') }}" method="POST">
         @csrf
         <div class="px-2 py-1 mb-4 flex items-center justify-between">
             <h2 class="text-lg font-semibold">Detail Mitra / Toko</h2>
-            <div class="flex flex-col sm:flex-row gap-2">
-            <button type="submit"
-                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
-                Simpan
-            </button>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                <!-- Tombol Simpan -->
+                <button type="submit"
+                    class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
+                    Simpan
+                </button>
 
-            <button type="button" onclick="confirmDelete('{{ route('mitra.delete', $mitra->id) }}')"
-                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow transition duration-150">
-                Hapus
-            </button>
+                 <div class="relative inline-block text-left w-full sm:w-auto">
+                <!-- Button Utama -->
+                <button type="button" onclick="toggleDropdown()"
+                    class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-1.5 text-sm font-medium  btn rounded-lg shadow transition duration-150">
+                    Tindakan
+                    <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-            <button type="button" onclick="checkTransaction('{{ route('transaksi.detail', $mitra->id) }}')"
-                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg shadow transition duration-150">
-                Lakukan Transaksi
-            </button>
+                <!-- Dropdown Menu -->
+                <div id="dropdownMenu"
+                    class="hidden absolute z-50 mt-2 w-full sm:w-40 rounded-md shadow-lg bg-white ring-1 ring-black/10 focus:outline-none">
+                    <div class="py-1">
+                        <!-- Tombol Hapus -->
+                        <button type="button"
+                            onclick="confirmDelete('{{ route('mitra.delete', $mitra->id) }}')"
+                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            Hapus
+                        </button>
 
-            <script>
+                        <!-- Tombol Transaksi -->
+                        <button type="button"
+                            onclick="checkTransaction('{{ route('transaksi.detail', $mitra->id) }}')"
+                            class="w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-gray-100">
+                            Transaksi
+                        </button>
+                    </div>
+                </div>
+                </div>
+                <script>
+                    function toggleDropdown() {
+                        const dropdown = document.getElementById('dropdownMenu');
+                        dropdown.classList.toggle('hidden');
+                    }
+
+                    // Optional: close dropdown when clicking outside
+                    document.addEventListener('click', function (e) {
+                        const dropdown = document.getElementById('dropdownMenu');
+                        const button = document.querySelector('button[onclick="toggleDropdown()"]');
+                        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+                            dropdown.classList.add('hidden');
+                        }
+                    });
+                </script>
+
+            </div>
+             <script>
                 function checkTransaction(url) {
                     @if ($mitra->transaksi == null)
                         window.location.href = "{{ route('transaksi.index') }}";
@@ -99,8 +172,9 @@
                     @endif
                 }
             </script>
-            </div>
+
             <script>
+                
             function confirmDelete(url) {
                 Swal.fire({
                 title: 'Yakin ingin menghapus?',
@@ -184,34 +258,36 @@
                         <div class="mb-4">
                             <label class="block mb-1">Tempel Link Google Maps</label>
                             <input type="text" id="gmaps-link" placeholder="Paste link Google Maps di sini"
-                                class="form-input w-full py-4">
+                                class="form-input mt-2 py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;">
                         </div>
 
-                        <div class="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-2">
-                            <!-- First Input Field -->
-                            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">
+                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Longitude Field -->
+                            <div class="bg-white dark:bg-white/5 border border-black/10 rounded-lg px-5 py-4">
+                                <label for="longitude" class="block mb-1 text-xs font-medium text-black/40 dark:text-white/40">
                                     Longitude
                                 </label>
-                                <input type="text" placeholder="Longitude" class="form-input w-full" name="longitude"
-                                    id="longitude" value="{{ $mitra->longitude }}" />
+                                <input type="text" id="longitude" name="longitude"
+                                    placeholder="Longitude"
+                                    value="{{ $mitra->longitude }}"
+                                    class="form-input w-full text-sm rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500" />
                             </div>
 
-                            <!-- Second Input Field -->
-                            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                                <label class="block mb-1 text-xs text-black/40 dark:text-white/40">
+                            <!-- Latitude Field -->
+                            <div class="bg-white dark:bg-white/5 border border-black/10 rounded-lg px-5 py-4">
+                                <label for="latitude" class="block mb-1 text-xs font-medium text-black/40 dark:text-white/40">
                                     Latitude
                                 </label>
-                                <input type="text" placeholder="latitude" class="form-input w-full" name="latitude"
-                                    id="latitude" value="{{ $mitra->latitude }}" />
+                                <input type="text" id="latitude" name="latitude"
+                                    placeholder="Latitude"
+                                    value="{{ $mitra->latitude }}"
+                                    class="form-input w-full text-sm rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500" />
                             </div>
-
                         </div>
 
                     </div>
                     <!-- Submit Button -->
                     <div>
-
                     </div>
                 </div>
             </div>
@@ -220,15 +296,49 @@
                     <div class="bg-white dark:bg-black border border-black/10 dark:border-white/10 p-5 rounded-md">
                         <div class="px-2 py-1 mb-4 flex items-center justify-between">
                             <p class="text-sm font-semibold">Daftar barang yang dijual</p>
-
-                            <button type="button"
-                                class="btn py-2 px-5 text-[15px]"
-                                onclick="addRow()">
+                            <button type="button"  id="btnTambahProduk" class="btn py-2 px-5 text-[15px]"  >
                                 + Tambah Produk
                             </button>
                         </div>
+                      <div id="productList" class="space-y-2">
+                        @forelse ($penawaran as $index => $row)
+                            <div class="flex items-center justify-between border rounded-lg p-3 bg-white dark:bg-white/5 dark:border-white/10 shadow-sm" data-index="{{ $index }}">
+                                <!-- Kiri: Hapus + Nama Produk -->
+                                <div class="flex items-center gap-3">
+                                   <button type="button" class="text-red-600 hover:text-red-800" onclick="removeRow(this)" data-id="{{ $row->id }}">
+                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                           <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6
+                            m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z"></path>
+                                       </svg>
+                                   </button>
 
-                        <div class="table-responsive">
+                                   
+                                    <select class="select2 text-sm w-full " onchange="updateHarga(this)" name="kode_produk[]">
+                                        <option value="">Pilih Produk</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}" data-harga="{{ $item->harga }}"
+                                                @selected($item->kode_produk == $row->kode_produk)>
+                                                {{ $item->nama_produk }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                              <div class="flex items-center gap-2">
+                                    <div class="text-sm ">Rp.</div>
+                                    <input type="text" name="harga[]"
+                                        value="{{ $row->harga ? number_format($row->harga, 0, ',', '.') : '' }}"
+                                        oninput="formatCurrency(this)"
+                                        class="harga-input text-sm rounded border border-black/10 px-2 py-1 dark:bg-white/5 " style="width: 90px;"
+                                        placeholder="0">
+                                </div>
+
+                            </div>
+                        @empty
+                            <div class="text-center text-gray-500 py-4">Belum ada produk yang ditawarkan.</div>
+                        @endforelse
+                    </div>
+
+                        {{-- <div class="table-responsive">
                             <table id="productTable" class="table-hover">
                                 <thead>
                                     <tr>
@@ -272,38 +382,13 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <template id="rowTemplate">
-        <tr class="group text-xs border-b border-black/20">
-            <td class="row-number">1</td>
-            <td class="w-1/2">
-                <select class="produk select2 w-full p-2 border border-gray-300 rounded-md" name="kode_produk[]"
-                    onchange="updateHarga(this)">
-                    <option value="" selected>Pilih Produk</option>
-                    @foreach ($produk as $item)
-                        <option value="{{ $item->kode_produk }}" data-harga="{{ $item->harga }}">
-                            {{ $item->nama_produk }}
-                        </option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                Rp.
-                <input type="text" name="harga[]" placeholder="Harga" oninput="formatCurrency(this)"
-                    class="form-input harga-input py-2.5 px-4 w-full text-black border border-black/10 rounded-lg" style="border:none;">
-            </td>
-            <td>
-                <button type="button" class="text-red-600 hover:text-red-800" onclick="removeRow(this)">
-                    Hapus
-                </button>
-            </td>
-        </tr>
-    </template>
+   
     @if(session('reload'))
     <script>
         setTimeout(() => {
@@ -316,75 +401,112 @@
             document.querySelector('.select2-search__field')?.focus();
         });
     </script>
+
     <script>
-        function addRow() {
-            const tableBody = document.querySelector('#productTable tbody');
-            const noDataRow = document.querySelector('#noDataRow');
-            const template = document.querySelector('#rowTemplate');
-            const newRow = template.content.cloneNode(true);
-
-            // Hapus pesan "Belum ada produk..." jika ada
-            if (noDataRow) noDataRow.remove();
-
-            tableBody.appendChild(newRow);
-            updateRowNumbers();
-
-            // Inisialisasi select2 pada elemen baru
-            $(tableBody.querySelectorAll('select.select2')).select2();
-        }
-
-        function removeRow(button) {
-            const row = button.closest('tr');
-            row.remove();
-
-            updateRowNumbers();
-
-            // Jika tidak ada baris, tampilkan pesan kosong
-            const tableBody = document.querySelector('#productTable tbody');
-            if (tableBody.rows.length === 0) {
-                tableBody.innerHTML = `
-                <tr id="noDataRow">
-                    <td colspan="4" class="text-center text-gray-500">Belum ada produk yang ditawarkan.</td>
-                </tr>
-            `;
-            }
-        }
-
-        function updateRowNumbers() {
-            const rows = document.querySelectorAll('#productTable tbody tr');
-            let number = 1;
-            rows.forEach((row) => {
-                const numberCell = row.querySelector('.row-number');
-                if (numberCell) numberCell.innerText = number++;
+        // Inisialisasi select2 pada semua select2 yang sudah ada
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Pilih Produk",
+                width: 'resolve'
             });
-        }
+        });
 
-        function formatCurrency(input) {
-            let value = input.value.replace(/[^0-9]/g, '');
-            value = new Intl.NumberFormat('id-ID').format(value);
-            input.value = value;
-        }
+        // Fungsi update harga otomatis saat pilih produk
+        function updateHarga(selectElem) {
+            // ambil parent baris paling atas yang ada class "flex items-center justify-between"
+            const rowDiv = selectElem.closest('div.flex.items-center.justify-between');
 
-        function updateHarga(selectElement) {
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const harga = selectedOption.getAttribute('data-harga');
+            if (!rowDiv) return;
 
-            const row = selectElement.closest('tr');
-            const hargaInput = row.querySelector('.harga-input');
+            // cari input harga di row ini
+            const hargaInput = rowDiv.querySelector('input[name="harga[]"]');
 
-            if (hargaInput && harga) {
-                hargaInput.value = new Intl.NumberFormat('id-ID').format(harga);
-            } else if (hargaInput) {
+            const selectedOption = selectElem.selectedOptions[0];
+            const harga = selectedOption ? selectedOption.getAttribute('data-harga') : 0;
+
+            if (harga && harga != 0) {
+                hargaInput.value = '' + formatNumber(harga);
+            } else {
                 hargaInput.value = '';
             }
         }
 
-        // Inisialisasi awal
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-    </script>
+        // Format angka jadi Rp. dengan titik ribuan
+        function formatNumber(num) {
+            return Number(num).toLocaleString('id-ID');
+        }
 
+        // Format input harga saat user mengetik
+        function formatCurrency(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value === '') {
+                input.value = '';
+                return;
+            }
+            input.value = formatNumber(value);
+        }
+
+        // Fungsi hapus row produk
+        function hapusItem(button) {
+            const rowDiv = button.closest('div.flex.items-center.justify-between');
+            if (rowDiv) {
+                rowDiv.remove();
+            }
+        }
+
+        // Fungsi tambah row produk baru
+        document.getElementById('btnTambahProduk').addEventListener('click', function() {
+            const productList = document.getElementById('productList');
+
+            // Buat elemen div baru dengan class dan isi sama seperti row produk
+            const newIndex = productList.children.length;
+
+            // Buat elemen div baru
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between border rounded-lg p-3 bg-white  dark:bg-white/5 dark:border-white/10 shadow-sm";
+            div.setAttribute('data-index', newIndex);
+
+            // Buat inner HTML dari row baru dengan select option dari produk
+            // Supaya select option selalu up-to-date, kamu bisa render ulang di JS dengan data produk dari server (kalau ada)
+            // Di contoh ini, saya copy langsung dari blade, kamu bisa sesuaikan kalau produk dinamis
+
+            const options = `@foreach ($produk as $item)
+                <option value="{{ $item->kode_produk }}" data-harga="{{ $item->harga }}">{{ $item->nama_produk }}</option>
+            @endforeach`;
+
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="hapusItem(this)" class="text-red-600 hover:text-red-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6
+                            m2 0a2 2 0 00-2-2H9a2 2 0 00-2 2h10z"></path>
+                        </svg>
+                    </button>
+                    <select class="select2 w-60" onchange="updateHarga(this)" name="kode_produk[]">
+                        <option value="">Pilih Produk</option>
+                        ${options}
+                    </select>
+                </div>
+                  <div class="flex items-center gap-2">
+                                    <div class="text-sm ">Rp.</div>
+                                    <input type="text" name="harga[]"
+                                        value="" oninput="formatCurrency(this)"
+                                        class="harga-input text-sm rounded border border-black/10 px-2 py-1 dark:bg-white/5" style="width: 90px;"
+                                        placeholder="0">
+                                </div>
+                
+            `;
+
+            productList.appendChild(div);
+
+            // Re-init select2 pada elemen select baru
+            $(div).find('.select2').select2({
+                placeholder: "Pilih Produk",
+                width: 'resolve'
+            });
+        });
+
+    </script>
 
     <script>
         function formatCurrency(input) {
@@ -395,15 +517,7 @@
             input.value = value;
         }
     </script>
-    <script>
-        $(document).ready(function() {
-            // Inisialisasi Select2 pada input kota
-            $('.produk').select2({
-                placeholder: 'Pilih Produk',
-                width: '100%',
-            });
-        });
-    </script>
+
     <script>
         const kotaData = @json($kota);
 
@@ -451,39 +565,37 @@
 
     <script>
         function removeRow(button) {
-            const row = button.closest('tr');
+            const row = button.closest('div[data-index]');
             const penawaranId = button.getAttribute('data-id');
 
             if (penawaranId) {
                 // Hapus dari database via API
                 fetch(`/mitra/produk/delete/${penawaranId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            row.remove();
-                            renumberRows();
-                            // Optional: tampilkan pesan sukses singkat tanpa konfirmasi
-                            console.log('Data penawaran telah dihapus.');
-                        } else {
-                            alert('Gagal menghapus data.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat menghapus.');
-                    });
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        row.remove();
+                        renumberRows();
+                        console.log('Data penawaran telah dihapus.');
+                    } else {
+                        alert('Gagal menghapus data.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menghapus.');
+                });
             } else {
-                // Baris belum disimpan di DB, hapus langsung di UI
+                // Jika belum tersimpan ke DB, cukup hapus dari UI
                 row.remove();
                 renumberRows();
             }
         }
-
 
 
         function renumberRows() {
@@ -492,69 +604,35 @@
             });
         }
     </script>
-    {{-- <script>
-        document.getElementById('gmaps-link').addEventListener('input', function() {
-            const url = this.value;
-
-            // Tangkap koordinat dari !3dLAT!4dLNG dengan angka desimal penuh
-            const regex_3d4d = /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/;
-            // Fallback dari @LAT,LNG
-            const regex_at = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
-
-            let lat = null;
-            let lng = null;
-
-            const match3d4d = url.match(regex_3d4d);
-            if (match3d4d) {
-                lat = parseFloat(match3d4d[1]);
-                lng = parseFloat(match3d4d[2]);
-            } else {
-                const matchAt = url.match(regex_at);
-                if (matchAt) {
-                    lat = parseFloat(matchAt[1]);
-                    lng = parseFloat(matchAt[2]);
-                }
-            }
-
-            if (lat && lng) {
-                document.getElementById('latitude').value = lat;
-                document.getElementById('longitude').value = lng;
-            } else {
-                console.warn("Koordinat tidak ditemukan.");
-                // alert("Link Google Maps tidak valid atau tidak mengandung koordinat.");
-            }
-        });
-    </script> --}}
 
     <script>
-document.getElementById('gmaps-link').addEventListener('input', function () {
-    const url = this.value;
+        document.getElementById('gmaps-link').addEventListener('input', function () {
+            const url = this.value;
 
-    // Kalau link kosong, skip
-    if (!url) return;
+            // Kalau link kosong, skip
+            if (!url) return;
 
-    fetch('/resolve-maps-link', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ url: url })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.latitude && data.longitude) {
-            document.getElementById('latitude').value = data.latitude;
-            document.getElementById('longitude').value = data.longitude;
-        } else {
-            console.warn(data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Gagal resolve:', error);
-    });
-});
-
+            fetch('/resolve-maps-link', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.latitude && data.longitude) {
+                    document.getElementById('latitude').value = data.latitude;
+                    document.getElementById('longitude').value = data.longitude;
+                } else {
+                    console.warn(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Gagal resolve:', error);
+            });
+        });
     </script>
 
 @endsection

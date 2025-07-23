@@ -43,7 +43,9 @@
                 margin-right: 0;
                 margin-bottom: 50px;
             }
-
+           .no-scrollbar{
+                max-width: 500px;
+           } 
 
         }
 
@@ -81,6 +83,18 @@
         .btn-icon:hover {
             background-color: #1e40af;
         }
+       .scrolling-wrapper {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+
+            
+        }
+        .tab-button.active {
+            background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+            border-color: #3b82f6;
+        }
     </style>
     <script>
         document.getElementById('rightSidebar').addEventListener('click', function() {
@@ -115,21 +129,31 @@
             }
         });
     </script>
-    <div class="flex border-b overflow-x-auto no-scrollbar">
-         @if (auth()->user()->role == 'admin' | auth()->user()->role == 'superadmin' )
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(0)">Detail IKM</button>
-
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(1)">Data Mitra</button>
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(2)">Data Produk</button>
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(3)">Riwayat
-                Transaksi</button>
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(4)">Laporan
-                Keuangan</button>
-            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap" onclick="changeTab(5)">Log
-                Aktivitas</button>
-        @endif
+    <!-- Wrapper scrollable -->
+    <div class="w-full overflow-x-auto no-scrollbar border-b bg-white dark:bg-gray-800" >
+        <div class="flex space-x-2 px-2 py-1 mt-1 min-w-max scrolling-wrapper" >
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'superadmin')
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(0)">
+                Detail IKM
+            </button>
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(1)">
+                Data Mitra
+            </button>
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(2)">
+                Data Produk
+            </button>
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(3)">
+                Riwayat Transaksi
+            </button>
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(4)">
+                Laporan Keuangan
+            </button>
+            <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(5)">
+                Log Aktivitas
+            </button>
+            @endif
+        </div>
     </div>
-
 
     <div class="bg-lightwhite dark:bg-white/5  p-6">
         <div class="flex items-start justify-between gap-2 mb-[2px]">
@@ -151,7 +175,7 @@
                                                                                                                                                                                                                         disetel') }}
                         </p>
                     </div>
-                    <div class="flex items-center gap-1 text-xs text-black/40 dark:text-white/40">
+                    <div class="flex items-center gap-1 text-xs text-black/40 dark:text-white/40 hidden md:block">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -196,7 +220,7 @@
                 </div>
             </div>
 
-            <div>
+            <div >
                 <div x-data="modals">
                     <a @click="toggle">
                         <img class="flex-none rounded-full object-cover cursor-pointer"
@@ -642,8 +666,6 @@
                                 </td>
                                 <td class="py-4 font-semibold mobile lg:table-cell">Rp
                                     Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
-
-
                             </tr>
                         @endforeach
                         @if ($produk->isEmpty())
@@ -666,9 +688,9 @@
                     <thead>
                         <tr>
                             <th>Kode Transaksi</th>
-                            <th>Tanggal Transaksi</th>
+                            <th class="hidden md:block">Tanggal Transaksi</th>
                             <th>Nama Toko</th>
-                            <th>Nilai Pesanan</th>
+                            <th class="hidden md:block">Nilai Pesanan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -676,9 +698,9 @@
                             <tr>
                                 <td class="whitespace-nowrap"><a
                                         href="/transaksi/{{ $item->id }}">{{ $item->kode_transaksi }}</a></td>
-                                <td>{{ \Carbon\Carbon::parse($item->tanggal_transaksi)->translatedFormat('d F Y') }}</td>
+                                <td class="hidden md:block">{{ \Carbon\Carbon::parse($item->tanggal_transaksi)->translatedFormat('d F Y') }}</td>
                                 <td>{{ $item->mitra->nama_mitra }}</td>
-                                <td>Rp{{ number_format($item->total, 0, ',', '.') }}</td>
+                                <td class="hidden md:block">Rp{{ number_format($item->total, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
                         @if ($transaksi->isEmpty())
@@ -1157,10 +1179,10 @@
         }
 
         // Aktifkan tab terakhir saat halaman dimuat
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedIndex = parseInt(localStorage.getItem('activeTab')) || 0;
-            changeTab(savedIndex);
-        });
+        // window.addEventListener('DOMContentLoaded', () => {
+        //     const savedIndex = parseInt(localStorage.getItem('activeTab')) || 0;
+        //     changeTab(savedIndex);
+        // });
     </script>
 
 @endsection

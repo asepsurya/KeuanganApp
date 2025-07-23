@@ -21,6 +21,7 @@ class IkmController extends Controller
 {
   public function index()
   {
+    date_default_timezone_set('Asia/Jakarta');
     $logs = Activity::where(['causer_id'=>auth()->user()->id, 'log_name' => 'ikm'])->latest()->take(10)->get();
     $ikm = ikm::all()->sortByDesc("created_at")->map(function ($item) {
         $foto = $item->foto ? asset('storage/' . $item->foto) : asset('assets/images/byewind-avatar.png');
@@ -77,7 +78,7 @@ class IkmController extends Controller
   }
   public function getAktifData(Request $request)
   {
-    
+        date_default_timezone_set('Asia/Jakarta');
           // 1. Tentukan periode & durasi hari
         $periode = $request->periode ?? 'bulanan';
         $days = match($periode) {

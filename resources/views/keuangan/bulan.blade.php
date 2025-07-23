@@ -76,15 +76,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const rawData = @json($data);
 
     function fetchEvents(tahun, bulan) {
-        // Filter dan mapping data sesuai bulan & tahun yang dipilih
         const events = rawData
             .filter(item => {
-                // item.tanggal format: d/m/Y
                 const [day, mon, yr] = item.tanggal.split('/');
                 return mon === bulan && yr === tahun;
             })
             .reduce((acc, item) => {
-                // Group by tanggal
                 let group = acc.find(g => g.tanggal === item.tanggal);
                 if (!group) {
                     group = { tanggal: item.tanggal, detail: [] };
@@ -100,25 +97,33 @@ document.addEventListener('DOMContentLoaded', function () {
             .map(item => {
                 let pemasukan = 0;
                 let pengeluaran = 0;
+
                 item.detail.forEach(d => {
                     if (d.tipe === 'pemasukan') pemasukan += Number(d.total);
                     else if (d.tipe === 'pengeluaran') pengeluaran += Number(d.total);
                 });
+
+                const balance = pemasukan - pengeluaran;
+
                 let title = '';
                 if (pemasukan > 0) title += `Masuk : Rp.${pemasukan.toLocaleString()}\n`;
-                if (pengeluaran > 0) title += `Keluar : Rp.${pengeluaran.toLocaleString()}`;
-                // Convert tanggal d/m/Y ke Y-m-d
+                if (pengeluaran > 0) title += `Keluar : Rp.${pengeluaran.toLocaleString()}\n`;
+                title += `Balance : Rp.${balance.toLocaleString()}`;
+
                 const [day, mon, yr] = item.tanggal.split('/');
                 return {
                     title: title.trim(),
                     start: `${yr}-${mon.padStart(2, '0')}-${day.padStart(2, '0')}`,
                     tanggal: item.tanggal,
                     detail: item.detail,
+                    balance: balance, // Optional: bisa dipakai untuk tooltip, dsb
                     allDay: true
                 };
             });
+
         return Promise.resolve(events);
     }
+
 
     function loadCalendar() {
         const [tahun, bulan] = monthPicker.value.split('-');

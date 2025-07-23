@@ -102,25 +102,28 @@
                             }
                         </script>
                     </div>
-                    
-                    <!-- Stok -->
-                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Stok Produk</label>
-                        <input type="number" name="stok" placeholder="Stok Produk" class="form-input"
-                            value="{{ $item->stok }}" />
-                    </div>
+                      <!-- Harga -->
+                       <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+                            <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih <span
+                                    style="color: red">*</span></label>
+                            <div class="flex items-center">
+                                <input type="number" name="berat" placeholder="Berat Bersih" class="form-input"  value="{{ $item->berat }}"  />
+                                <select name="satuan" class="form-select rounded-l-none border-l-0">
+                                    <option value="gram" {{ $item->satuan == 'gram' ? 'selected' : '' }}>gram</option>
+                                    <option value="kg"  {{ $item->satuan == 'kg' ? 'selected' : '' }}>kg</option>
+                                    <option value="ons"  {{ $item->satuan == 'ons' ? 'selected' : '' }}>ons</option>
+                                </select>
+                            </div>
+                        </div>
+                
+                   <input type="text" name="stok" value="{{ $item->stok }}" hidden>
+                     
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
-                    <!-- Harga -->
-                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
-                        <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih</label>
-                        <input type="number" name="berat" placeholder="Berat Bersih" class="form-input"
-                            value="{{ $item->berat }}" />
-                    </div>
-
+                  
                     <!-- Stok -->
-                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+                    <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5" hidden>
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status Keterdiaan</label>
                         <select name="status" class="status form-select w-full">
                             <option value="" selected>Pilih status</option>

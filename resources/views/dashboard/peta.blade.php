@@ -120,13 +120,18 @@ date_default_timezone_set('Asia/Jakarta');
                     </thead>
                     <tbody>
                         @php $no=1; @endphp
-                        @foreach ($jumlahPerKota as $data)
+                        @forelse ($jumlahPerKota as $data)
                             <tr>
                                 <td>{{ $no++ }}.</td>
                                 <td>{{ strtoupper($data->id_kota) }}</td>
                                 <td>{{ $data->total }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center">Data tidak tersedia</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
                 </table>
             </div>
@@ -179,65 +184,81 @@ date_default_timezone_set('Asia/Jakarta');
         let currentPage = 1;
         const totalPages = Math.ceil(titikAwal.length / perPage);
 
-        function renderPage(page) {
-            locationCardsContainer.innerHTML = '';
+       function renderPage(page) {
+    locationCardsContainer.innerHTML = '';
 
-            // Hapus semua marker sebelumnya
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-
-            const start = (page - 1) * perPage;
-            const end = start + perPage;
-            const pageData = titikAwal.slice(start, end);
-
-            // Buat bounds kosong
-            const bounds = L.latLngBounds();
-            pageData.forEach((titik) => {
-                const marker = L.marker([titik.lat, titik.lng]).addTo(map).bindPopup(titik.label);
-                bounds.extend(marker.getLatLng());
-
-                const lat = parseFloat(titik.lat);
-                const lng = parseFloat(titik.lng);
-                const label = titik.label || "Lokasi tanpa nama";
-                const gmapsLink = `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})`;
-
-                const card = document.createElement('div');
-                card.className =
-                    "border border-black/10 dark:border-white/10 p-5 rounded-md shadow-sm hover:shadow-md cursor-pointer transition-all duration-300";
-                card.innerHTML = `
-        <div class="font-semibold text-gray-800">
-            <a href="${gmapsLink}" target="_blank" class="text-blue-600 underline">
-                ${label}
-            </a>
-        </div>
-        <div class="text-sm text-gray-500">
-            ${isNaN(lat) ? titik.lat : lat.toFixed(3)}, ${isNaN(lng) ? titik.lng : lng.toFixed(3)}
-        </div>
-    `;
-
-                card.addEventListener('click', () => {
-                    map.setView([lat, lng], 14);
-                    marker.openPopup();
-                });
-
-                locationCardsContainer.appendChild(card);
-            });
-
-
-            // Fit map ke bounds semua marker jika ada marker
-            if (pageData.length > 0) {
-                map.fitBounds(bounds, {
-                    padding: [50, 50]
-                });
-            }
-
-            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-            prevBtn.disabled = currentPage === 1;
-            nextBtn.disabled = currentPage === totalPages;
+    // Hapus semua marker sebelumnya
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
         }
+    });
+
+    if (titikAwal.length === 0) {
+        locationCardsContainer.innerHTML = `
+          <div class="col-span-full flex items-center justify-center border border-gray-300 rounded p-6 text-gray-500 h-48">
+            Data lokasi tidak tersedia
+            </div>
+
+        `;
+        pageInfo.textContent = 'No data available';
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+
+        // Reset view ke default (optional)
+        map.setView([-6.200000, 106.816666], 10);
+        return;
+    }
+
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const pageData = titikAwal.slice(start, end);
+
+    // Buat bounds kosong
+    const bounds = L.latLngBounds();
+
+    pageData.forEach((titik) => {
+        const marker = L.marker([titik.lat, titik.lng]).addTo(map).bindPopup(titik.label);
+        bounds.extend(marker.getLatLng());
+
+        const lat = parseFloat(titik.lat);
+        const lng = parseFloat(titik.lng);
+        const label = titik.label || "Lokasi tanpa nama";
+        const gmapsLink = `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})`;
+
+        const card = document.createElement('div');
+        card.className =
+            "border border-black/10 dark:border-white/10 p-5 rounded-md shadow-sm hover:shadow-md cursor-pointer transition-all duration-300";
+        card.innerHTML = `
+            <div class="font-semibold text-gray-800">
+                <a href="${gmapsLink}" target="_blank" class="text-blue-600 underline">
+                    ${label}
+                </a>
+            </div>
+            <div class="text-sm text-gray-500">
+                ${isNaN(lat) ? titik.lat : lat.toFixed(3)}, ${isNaN(lng) ? titik.lng : lng.toFixed(3)}
+            </div>
+        `;
+
+        card.addEventListener('click', () => {
+            map.setView([lat, lng], 14);
+            marker.openPopup();
+        });
+
+        locationCardsContainer.appendChild(card);
+    });
+
+    // Fit map ke bounds semua marker jika ada marker
+    if (pageData.length > 0) {
+        map.fitBounds(bounds, {
+            padding: [50, 50]
+        });
+    }
+
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+}
 
 
         prevBtn.addEventListener('click', () => {

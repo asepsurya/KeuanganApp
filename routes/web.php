@@ -70,7 +70,7 @@ Route::middleware(['auth','checkPerusahaan','redirectIfNotAdmin'])->group(functi
         Route::get('/produk', [ProdukController::class, 'index'])->name('index.produk');
         Route::get('/produk/create', [ProdukController::class, 'create'])->name('index.create.produk');
         Route::get('/produk/update/{id}', [ProdukController::class, 'update'])->name('index.update.produk');
-        Route::post('/produk/update/', [ProdukController::class, 'updateaction'])->name('action.update');
+        Route::post('/produk/update', [ProdukController::class, 'updateaction'])->name('action.update');
         Route::get('/produk/delete/{id}', [ProdukController::class, 'deleteaction'])->name('action.delete');
         Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
         Route::get('/produk/category', [ProdukController::class, 'category'])->name('produk.category');
