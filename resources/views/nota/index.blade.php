@@ -73,8 +73,13 @@
                     @endphp
                     <tr onclick="window.location='{{ $link }}'" class="cursor-pointer hover:bg-gray-100 border-b border-black/20">
                         <td>{{ $no++ }}</td>
-                        <td class="whitespace-nowrap">{{ $item->tanggal }}</td>
-                        <td class="mobile">{{ $item->kode_transaksi }}</td>
+                        <td class="whitespace-nowrap"><span class="inline-flex items-center rounded-full text-xs justify-center px-2 py-1 bg-lightblue-200 text-black">
+                         <svg class="w-5 h-5 text-black mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10m2-5H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2z" />
+                        </svg> {{ $item->tanggal }}
+                        </span></td>
+                        <td class="mobile"><b>{{ $item->kode_transaksi }}</b></td>
                         <td class="mobile">{{ $item->judul }}</td>
                         <td>{{ $item->kepada }}</td>
                         <td>Rp {{ number_format($item->grandtotal, 0, ',', '.') }}</td>

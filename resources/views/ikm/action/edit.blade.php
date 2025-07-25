@@ -120,18 +120,18 @@
             // Cek apakah URL cocok dengan pola `/people/update/*`
             if (window.location.pathname.startsWith("/people/update/")) {
                 // Pilih semua elemen yang mengandung class `sm:p-7`
-                const elements = document.querySelectorAll(".sm\\:p-7");
+                const elements = document.querySelectorAll(".sm\\:p-5");
                 const elements2 = document.querySelectorAll(".p-7");
 
                 // Hapus class `sm:p-7` dari elemen tersebut
-                elements.forEach(el => el.classList.remove("sm:p-7"));
+                elements.forEach(el => el.classList.remove("sm:p-5"));
                 elements2.forEach(el => el.classList.remove("p-7"));
             }
         });
     </script>
     <!-- Wrapper scrollable -->
-    <div class="w-full overflow-x-auto no-scrollbar border-b bg-white dark:bg-gray-800" >
-        <div class="flex space-x-2 px-2 py-1 mt-1 min-w-max scrolling-wrapper" >
+    <div class="w-full overflow-x-auto no-scrollbar border-b bg-white dark:text-black dark:bg-white/5" >
+        <div class="flex space-x-2 px-2  mt-1 min-w-max scrolling-wrapper" >
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'superadmin')
             <button class="tab-button px-4 py-2 flex-shrink-0 whitespace-nowrap rounded-md border border-gray-300 bg-gray-100 text-sm hover:bg-gray-200 transition" onclick="changeTab(0)">
                 Detail IKM
@@ -175,7 +175,7 @@
                                                                                                                                                                                                                         disetel') }}
                         </p>
                     </div>
-                    <div class="flex items-center gap-1 text-xs text-black/40 dark:text-white/40 hidden md:block">
+                    <div class="flex items-center gap-1 text-xs text-black/40 dark:text-white/40 ">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -447,33 +447,57 @@
                     </div>
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Provinsi</label>
+                      @php
+                            $selectedProvinsi = old('id_provinsi', $ikm->id_provinsi);
+                        @endphp
+
                         <select id="provinsi" name="id_provinsi" class="form-select w-full">
-                            <option value="" selected>Pilih Provinsi</option>
+                            <option value="">Pilih Provinsi</option>
                             @foreach ($provinsi as $ikm2)
                                 <option value="{{ $ikm2->id }}"
-                                    {{ $ikm2->id == $ikm->id_provinsi ? 'selected' : '' }}>{{ $ikm2->name }}</option>
+                                    {{ $ikm2->id == $selectedProvinsi ? 'selected' : '' }}>
+                                    {{ $ikm2->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
+                    @php
+                        $selectedKotaId = old('id_kota', $ikm->id_kota ?? '');
+                        $selectedKecamatanId = old('id_kecamatan', $ikm->id_kecamatan ?? '');
+                        $selectedDesaId = old('id_desa', $ikm->id_desa ?? '');
+                    @endphp
+
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kota / Kabupaten</label>
                         <select id="kabupaten" name="id_kota" class="form-select w-full">
-                            <option value="{{ $ikm->id_kota ?? '' }}" selected>{{ $ikm->kota->name ?? '' }}</option>
+                            @if ($selectedKotaId)
+                                <option value="{{ $selectedKotaId }}" selected>{{ $ikm->kota->name ?? 'Terpilih' }}</option>
+                            @else
+                                <option value="">Pilih Kota</option>
+                            @endif
                         </select>
                     </div>
 
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kecamatan</label>
                         <select id="kecamatan" name="id_kecamatan" class="form-select w-full">
-                            <option value="{{ $ikm->id_kecamatan ?? '' }}" selected>{{ $ikm->kecamatan->name ?? '' }}
-                            </option>
+                            @if ($selectedKecamatanId)
+                                <option value="{{ $selectedKecamatanId }}" selected>{{ $ikm->kecamatan->name ?? 'Terpilih' }}</option>
+                            @else
+                                <option value="">Pilih Kecamatan</option>
+                            @endif
                         </select>
                     </div>
+
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Desa</label>
                         <select id="desa" name="id_desa" class="form-select w-full">
-                            <option value="{{ $ikm->id_desa ?? '' }}" selected>{{ $ikm->desa->name ?? '' }}</option>
+                            @if ($selectedDesaId)
+                                <option value="{{ $selectedDesaId }}" selected>{{ $ikm->desa->name ?? 'Terpilih' }}</option>
+                            @else
+                                <option value="">Pilih Desa</option>
+                            @endif
                         </select>
                     </div>
 
@@ -482,33 +506,35 @@
                 <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Agama</label>
+                        @php
+                            $selectedAgama = old('agama', $ikm->agama);
+                        @endphp
+
                         <select id="agama" name="agama" class="form-select w-full">
-                            <option value="islam" {{ $ikm->agama == 'islam' ? 'selected' : '' }}>Islam</option>
-                            <option value="kristen" {{ $ikm->agama == 'kristen' ? 'selected' : '' }}>Kristen</option>
-                            <option value="katolik" {{ $ikm->agama == 'katolik' ? 'selected' : '' }}>Katolik</option>
-                            <option value="hindu" {{ $ikm->agama == 'hindu' ? 'selected' : '' }}>Hindu</option>
-                            <option value="buddha" {{ $ikm->agama == 'budha' ? 'selected' : '' }}>Buddha</option>
-                            <option value="konghucu" {{ $ikm->agama == 'konghucu' ? 'selected' : '' }}>Konghucu</option>
-                            <option value="kepercayaan" {{ $ikm->agama == 'kepercayaan' ? 'selected' : '' }}>Kepercayaan
-                                (Agama
-                                Lokal)</option>
+                            <option value="islam" {{ $selectedAgama == 'islam' ? 'selected' : '' }}>Islam</option>
+                            <option value="kristen" {{ $selectedAgama == 'kristen' ? 'selected' : '' }}>Kristen</option>
+                            <option value="katolik" {{ $selectedAgama == 'katolik' ? 'selected' : '' }}>Katolik</option>
+                            <option value="hindu" {{ $selectedAgama == 'hindu' ? 'selected' : '' }}>Hindu</option>
+                            <option value="buddha" {{ $selectedAgama == 'buddha' ? 'selected' : '' }}>Buddha</option>
+                            <option value="konghucu" {{ $selectedAgama == 'konghucu' ? 'selected' : '' }}>Konghucu</option>
+                            <option value="kepercayaan" {{ $selectedAgama == 'kepercayaan' ? 'selected' : '' }}>
+                                Kepercayaan (Agama Lokal)
+                            </option>
                         </select>
                     </div>
+
+                    @php
+                        $selectedStatus = old('status_perkawinan', $ikm->status_perkawinan);
+                    @endphp
 
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Status </label>
                         <select id="status_perkawinan" name="status_perkawinan" class="form-select w-full">
-                            <option value="" selected>status perkawinan</option>
-                            <option value="belum_menikah"
-                                {{ $ikm->status_perkawinan == 'belum_menikah' ? 'selected' : '' }}>Belum Menikah</option>
-                            <option value="menikah" {{ $ikm->status_perkawinan == 'menikah' ? 'selected' : '' }}>Menikah
-                            </option>
-                            <option value="cerai_hidup" {{ $ikm->status_perkawinan == 'cerai_hidup' ? 'selected' : '' }}>
-                                Cerai
-                                Hidup</option>
-                            <option value="cerai_mati" {{ $ikm->status_perkawinan == 'cerai_mati' ? 'selected' : '' }}>
-                                Cerai
-                                Mati</option>
+                            <option value="" {{ $selectedStatus == '' ? 'selected' : '' }}>status perkawinan</option>
+                            <option value="belum_menikah" {{ $selectedStatus == 'belum_menikah' ? 'selected' : '' }}>Belum Menikah</option>
+                            <option value="menikah" {{ $selectedStatus == 'menikah' ? 'selected' : '' }}>Menikah</option>
+                            <option value="cerai_hidup" {{ $selectedStatus == 'cerai_hidup' ? 'selected' : '' }}>Cerai Hidup</option>
+                            <option value="cerai_mati" {{ $selectedStatus == 'cerai_mati' ? 'selected' : '' }}>Cerai Mati</option>
                         </select>
                     </div>
 
@@ -521,13 +547,16 @@
 
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kewarganegaraan</label>
+                        @php
+                            $selectedKewarganegaraan = old('kewarganegaraan', $ikm->kewarganegaraan);
+                        @endphp
                         <select id="kewarganegaraan" name="kewarganegaraan" class="form-select w-full">
-                            <option value="" selected> Kewarganegaraan</option>
-                            <option value="wni" {{ $ikm->kewarganegaraan == 'wni' ? 'selected' : '' }}>Warga Negara
-                                Indonesia
-                                (WNI)</option>
-                            <option value="wna" {{ $ikm->kewarganegaraan == 'wna' ? 'selected' : '' }}>Warga Negara
-                                Asing (WNA)
+                            <option value="" {{ $selectedKewarganegaraan == '' ? 'selected' : '' }}>Kewarganegaraan</option>
+                            <option value="wni" {{ $selectedKewarganegaraan == 'wni' ? 'selected' : '' }}>
+                                Warga Negara Indonesia (WNI)
+                            </option>
+                            <option value="wna" {{ $selectedKewarganegaraan == 'wna' ? 'selected' : '' }}>
+                                Warga Negara Asing (WNA)
                             </option>
                         </select>
                     </div>
@@ -683,6 +712,11 @@
     <div id="tab-content-3" class="tab-content hidden p-4">
         <p class="text-sm font-semibold mb-3 text-black/40 dark:text-white/40">Daftar Riwayat Transaksi</p>
         <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-5 rounded-md">
+            <div class="mb-4">
+                <p class="text-sm font-semibold">Daftar Riwayat Transaksi </p>
+                <p class="text-xs text-black/60 dark:text-white/60">Berikut adalah daftar Transaksi dengan Mitra yang telah
+                    terdaftar di sistem.</p>
+            </div>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -718,116 +752,69 @@
         <p class="text-sm font-semibold mb-3 text-black/40 dark:text-white/40">Catatan Keuangan</p>
         <div class="border bg-lightwhite dark:bg-white/5 dark:border-white/10 border-black/10 p-2 rounded-md">
             <div class="">
-                <table class="w-full border-collapse text-sm table-auto" id="produkTable">
+                <div class="table-responsive">
+            <table class="w-full border-collapse text-sm table-auto" id="produkTable">
+
+                @php
+                    // Group transaksi by tanggal (format: Y-m-d)
+                    $groupedTransaksi = $keuangan->groupBy(function ($item) {
+                        return \Carbon\Carbon::createFromFormat('d/m/Y', $item->tanggal)->format('Y-m-d');
+                    });
+                @endphp
+
+                @foreach ($groupedTransaksi as $tanggal => $items)
+                    @php
+                        // Format tanggal untuk header
+                        $carbonTanggal = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggal);
+                        $tanggalFormatted = $carbonTanggal->translatedFormat('d F Y - l');
+                        // Hitung total pemasukan & pengeluaran untuk tanggal ini
+                        $pemasukan = $items->where('tipe', 'pemasukan')->sum('total');
+                        $pengeluaran = $items->where('tipe', 'pengeluaran')->sum('total');
+                    @endphp
                     <thead class="lg:table-header-group">
                         <tr class="text-gray-400">
-                            <th width="70%" class="text-left font-normal ">
-                                <div class="flex flex-col md:flex-row justify-between mb-2 gap-2">
-                                    <div x-data="{ openFilter: false }" class="relative">
-                                        <button type="button" @click="openFilter = !openFilter"
-                                            class="p-2 rounded-lg bg-gray-100 hover:bg-blue-100 dark:bg-black border border-gray-200 flex items-center gap-1">
-                                            <i class="fas fa-filter"></i>
-                                            <span class=" md:inline">Filter</span>
-                                        </button>
-                                        <div x-show="openFilter" @click.away="openFilter = false"
-                                            class="absolute z-50 mt-2 left-0 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg shadow-lg p-4 min-w-[320px]"
-                                            style="display: none;">
-                                            <form method="GET" class="flex flex-col gap-2" id="filterForm">
-                                                <h3><strong>Filter Transaksi</strong></h3>
-                                                <div class="flex flex-col gap-2">
-                                                    <div class="flex items-center gap-2">
-                                                        <label class="text-sm w-16">Dari:</label>
-                                                        <input type="text" name="from" id="from_date"
-                                                            value=""
-                                                            class="form-input py-1 px-2 rounded border border-black/10 dark:border-white/10 w-full flatpickr-input"
-                                                            placeholder="dd/mm/yyyy" autocomplete="off">
-                                                    </div>
-                                                    <div class="flex items-center gap-2">
-                                                        <label class="text-sm w-16">Sampai:</label>
-                                                        <input type="text" name="to" id="to_date"
-                                                            value=""
-                                                            class="form-input py-1 px-2 rounded border border-black/10 dark:border-white/10 w-full flatpickr-input"
-                                                            placeholder="dd/mm/yyyy" autocomplete="off">
-                                                    </div>
-                                                    <div class="flex gap-2 mt-2">
-                                                        <button type="submit"
-                                                            class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 w-full">Terapkan</button>
-                                                        <a href="http://127.0.0.1:8000/keuangan"
-                                                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 w-full text-center">Reset</a>
-                                                    </div>
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
-                                        flatpickr("#from_date", {
-                                            dateFormat: "d/m/Y",
-                                            locale: "id",
-                                            allowInput: true
-                                        });
-                                        flatpickr("#to_date", {
-                                            dateFormat: "d/m/Y",
-                                            locale: "id",
-                                            allowInput: true
-                                        });
-                                    });
-                                </script>
-                            </th>
+                            <th width="70%" class="text-left font-normal ">{{ $tanggalFormatted }}</th>
                             <th class="text-left ">
                                 <div class="flex flex-col lg:flex-row gap-4 text-gray-600">
-                                    Pemasukan:
-                                    <span class="text-green-600">
-                                        Rp{{ number_format($keuangan->where('tipe', 'pemasukan')->sum('total'), 0, ',', '.') }}
-                                    </span>
-                                    <div>Pengeluaran:
-                                        <span class="text-red-600">
-                                            Rp{{ number_format($keuangan->where('tipe', 'pengeluaran')->sum('total'), 0, ',', '.') }}
-                                        </span>
-                                    </div>
+                                    <div>Pemasukan:<span class="text-green-600"> Rp
+                                            {{ number_format($pemasukan, 0, ',', '.') }}</span></div>
+                                    <div>Pengeluaran: <span class="text-red-600"> Rp
+                                            {{ number_format($pengeluaran, 0, ',', '.') }}</span></div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($keuangan as $item)
-                            <tr class="hover:bg-gray-50" x-data="{ openDetail: false }">
-                                <!-- Produk / Transaksi -->
-                                <td class="py-4 pl-6 flex items-start gap-3">
-                                    <div class="flex flex-col">
-                                        <span class="font-semibold leading-tight">
-                                            <a href="#"  class="hover:underline">
-                                                {{ $item->akun->nama_akun }}
-                                            </a>
-
-                                        </span>
-                                        <span class="text-gray-400 leading-tight truncate max-w-[120px]">
-                                            {{ $item->deskripsi }}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="py-4 font-semibold mobile lg:table-cell">
-                                    @if ($item->tipe == 'pemasukan')
-                                        <span class="text-green-600">
-                                            Rp{{ number_format($item->total, 0, ',', '.') }}
-                                        </span>
-                                    @else
-                                        <span class="text-red-600">
-                                            Rp{{ number_format($item->total, 0, ',', '.') }}
-                                        </span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                        @if ($keuangan->isEmpty())
-                            <tr>
-                                <td colspan="5" class="text-center text-gray-500 py-4">Data tidak ditemukan</td>
-                            </tr>
-                        @endif
+                      @forelse ($items as $item)
+                        <tr class="hover:bg-gray-50" x-data="{ openDetail: false }">
+                            <!-- Produk / Transaksi -->
+                            <td class="py-4 pl-6 flex items-start gap-3">
+                                <div class="flex flex-col">
+                                    <span class="font-semibold leading-tight">
+                                        <a>{{ $item->deskripsi ?? '-' }}</a>
+                                    </span>
+                                    <span class="text-gray-400 leading-tight truncate max-w-[120px]">
+                                        {{ $item->akun->nama_akun ?? '-' }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="py-4 font-semibold mobile lg:table-cell">
+                                <span class="{{ $item->tipe == 'pemasukan' ? 'text-green-600' : 'text-red-600' }}">
+                                    Rp. {{ number_format($item->total, 0, ',', '.') }}
+                                </span>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="text-center py-6 text-gray-400">Tidak ada transaksi yang ditemukan.</td>
+                        </tr>
+                    @endforelse
                     </tbody>
-                </table>
+                @endforeach
+
+            </table>
+            
+            </div>
                 <div class="mt-4">
                     {{ $keuangan->links() }}
                 </div>

@@ -114,7 +114,7 @@
                     </span>
                     <input id="name" name="name"
                         class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('name') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                        placeholder="Nama Perusahaan" type="text" value="{{ old('name') }}" />
+                        placeholder="Nama Perusahaan" type="text" value="{{ old('name') }}" required />
 
                 </label>
                 @error('name')
@@ -128,7 +128,7 @@
                         class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('phone') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                         placeholder="Nomor Telepon Perusahaan" type="tel"
                         value="{{ auth()->user()->phone ?? old('phone') }}" pattern="[0-9]{10,15}"
-                        title="Hanya angka yang diizinkan dan panjang nomor 10-15 digit" />
+                        title="Hanya angka yang diizinkan dan panjang nomor 10-15 digit" required/>
                 </label>
 
                 @error('phone')
@@ -141,7 +141,7 @@
                     <input id="email" name="email"
                         class="w-full pl-12 pr-4 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('email') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                         placeholder="Email Perusahaan" type="email"
-                        value="{{auth()->user()->email ??  old('email') }}" />
+                        value="{{auth()->user()->email ??  old('email') }}" required/>
 
                 </label>
                 @error('email')
@@ -153,7 +153,7 @@
                     </span>
                     <input id="alamat" name="alamat"
                         class="w-full pl-12 pr-12 py-3 text-[#334155] placeholder-[#64748b] bg-[#f8fafc] rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                        placeholder="Alamat Perusahaan" type="text" />
+                        placeholder="Alamat Perusahaan" type="text" required />
                 </label>
                 @error('alamat')
                 <div class="text-red-500 text-sm">{{ $message }}</div>

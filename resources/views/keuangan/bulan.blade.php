@@ -18,27 +18,30 @@
     border-color: #343434 !important;
 }
 </style>
-<div class="flex flex-col md:flex-row justify-between items-center mb-6 border-b border-gray-300 dark:border-[#343434] pb-4 gap-4">
-    <div>
-        <h1 class="text-2xl font-bold mb-1 text-gray-800 dark:text-gray-100">Kalender Keuangan</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Pantau pemasukan dan pengeluaran Anda setiap hari dalam satu tampilan kalender.</p>
-    </div>
-    <div class="flex items-center gap-3">
-        <label for="monthPicker" class="font-medium text-gray-700 dark:text-gray-200">Filter Bulan:</label>
-        <select id="monthPicker" class="form-select py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" style="width: 220px;">
-            @for ($i = 1; $i <= 12; $i++)
-                @php
-                    $val = date('Y') . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
-                @endphp
-                <option value="{{ $val }}" {{ now()->format('Y-m') === $val ? 'selected' : '' }}>
-                    {{ \Carbon\Carbon::createFromFormat('Y-m', date('Y') . '-' . str_pad($i, 2, '0', STR_PAD_LEFT))->translatedFormat('F Y') }}
-                </option>
-            @endfor
-        </select>
+<div class="">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 dark:border-[#343434] pb-4 gap-4">
+        <div>
+            <h1 class="text-2xl font-bold mb-1  dark:text-gray-100">Kalender Keuangan</h1>
+            <p class="text-sm">Pantau pemasukan dan pengeluaran Anda setiap hari dalam satu tampilan kalender.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <label for="monthPicker" class="font-medium  dark:text-gray-200">Filter Bulan:</label>
+            <select id="monthPicker" class="form-select py-2.5 px-4 w-full text-black dark:text-white border border-black/10 dark:border-white/10 rounded-lg placeholder:text-black/20 dark:placeholder:text-white/20 focus:border-black dark:focus:border-white/10 focus:ring-0 focus:shadow-none;" style="width: 220px;">
+                @for ($i = 1; $i <= 12; $i++)
+                    @php
+                        $val = date('Y') . '-' . str_pad($i, 2, '0', STR_PAD_LEFT);
+                    @endphp
+                    <option value="{{ $val }}" {{ now()->format('Y-m') === $val ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::createFromFormat('Y-m', date('Y') . '-' . str_pad($i, 2, '0', STR_PAD_LEFT))->translatedFormat('F Y') }}
+                    </option>
+                @endfor
+            </select>
+        </div>
     </div>
 </div>
 
-<div id="calendar" class="rounded-md  rounded-lg shadow-md p-2"></div>
+
+<div id="calendar" class="rounded-md  shadow-md p-2 mt-5"></div>
 
 <!-- Modal Structure -->
 <div id="detailModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); align-items:center; justify-content:center;">
@@ -64,6 +67,12 @@
                     <tbody id="modalDetailBody" class="text-gray-800 dark:text-gray-100"></tbody>
                 </table>
             </div>
+            <div class="mt-3">
+               <div class="rounded bg-lightblue-200 p-3 text-black">
+                    <span id="modalBalance" class="font-semibold text-lg text-gray-800 dark:text-gray-100"></span>
+                </div>
+            </div>
+              
         </div>
     </div>
 </div>
@@ -128,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadCalendar() {
         const [tahun, bulan] = monthPicker.value.split('-');
         const calendarEl = document.getElementById('calendar');
+        
         calendarEl.innerHTML = ''; // Reset DOM
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -145,13 +155,13 @@ document.addEventListener('DOMContentLoaded', function () {
             eventClick: function(info) {
                 const detail = info.event.extendedProps.detail || [];
                 const tanggal = info.event.extendedProps.tanggal;
-                // tanggal format: d/m/Y
                 const [day, mon, yr] = tanggal.split('/');
                 const dateObj = new Date(`${yr}-${mon}-${day}`);
                 const hari = dateObj.toLocaleDateString('id-ID', { weekday: 'long' });
                 const bulan = dateObj.toLocaleDateString('id-ID', { month: 'long' });
                 const formatted = `${hari}, ${day} ${bulan} ${yr}`;
                 document.getElementById('modalTanggal').textContent = formatted;
+
                 const tbody = document.getElementById('modalDetailBody');
 
                 let pemasukan = 0;
@@ -160,8 +170,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (d.tipe === 'pemasukan') pemasukan += Number(d.total);
                     else if (d.tipe === 'pengeluaran') pengeluaran += Number(d.total);
                 });
+
+                // Tambahkan saldo (balance)
+                const balance = pemasukan - pengeluaran;
+
                 document.getElementById('modalPemasukan').textContent = `Pemasukan: Rp${pemasukan.toLocaleString()}`;
                 document.getElementById('modalPengeluaran').textContent = `Pengeluaran: Rp${pengeluaran.toLocaleString()}`;
+                document.getElementById('modalBalance').textContent = `Balance: Rp.${balance.toLocaleString()}`;
+
                 tbody.innerHTML = '';
                 detail.forEach(d => {
                     const tr = document.createElement('tr');
@@ -172,8 +188,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                     tbody.appendChild(tr);
                 });
+
                 document.getElementById('detailModal').style.display = 'flex';
             }
+
         });
 
         calendar.render();

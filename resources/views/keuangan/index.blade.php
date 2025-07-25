@@ -92,7 +92,7 @@
 
     @if ($errors->any())
         <div class="mb-4">
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div class="p-5 rounded bg-lightred/50  dark:bg-lightred text-black/80 dark:text-black" role="alert">
                 <strong class="font-bold">Terjadi kesalahan:</strong>
                 <ul class="mt-2 list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
@@ -172,7 +172,7 @@
 
                                         <div x-show="tab === 'pengeluaran'">
                                             <form action="{{ route('keuangan.add') }}" method="POST"
-                                                enctype="multipart/form-data" class="space-y-4">
+                                                enctype="multipart/form-data" class="space-y-4" id="myForm">
                                                 @csrf
                                                 <input type="hidden" name="tipe" value="pengeluaran">
                                                 <div
@@ -369,13 +369,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex ">
-                                                    <button type="submit"
-                                                        class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Simpan</button>
+                                                   <button id="submitBtnPengeluaran" type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+                                                        <span class="btn-text">Simpan</span>
+                                                        <span class="btn-spinner hidden ml-2">
+                                                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24">
+                                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                                    stroke-width="4"></circle>
+                                                                <path class="opacity-75" fill="currentColor"
+                                                                    d="M4 12a8 8 0 018-8v8z"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
                                         <div x-show="tab === 'pemasukan'">
-                                            <form action="{{ route('keuangan.add') }}" method="POST"
+                                            <form action="{{ route('keuangan.add') }}" method="POST" id="formPemasukan"
                                                 enctype="multipart/form-data" class="space-y-4">
                                                 @csrf
                                                 <input type="hidden" name="tipe" value="pemasukan">
@@ -575,8 +585,18 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex ">
-                                                    <button type="submit"
-                                                        class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Simpan</button>
+                                                  <button id="submitBtn" type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+                                                    <span class="btn-text">Simpan</span>
+                                                    <span class="btn-spinner hidden ml-2">
+                                                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24">
+                                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                                stroke-width="4"></circle>
+                                                            <path class="opacity-75" fill="currentColor"
+                                                                d="M4 12a8 8 0 018-8v8z"></path>
+                                                        </svg>
+                                                    </span>
+                                                </button>
                                                 </div>
                                             </form>
                                         </div>
@@ -690,6 +710,40 @@
                 </div>
             </div>
         </div>
+        <script>
+            document.getElementById('myForm').addEventListener('submit', function (e) {
+                const submitBtn = document.getElementById('submitBtnPengeluaran');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+
+                // Tampilkan spinner dan ubah teks
+                btnText.textContent = 'Menyimpan...';
+                btnSpinner.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-blue-400', 'cursor-not-allowed');
+                submitBtn.classList.remove('hover:bg-blue-700');
+
+                // Biarkan form lanjut submit (hapus preventDefault jika pakai action URL)
+                // e.preventDefault(); // hanya jika kamu tidak ingin submit form secara default
+            });
+        </script>
+        <script>
+            document.getElementById('formPemasukan').addEventListener('submit', function (e) {
+                const submitBtn = document.getElementById('submitBtn');
+                const btnText = submitBtn.querySelector('.btn-text');
+                const btnSpinner = submitBtn.querySelector('.btn-spinner');
+
+                // Tampilkan spinner dan ubah teks
+                btnText.textContent = 'Menyimpan...';
+                btnSpinner.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-blue-400', 'cursor-not-allowed');
+                submitBtn.classList.remove('hover:bg-blue-700');
+
+                // Biarkan form lanjut submit (hapus preventDefault jika pakai action URL)
+                // e.preventDefault(); // hanya jika kamu tidak ingin submit form secara default
+            });
+        </script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 flatpickr("#from_date", {

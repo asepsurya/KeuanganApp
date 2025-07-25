@@ -62,7 +62,7 @@
                     <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Nama Produk <span
                                 style="color: red">*</span></label>
-                        <input type="text" name="nama_produk" placeholder="Nama Produk" class="form-input" />
+                        <input type="text" name="nama_produk" placeholder="Nama Produk" class="form-input" value="{{ old('nama_produk') }}" />
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
@@ -72,7 +72,7 @@
                             <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Harga Produk <span
                                     style="color: red">*</span></label>
                             <input type="number" name="harga" placeholder="Harga Produk" class="form-input"
-                                oninput="formatCurrency(this)" />
+                                oninput="formatCurrency(this)" value="{{ old('harga') }}"/>
                             <small><span id="formattedHarga" class="text-gray-500">Rp 0</span></small>
                             <script>
                                 function formatCurrency(input) {
@@ -100,11 +100,11 @@
                             <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Berat Bersih <span
                                     style="color: red">*</span></label>
                             <div class="flex items-center">
-                                <input type="number" name="berat" placeholder="Berat Bersih" class="form-input" />
-                                <select name="satuan" class="form-select rounded-l-none border-l-0">
-                                    <option value="gram">gram</option>
-                                    <option value="kg">kg</option>
-                                    <option value="ons">ons</option>
+                                <input type="number" name="berat" placeholder="Berat Bersih" class="form-input" value="{{ old('berat') }}" />
+                               <select name="satuan" class="form-select rounded-l-none border-l-0">
+                                    <option value="gram" {{ old('satuan') == 'gram' ? 'selected' : '' }}>gram</option>
+                                    <option value="kg" {{ old('satuan') == 'kg' ? 'selected' : '' }}>kg</option>
+                                    <option value="ons" {{ old('satuan') == 'ons' ? 'selected' : '' }}>ons</option>
                                 </select>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                     <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Deskripsi Produk</label>
                         <textarea name="deskripsi" placeholder="Deskripsi Singkat Produk Anda" class="form-input resize-none overflow-hidden"
-                            oninput="autoResize(this)"></textarea>
+                            oninput="autoResize(this)">{{ old('deskripsi') }}</textarea>
                     </div>
                 </div>
 
@@ -145,12 +145,16 @@
                     <div class="py-4 px-5 bg-white rounded-lg border border-black/10 relative dark:bg-white/5 mb-3">
                         <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Kategori Produk <span
                                 style="color: red">*</span></label>
-                        <select id="select-kategori" name="kategori" class="form-select w-full">
-                            <option value=""selected>Pilih Kategori</option>
+                       <select id="select-kategori" name="kategori" class="form-select w-full">
+                            <option value="" disabled {{ old('kategori') === null ? 'selected' : '' }}>Pilih Kategori</option>
+
                             @foreach ($category as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                <option value="{{ $item->id }}" {{ old('kategori') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
                             @endforeach
-                            <option value="other">Lainnya</option>
+
+                            <option value="other" {{ old('kategori') == 'other' ? 'selected' : '' }}>Lainnya</option>
                         </select>
                     </div>
                     <!-- Upload Gambar -->

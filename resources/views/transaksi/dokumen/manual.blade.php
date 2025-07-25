@@ -17,7 +17,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+     <!-- Site favicon -->
+    <link rel="shortcut icon" href="{{asset('assets/fav.png')}}" />
     <!-- Load ProseMirror dependencies (wajib) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js"
         integrity="sha512-bib7srucEhHYYWglYvGY+EQb0JAAW0qSOXpkPTMgCgW8eLtswHA/K4TKyD4+FiXcRHcy8z7boYxk0HTACCTFMQ=="
@@ -84,7 +85,10 @@
                 <i data-lucide="menu" class="w-5 h-5 text-white"></i>
             </button>
             <span class="text-sm truncate max-w-[140px] text-gray-300">Buat Dokument Baru</span>
-            <a href="{{ route('nota.index') }}" class="bg-blue-600 text-xs px-2 py-1 rounded">Kembali</a>
+             <a href="{{ route('nota.index') }}"  class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-sm font-medium text-gray-800 rounded shadow">
+                ← Kembali
+            </a>
+       
         </div>
         <div class="flex items-center space-x-3">
            
@@ -113,9 +117,9 @@
            @if (Request::is('transaksi/nota/*'))
                @include('transaksi.dokumen.laporan.konsinyasiMain')
            @elseif (Request::is('transaksi/invoice/*'))
-               @include('transaksi.dokumen.laporan.invoiceKwitansiMain')
+               @include('transaksi.dokumen.laporan.KwitansiMain')
            @else
-               @include('transaksi.dokumen.laporan.invoiceKwitansiMain')
+               @include('transaksi.dokumen.laporan.KwitansiMain')
            @endif
            
             </div>

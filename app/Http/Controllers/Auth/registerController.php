@@ -45,9 +45,11 @@ class RegisterController extends Controller
       "phone" => $request->phone,
       "email" => $request->email,
       "password" => Hash::make($request->password),
-      "role" => "pengguna",
+      "role" => "gold",
       "activation_token" => $token,
     ]);
+
+    $user->assignRole('gold');
 
     $pengguna = ikm::create([
       'nik'=>$request->nik,
@@ -62,7 +64,7 @@ class RegisterController extends Controller
       'auth'=> $user->id
     ]);
 
-     Artisan::call('optimize:clear');
+    //  Artisan::call('optimize:clear');
     // contoh token
     Mail::to($request->email)->send(new AccountActivationMail($user, $token));
     return redirect()->route('successRegister', ['token' => $token])->with("success", "Pendaftaran Berhasil, Silahkan Lanjutkan ke Tahap Selanjutnya");

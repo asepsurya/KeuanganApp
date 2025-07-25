@@ -35,16 +35,17 @@
 </style>
 @endsection
 @section('container')
-<div class="px-2 py-1 flex items-center justify-between">
+
+<div class="p-5 flex items-center justify-between">
     <h2 class="text-lg font-semibold">Peoples</h2>
     <a href="{{ route('ikm.create') }}" class="px-2 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
         + Tambah Pengguna Baru
     </a>
 </div>
-<div x-data="{ tab: 'harian' }" class="py-5">
+<div x-data="{ tab: 'harian' }" class=" ">
 
     <!-- Tab Buttons -->
-    <div class="flex space-x-2 bg-gray-100 dark:bg-white/5 p-3 rounded-full w-max m-5">
+    <div class="flex space-x-2 bg-gray-100 dark:bg-white/5 p-3 w-max m-5 ">
         <!-- Data Pengguna -->
         <button :class="tab === 'harian' ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-800'" class="flex items-center space-x-2 px-4 py-2 text-sm font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-blue-400" @click="tab = 'harian'">
             <!-- Icon -->
@@ -65,11 +66,11 @@
 
             <span>Keaktifan Pengguna</span>
         </button>
-    </div>
+</div>
 
     <!-- Tab Content -->
-    <div class="m-5">
-        <div x-show="tab === 'harian'" class="p-4  rounded-lg ">
+    <div class="">
+        <div x-show="tab === 'harian'" class="p-4 rounded-lg ">
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 mb-4">
                 <div class="bg-lightblue-100 rounded-2xl p-6">
                     <p class="text-sm font-semibold text-black mb-2">Jumlah UMKM</p>
@@ -181,42 +182,20 @@
 <script src="{{ asset('assets/js/simple-datatables.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-{{-- <script>
-document.addEventListener('alpine:init', () => {
-    const ctx = document.getElementById('userPieChart').getContext('2d');
+ <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cek apakah URL cocok dengan pola `/people/update/*`
+            if (window.location.pathname.startsWith("/people")) {
+                // Pilih semua elemen yang mengandung class `sm:p-7`
+                const elements = document.querySelectorAll(".sm\\:p-5");
+                const elements2 = document.querySelectorAll(".p-7");
 
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Aktif', 'Tidak Aktif'],
-            datasets: [{
-                label: 'Keaktifan User',
-                data: [{{ $aktif }}, {{ $tidakAktif }}],
-                backgroundColor: ['#16A34A', '#E5E7EB'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const total = {{ $totalUser }};
-                            const value = context.parsed;
-                            const percentage = (value / total * 100).toFixed(1);
-                            return `${context.label}: ${value} user (${percentage}%)`;
-                        }
-                    }
-                }
+                // Hapus class `sm:p-7` dari elemen tersebut
+                elements.forEach(el => el.classList.remove("sm:p-5"));
+                elements2.forEach(el => el.classList.remove("p-7"));
             }
-        }
-    });
-});
-</script> --}}
+        });
+    </script>
 
 <script>
     let pieChartInstance = null; // <-- simpan di luar Alpine jika global
@@ -328,11 +307,11 @@ document.addEventListener('alpine:init', () => {
                 }
             };
 
-            if (pieChartInstance) {
-                pieChartInstance.destroy();
+            if (this.pieChartInstance) {
+                this.pieChartInstance.destroy();
             }
 
-            pieChartInstance = new Chart(ctx, {
+            this.pieChartInstance = new Chart(ctx, {
                 type: 'pie',
                 data: chartData,
                 options: chartOptions

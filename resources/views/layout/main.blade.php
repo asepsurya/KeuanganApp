@@ -43,6 +43,9 @@
             #container {
                 margin-bottom: 100px;
             }
+            .right-sidebar{
+                z-index: 9999;
+            }
         }
      
     </style>

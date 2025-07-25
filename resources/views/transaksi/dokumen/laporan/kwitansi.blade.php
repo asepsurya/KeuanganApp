@@ -44,7 +44,7 @@
 
     <div class="max-w-[900px] mx-auto p-6 text-black">
         <div class="flex justify-between items-center mb-2">
-            <div class="w-36">
+            <div style="width: 90px; height: 90px; ">
                     @php
                         $perusahaan = \App\Models\Perusahaan::find(auth()->user()->perusahaanUser->id);
                         $nama = $perusahaan->nama_perusahaan ?? 'Perusahaan tidak ditemukan';
@@ -241,11 +241,11 @@
                                     <p class="font-bold">Hormat Kami</p>
 
                                     <div class="relative flex justify-center items-center"
-                                        style="height: 10px; width: 180px; margin-top: 8px;">
+                                        style="height: 10px; width: 180px; margin-top: -20px;">
                                         <!-- Stempel di belakang -->
                                         <img src="{{ optional($perusahaan)->stamp ? asset('storage/' . $perusahaan->stamp) : asset('assets/stamp-default.png') }}"
                                                 alt="Stemple" class="object-contain absolute z-10" width="140"
-                                                style="top: -20px; left: 50%; transform: translateX(-30%); display: none;"  id="stamp" hidden="">                 
+                                                style="top: -20px; left: 50%; transform: translateX(-30%); display: none;margin-top:10px;"  id="stamp" hidden="">                 
                                         <!-- Tanda tangan di atas -->
                                         <img src="{{ optional($perusahaan)->ttd ? asset('storage/' . $perusahaan->ttd) : asset('assets/ttd-default.png') }}"
                                                 alt="tanda Tangan" class="object-contain absolute z-20" width="150"

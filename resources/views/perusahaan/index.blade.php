@@ -208,7 +208,7 @@
                                     placeholder=" " value="{{ $perusahaan->nama_perusahaan }}">
                                 <label for="cold-design"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
-                                    Nama Perusahaan
+                                    Nama Perusahaan <span style="color:red">*</span>
                                 </label>
                             </div>
                             <div class="relative mb-3">
@@ -217,7 +217,7 @@
                                     placeholder=" ">
                                 <label for="relationship"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
-                                    Telepon Perusahaan
+                                    Telepon Perusahaan <span style="color:red">*</span>
                                 </label>
                             </div>
                             <div class="relative mb-3">
@@ -226,7 +226,7 @@
                                     placeholder=" ">
                                 <label for="relationship"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
-                                    Email
+                                    Email <span style="color:red">*</span>
                                 </label>
                             </div>
                             <div class="relative mb-3">
@@ -235,7 +235,7 @@
                                     placeholder=" ">{{ $perusahaan->alamat }}</textarea>
                                 <label for="description"
                                     class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
-                                    Alamat Usaha
+                                    Alamat Usaha <span style="color:red">*</span>
                                 </label>
                             </div>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 ">
@@ -243,12 +243,12 @@
                                 <div
                                     class=" px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
                                     <label for="provinsi"
-                                        class="text-sm font-medium text-slate-700 mb-1 block">Provinsi</label>
+                                        class="text-sm font-medium text-slate-700 mb-1 block">Provinsi <span style="color:red">*</span></label>
                                     <div class="relative">
 
                                         <select id="provinsi" name="id_provinsi"
-                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
-                                            <option value="">Pilih Provinsi</option>
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600" required>
+                                            <option value="">Pilih Provinsi </option>
                                             @foreach ($provinsi as $ikm2)
                                                 <option value="{{ $ikm2->id }}"
                                                     {{ $ikm2->id == $perusahaan->id_provinsi ? 'selected' : '' }}>
@@ -265,10 +265,10 @@
                                 <div
                                     class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
                                     <label for="kabupaten" class="text-sm font-medium text-slate-700 mb-1 block">Kota /
-                                        Kabupaten</label>
+                                        Kabupaten <span style="color:red">*</span></label>
                                     <div class="relative">
                                         <select id="kabupaten" name="id_kota"
-                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
+                                            class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600" required>
                                             <option value="">Pilih Kota/Kabupaten</option>
                                             <option value="{{ $perusahaan->id_kota ?? '' }}" selected>
                                                 {{ $perusahaan->kota->name ?? '' }}</option>
@@ -283,10 +283,10 @@
                                 <div
                                     class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
                                     <label for="kecamatan"
-                                        class="text-sm font-medium text-slate-700 mb-1 block">Kecamatan</label>
+                                        class="text-sm font-medium text-slate-700 mb-1 block">Kecamatan <span style="color:red">*</span></label>
                                     <div class="relative">
 
-                                        <select id="kecamatan" name="id_kecamatan"
+                                        <select id="kecamatan" name="id_kecamatan" required
                                             class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
                                             <option value="">Pilih Kecamatan</option>
                                             <option value="{{ $perusahaan->id_kecamatan ?? '' }}" selected>
@@ -302,10 +302,10 @@
                                 <div
                                     class="px-5 w-full pl-12 pr-2 py-3 text-[#334155] placeholder-[#64748b] bg-white  dark:bg-white/5 dark:border-white/10 rounded-lg border @error('alamat') border-red-500 @enderror focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
                                     <label for="desa" class="text-sm font-medium text-slate-700 mb-1 block">Desa /
-                                        Kelurahan</label>
+                                        Kelurahan <span style="color:red">*</span> </label>
                                     <div class="relative">
 
-                                        <select id="desa" name="id_desa"
+                                        <select id="desa" name="id_desa" required
                                             class="select2 pl-10 pr-4 py-2 w-full border rounded-lg text-slate-700 focus:ring-2 focus:ring-blue-600">
                                             <option value="">Pilih Desa</option>
                                             <option value="{{ $perusahaan->id_desa ?? '' }}" selected>
@@ -640,18 +640,18 @@
                                 background: transparent;
                                 display: block;
                                 width: auto;
-                                max-width: 420px;
+                               
                                 /* tampilan layar */
-                                height: 200px;
+                                height: 400px;
                                 cursor: crosshair;
                             }
                         </style>
                         <h2>Atau Silakan Tanda Tangan di Bawah Ini</h2>
-                        <canvas id="signature-pad" width="500" height="200"></canvas>
+                        <canvas id="signature-pad" ></canvas>
                         <br>
                         <label for="lineWidth">Ketebalan Garis:</label>
-                        <input type="range" id="lineWidth" min="1" max="7" value="2">
-                        <span id="lineWidthValue">2</span> px
+                        <input type="range" id="lineWidth" min="10" max="50" value="2">
+                        <span id="lineWidthValue">10</span> px
                         <button type="button" class="btn" onclick="clearSignature()">Clear</button>
                         <button type="button" class="btn" onclick="saveSignature()">Ok</button>
                         <input type="text" name="ttd_base64" id="ttd_base64" hidden><br>
@@ -698,7 +698,7 @@
                     <div class="relative">
                         <textarea id="description" name="keterangan_pembayaran" cols="10" rows="10"
                             class="block rounded-lg px-5 pb-4 pt-[38px] w-full text-black dark:text-white bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-black/10 peer"
-                            placeholder="">Pembayaran dilakukan melalui transfer ke no. Rekeneing xxxxxxxx atas nama xxxxxxxxx setelah diterima informasi penjualan.</textarea>
+                            placeholder="">{{ $perusahaan->keterangan_pembayaran ?? 'Pembayaran dilakukan melalui transfer ke no. Rekeneing xxxxxxxx atas nama xxxxxxxxx setelah diterima informasi penjualan.'}}</textarea>
 
                         <label for="description"
                             class="absolute text-sm text-black/40 dark:text-white/40 duration-300 transform -translate-y-2 scale-90 top-6 z-10 origin-[0] left-5 peer-focus:text-black/40 dark:peer-focus:text-white/40 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-90 peer-focus:-translate-y-2">
@@ -978,7 +978,7 @@
 
         // Buat canvas 2x resolusi untuk HD
         const width = 2000;
-        const height = 500;
+        const height = 2000;
         canvas.width = width;
         canvas.height = height;
 

@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nota {{ Request('type') }}{{ $id }}</title>
+    <title>Nota {{ Request('type') }} | {{ $id }}</title>
+     <!-- Site favicon -->
+    <link rel="shortcut icon" href="{{asset('assets/fav.png')}}" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -18,6 +20,10 @@
                 <i data-lucide="menu" class="w-5 h-5 text-white"></i>
             </button>
             <span class="text-sm truncate max-w-[140px] text-gray-300">Nota {{ Request('type') }}{{ $id }}</span>
+            <a href="/transaksi"  class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-sm font-medium text-gray-800 rounded shadow">
+                ← Kembali
+            </a>
+           
             {{-- <button class="bg-blue-600 text-xs px-2 py-1 rounded">+ Create</button> --}}
         </div>
         <div class="flex items-center space-x-3">

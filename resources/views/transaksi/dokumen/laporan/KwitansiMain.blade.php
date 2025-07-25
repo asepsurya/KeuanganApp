@@ -1,23 +1,15 @@
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    body {
+    body{
         font-family: 'Roboto', sans-serif;
     }
-
-    h1,
-    h2,
-    h3 {
+    h1, h2, h3 {
         font-family: 'Poppins', sans-serif;
     }
-
     @page {
         size: A4;
         margin: 2.54cm;
-    }
-
-    .kop-surat {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
+        background-color: white;
     }
 
     .garis-atas {
@@ -30,16 +22,52 @@
         margin: 2px 0 10px 0;
     }
 
-    input:focus {
-        outline: none;
-        border: none;
-    }
-
     .address {
         word-wrap: break-word;
         /* Optionally add a max width for better control */
         max-width: 300px;
         /* Or whatever max-width you want */
+    }
+
+    input:focus {
+        outline: none;
+        border: none;
+    }
+
+    /* Gaya untuk elemen melayang */
+    .floating-element {
+        position: fixed;
+        /* Posisi tetap */
+        top: 80px;
+        /* Jarak dari atas */
+        left: 10px;
+        /* Jarak dari kiri */
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        /* Latar belakang transparan */
+        color: white;
+        border-radius: 5px;
+        font-size: 16px;
+        z-index: 1000;
+        /* Pastikan elemen di atas elemen lainnya */
+        display: flex;
+        /* Agar tombol close berada di dalam elemen melayang */
+        align-items: center;
+        justify-content: space-between;
+        width: auto;
+    }
+
+    .close-btn {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .close-btn:hover {
+        color: red;
     }
 
     .tooltip {
@@ -56,9 +84,7 @@
         display: block;
         /* Menampilkan tombol hapus saat hover */
     }
-
 </style>
-
 
 @if ($errors->any())
 <div class="floating-element">
@@ -73,10 +99,9 @@
 </div>
 @endif
 
-<form action="{{ route('transaksi.nota.add') }}" method="POST" id="myForm">
+<form action="{{ route('transaksi.nota.add') }}" method="post" id="myForm">
     @csrf
-
-        <div class="max-w-[900px] mx-auto p-6 text-black">
+     <div class="max-w-[900px] mx-auto p-6 text-black">
                 <div class="flex justify-between items-center mb-2">
                     <div class="w-36">
                         @php
@@ -89,8 +114,14 @@
         </div>
 
         <div class="text-right">
-            <h1 class="text-2xl font-normal mb-1"><b>
-                    <input type="text" class="w-full text-right" name="judul" placeholder="" required value="{{$nota->judul ?? ''}}">
+            <h1 class="text-2xl font-normal mb-1 "><b>
+                   <input type="text" name="judul" value="{{ 
+                    $nota->judul 
+                        ?? (Request::is('transaksi/invoice*') ? 'INVOICE' 
+                        : (Request::is('transaksi/nota*') ? 'NOTA KONSINYASI' 
+                        : (Request::is('transaksi/kwitansi*') ? 'NOTA PEMBAYARAN' 
+                        : ''))) 
+                }}" class="form-input w-full text-center"/>
                 </b></h1>
             <input type="hidden" name="type" value="{{ Request::is('transaksi/invoice*') 
                                     ? 'invoice' 
@@ -223,11 +254,10 @@
             <table class="w-full border-collapse text-[12px] leading-[14px]">
                 <tbody>
                     <tr>
-
                         <!-- Kolom Penerima -->
                         <td width="90%" class="" style="height: 180px;">
                             <p class="text-[11px] leading-[13px] ">
-                                <textarea name="keterangan" id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $nota->keterangan ?? $perusahaan->keterangan_pembayaran ?? '' }}
+                                <textarea  id="autoTextarea" oninput="autoResize(this)" name="keterangan" class="w-full">{{ $nota->keterangan ?? $perusahaan->keterangan_pembayaran ?? 'Pembayaran dilakukan melalui transfer ke no. Rekeneing xxxxxxxx atas nama xxxxxxxxx setelah diterima informasi penjualan.' }}
 
                                 </textarea>
                             </p>
@@ -438,7 +468,6 @@
         @endif
 
     </script>
-
 
 
     <script>

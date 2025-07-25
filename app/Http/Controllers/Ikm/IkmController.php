@@ -27,7 +27,7 @@ class IkmController extends Controller
         $foto = $item->foto ? asset('storage/' . $item->foto) : asset('assets/images/byewind-avatar.png');
         return [
              '<a href="' . route("ikm.update", $item->id) . '" class="flex items-center space-x-2 text-blue-600 hover:underline">
-                <img class="w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-black" src="' . $foto . '" alt="Foto">
+                <img  class="object-cover w-6 h-6 rounded-full object-cover ring-2 ring-white dark:ring-black" src="' . $foto . '" alt="Foto" loading="lazy">
                 <span>' . e($item->nama) . '</span>
             </a>',
             '<div ><a href="https://wa.me/' . preg_replace('/[^0-9]/', '', (substr($item->telp, 0, 1) === '0' ? '+62' . substr($item->telp, 1) : $item->telp)) . '" target="_blank" class="inline-flex items-center  py-1 rounded-full  hover:bg-green-600">' .($item->telp ?? '<span class="text-gray-500">Tidak Diketahui</span>') . '</a></div>',

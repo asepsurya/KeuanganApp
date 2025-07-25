@@ -11,13 +11,44 @@
         margin-left: -10px;
         border: none;
     }
+    @media (max-width: 768px) {
+        .tombol-dekstop {
+            display: none;
+        }
+        .tombol-mobile {
+            display: flex;
+        }
+    }   
 </style>
 
 <form action="{{ route('action.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="px-2 py-1 mb-4 flex items-center justify-between">
         <h2 class="text-lg font-semibold">Produk Saya</h2>
-        <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Floating buttons: hanya mobile -->
+        <div class="fixed bottom-0 right-4 z-50 space-y-2  flex-col tombol-mobile hidden" style="margin-bottom: 90px;">
+            <!-- Tombol Simpan -->
+            <button type="submit"
+                class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 13l4 4L19 7"/>
+                </svg>
+            </button>
+
+            <!-- Tombol Hapus -->
+            <button type="button" onclick="confirmDelete('{{ route('action.delete', $id) }}')"
+                class="w-12 h-12 flex items-center justify-center bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 tombol-dekstop">
             <button type="submit"
                 class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition duration-150">
                 Simpan

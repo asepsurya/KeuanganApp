@@ -62,16 +62,16 @@
             <div>
                 <a href="javascript:;" class="text-black dark:text-white" x-cloak x-show="$store.app.mode === 'light'"
                     @click="$store.app.toggleMode('dark')">
-                    <x-icon name="moon" class="text-gray-600" />
+                    <x-icon name="moon" class="" />
                 </a>
                 <a href="javascript:;" class="text-black dark:text-white" x-cloak x-show="$store.app.mode === 'dark'"
                     @click="$store.app.toggleMode('light')">
-                    <x-icon name="sun" class="text-gray-600" />
+                    <x-icon name="sun" class="" />
                 </a>
             </div>
             <button type="button" class="relative w-7 h-7 p-1 text-black dark:text-white"
                 @click="$store.app.rightSidebar()" id="rightSidebar">
-                <x-icon name="notif" class="text-gray-600" />
+                <x-icon name="notif" class="" />
                 <span class="flex absolute w-3 h-3 right-px top-[5px]">
                     <span
                         class="animate-ping absolute -left-[3px] -top-[3px] inline-flex h-full w-full rounded-full bg-black/50 dark:bg-white/50 opacity-75"></span>
@@ -88,7 +88,7 @@
                         Hallo, {{ explode(' ', auth()->user()->name)[0] }}
                     </span>
 
-                    <x-icon name="arrow-bottom" class="text-gray-600" />
+                    <x-icon name="arrow-bottom" class="" />
                 </button>
                 <ul x-cloak x-show="open" x-transition x-transition.duration.300ms>
                     <li>
@@ -121,7 +121,7 @@
                     <li class="h-px bg-black/5 block my-1"></li>
                     <li>
                         <a href="{{ route('ikm.update', auth()->user()->ikm->id) }}" class="flex items-center">
-                            <x-icon name="user-rounded" class="text-gray-600" />
+                            <x-icon name="user-rounded" class="" />
                             Profile
                         </a>
                     </li>
@@ -129,7 +129,7 @@
                         <div x-data="{ open: false }">
                             <!-- Trigger -->
                             <a href="javascript:;" class="flex items-center" @click="open = true">
-                                <x-icon name="gear" class="text-gray-600" />
+                                <x-icon name="gear" class="" />
                                 Ubah Password
                             </a>
 
@@ -199,7 +199,7 @@
                             @csrf
                             <button type="submit"
                                 class="text-black dark:text-white flex items-center w-full text-left">
-                                <x-icon name="sign-out" class="text-gray-600 mr-2" />
+                                <x-icon name="sign-out" class=" mr-2" />
                                 Sign Out
                             </button>
                         </form>
@@ -218,41 +218,41 @@
     </style>
 <ul class="flex space-x-2 border-b border-black/10 dark:border-white/10 pb-2 g-2 pl-5">
     <a href="/keuangan">
-        <li class="tab-link cursor-pointer px-4 py-2 text-gray-600 hover:text-blue-500 font-semibold flex items-center @if(request()->is('keuangan')) border-b-2 border-bottom @endif">
+        <li class="tab-link cursor-pointer px-4 py-2  hover:text-blue-500 font-semibold flex items-center @if(request()->is('keuangan')) border-b-2 border-bottom @endif">
             <!-- Ikon Kiri -->
-            <x-icon name="forms" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="forms" class=" w-6 h-6 mr-2" />
             <span class="pl-2">Keuangan</span>
         </li>
     </a>
 
     <a href="/akun">
-        <li class="tab-link cursor-pointer px-4 py-2 text-gray-600 hover:text-blue-500 font-semibold flex items-center @if(request()->is('akun')) border-b-2 border-bottom @endif">
+        <li class="tab-link cursor-pointer px-4 py-2  hover:text-blue-500 font-semibold flex items-center @if(request()->is('akun')) border-b-2 border-bottom @endif">
             <!-- Ikon Kiri -->
-            <x-icon name="forms" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="forms" class=" w-6 h-6 mr-2" />
             <span class="pl-2">Akun</span>
         </li>
     </a>
 
     <a href="/rekening">
-        <li class="tab-link cursor-pointer px-4 py-2 text-gray-600 hover:text-blue-500 font-semibold flex items-center @if(request()->is('rekening')) border-b-2 border-bottom @endif">
+        <li class="tab-link cursor-pointer px-4 py-2  hover:text-blue-500 font-semibold flex items-center @if(request()->is('rekening')) border-b-2 border-bottom @endif">
             <!-- Ikon Kiri -->
-            <x-icon name="layer" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="layer" class=" w-6 h-6 mr-2" />
             <span class="pl-2">Rekening</span>
         </li>
     </a>
 
     <a href="{{ route('dashboard.keuangan') }}">
-        <li class="tab-link cursor-pointer px-4 py-2 text-gray-600 hover:text-blue-500 font-semibold flex items-center @if(request()->routeIs('dashboard.keuangan')) border-b-2 border-bottom @endif" onclick="openTab(event, 'tab1')">
+        <li class="tab-link cursor-pointer px-4 py-2  hover:text-blue-500 font-semibold flex items-center @if(request()->routeIs('dashboard.keuangan')) border-b-2 border-bottom @endif" onclick="openTab(event, 'tab1')">
             <!-- Ikon Kiri -->
-            <x-icon name="dashboard" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="dashboard" class=" w-6 h-6 mr-2" />
             <span class="pl-2">Grafik</span>
         </li>
     </a>
 
     <a href="/setelan">
-        <li class="tab-link cursor-pointer px-4 py-2 text-gray-600 hover:text-blue-500 font-semibold flex items-center @if(request()->is('setelan')) border-b-2 border-bottom @endif">
+        <li class="tab-link cursor-pointer px-4 py-2  hover:text-blue-500 font-semibold flex items-center @if(request()->is('setelan')) border-b-2 border-bottom @endif">
             <!-- Ikon Kiri -->
-            <x-icon name="gear" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="gear" class=" w-6 h-6 mr-2" />
             <span class="pl-2">Perusahaan Saya</span>
         </li>
     </a>
@@ -284,13 +284,13 @@
         <a href="/akun"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'akun' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
              <!-- Ikon Kiri -->
-            <x-icon name="forms" class="text-gray-600 w-6 h-6 mr-2" />
+            <x-icon name="forms" class=" w-6 h-6 mr-2" />
             <span class="text-[10px]">Akun</span>
         </a>
         <!-- Dashboard -->
         <a href="/rekening"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'rekening' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
-             <x-icon name="layer" class="text-gray-600 w-6 h-6 mr-2" />
+             <x-icon name="layer" class=" w-6 h-6 mr-2" />
             <span class="text-[10px]">Rekening</span>
         </a>
 
@@ -299,7 +299,7 @@
         <a href="/setelan"
            class="flex flex-col items-center justify-center w-full py-2 text-xs {{ $active === 'setelan' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/60' }}">
             <!-- Ikon User (Heroicons) -->
-               <x-icon name="user-1" class="text-gray-600 w-6 h-6 mr-2" />
+               <x-icon name="user-1" class=" w-6 h-6 mr-2" />
             <span class="text-[10px]">Usaha Saya</span>
         </a>
 

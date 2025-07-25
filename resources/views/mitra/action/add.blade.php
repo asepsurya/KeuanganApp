@@ -57,12 +57,12 @@
 
         /* Ukuran tampilan select2 (input yang terlihat) */
         .select2-container--default .select2-selection--single {
-            width: 200px !important; /* ganti sesuai kebutuhan */
+            width: 160px !important; /* ganti sesuai kebutuhan */
         }
 
         /* Ukuran dropdown saat terbuka */
         .select2-container--default .select2-dropdown {
-            width: 200px !important; /* samakan dengan di atas agar konsisten */
+            width:160px !important; /* samakan dengan di atas agar konsisten */
         }
     
 

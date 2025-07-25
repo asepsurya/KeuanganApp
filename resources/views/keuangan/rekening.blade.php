@@ -13,7 +13,7 @@
         border: none;
     }
 </style>
-<div class="px-2 py-1 flex items-center justify-between">
+<div class="px-2 py-1 flex items-center justify-between mb-3">
     <h2 class="text-lg font-semibold">Data Akun</h2>
     <div x-data="modals">
         <button type="button" @click="toggle"
@@ -166,14 +166,20 @@
                                 <div class="lg:hidden mt-2 text-xs text-gray-500 space-y-1">
                                     <div><strong>Jenis Akun:</strong> {{ ucfirst(str_replace('_', ' ',
                                         $item->jenis_akun)) }}</div>
-                                    <div><strong>Keterangan:</strong> {{ $item->keterangan ?? '-' }}</div>
+                                    <div><strong>Keterangan:</strong> 
+                                        <span class="block truncate max-w-xs">
+                                        {{ $item->keterangan ?? '-' }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                         <td class="py-4">
-                            @if(app('settings')['default_rekening'] == $item->kode_rekening)
-                             <span class="bg-violet-500 text-white text-[10px] px-1.5 py-0.5 rounded"><span class="p-0.5 rounded-full bg-white inline-block mr-1 align-middle"></span> Default</span>
-                            @endif
+                         <td class="py-4 " >
+                            <div class="hidden md:block">
+                                @if(app('settings')['default_rekening'] == $item->kode_rekening)
+                                <span class="bg-violet-500 text-white text-[10px] px-1.5 py-0.5 rounded "><span class="p-0.5 rounded-full bg-white inline-block mr-1 align-middle"></span> Default</span>
+                                @endif
+                            </div>
                         </td>
                         <td class="py-4 font-semibold mobile lg:table-cell">
                             Rp{{ number_format($item->jumlah, 0, ',', '.') }}

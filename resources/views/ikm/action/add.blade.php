@@ -178,13 +178,13 @@
                     value="{{ old('telp', $item->telp ?? '') }}" />
             </div>
 
-            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5" hidden>
                 <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Sosial Media</label>
                 <input type="text" name="sosmed" placeholder="Sosial Media" class="form-input"
                     value="{{ old('sosmed', $item->sosmed ?? '') }}" />
             </div>
 
-            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5">
+            <div class="py-4 px-5 mb-3 bg-white rounded-lg border border-black/10 relative dark:bg-white/5" hidden>
                 <label class="block mb-1 text-xs text-black/40 dark:text-white/40">Website</label>
                 <input type="text" name="website" placeholder="Website" class="form-input"
                     value="{{ old('website', $item->website ?? '') }}" />
